@@ -12,11 +12,12 @@ import javax.persistence.*;
 @Getter
 @Entity
 @Table(name = "groups")
-public class group {
+public class Group {
 
     @Id
     @GeneratedValue
-    private long group_id;
+    @Column(name = "group_id")
+    private long id;
 
     @Column(name = "name")
     private String name;
