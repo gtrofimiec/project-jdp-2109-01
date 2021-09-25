@@ -11,13 +11,13 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Getter
 @Entity
-@Table(name = "groups")
+@Table(name = "product_groups")
 public class Group {
 
     @Id
     @GeneratedValue
     @Column(name = "group_id")
-    private long id;
+    private Long id;
 
     @Column(name = "name")
     private String name;

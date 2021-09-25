@@ -16,10 +16,10 @@ public interface GroupRepository extends CrudRepository<Group, Long> {
     Group save(Group group);
 
     @Override
-    Optional<Group> findById(Long group_id);
+    Optional<Group> findById(Long groupId);
 
     @Override
-    void deleteById(Long group_id);
+    void deleteById(Long groupId);
 
 
 }
