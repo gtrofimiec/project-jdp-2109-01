@@ -1,0 +1,14 @@
+### GET BY ID
+GET http://localhost:8080/v1/ecommerce/examples/some-id
+
+### GET ALL
+GET http://localhost:8080/v1/ecommerce/examples
+
+### SAVE json as request body
+POST http://localhost:8080/v1/ecommerce/examples
+
+### UPDATE json as request body
+PUT http://localhost:8080/v1/ecommerce/examples/some-id
+
+### DELETE
+DELETE http://localhost:8080/v1/ecommerce/examples/some-id
