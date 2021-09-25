@@ -13,5 +13,5 @@ public class ProductDto {
     private String name;
     private String description;
     private BigDecimal price;
-//    private Group group;              // remove comment after Group.class implementation
+//    private GroupDto groupDto;              // remove comment after GroupDto.class implementation
 }

@@ -9,16 +9,21 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
-@CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/v1/ecommerce/product")
+@RequestMapping("/v1/ecommerce/products")
 @RequiredArgsConstructor
 
 public class ProductController {
 
 
-    @RequestMapping(method = RequestMethod.GET, value = "/products")
-    public List<ProductDto> getProducts() {
+    @GetMapping(value = "/{id}")
+    public ProductDto getOne(@PathVariable("id") Long id) {
+        return new ProductDto("name", "description", new BigDecimal(10));
+    }
+
+
+    @GetMapping
+    public List<ProductDto> getAll() {
         return Arrays.asList(
                 new ProductDto("name1", "description1", new BigDecimal(100)),
                 new ProductDto("name2", "description2", new BigDecimal(200)),
@@ -26,25 +31,20 @@ public class ProductController {
         );
     }
 
-
-    @RequestMapping(method = RequestMethod.GET, value = "/{id}")
-    public ProductDto getProduct(@PathVariable ("id") Long productId) {
-        return new ProductDto("name", "description" + productId, new BigDecimal(10).multiply(BigDecimal.valueOf(productId)));
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ProductDto save(@RequestBody ProductDto productDto) {
+        System.out.println("Saved!");
+        return productDto;
     }
 
-    @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String addProduct(@RequestBody ProductDto newProduct) {
-        return "Created new Product: \n" + newProduct.toString();
-    }
-
-    @PutMapping("/{id}")
-    public String updateProduct(@PathVariable ("id") Long productId, @RequestBody ProductDto productDto) {
-
-        return "Product Nr " + productId + " has been updated." + "\nProduct after change: \n" + productDto.toString();
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, value = "/{id}")
+    public ProductDto update(@PathVariable("id") Long id, @RequestBody ProductDto productDto) {
+        System.out.println("Product has been changed!");
+        return productDto;
     }
 
     @DeleteMapping(value = "/{id}")
-    public String removeProduct(@PathVariable ("id") Long productId) {
-        return "Product Nr " + productId + " has been removed.";
+    public void delete(@PathVariable("id") Long id) {
+        System.out.println("Product with "+id +" id, has been successfully deleted.");
     }
 }
