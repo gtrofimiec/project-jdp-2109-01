@@ -17,7 +17,7 @@ import java.util.List;
 public class ProductController {
 
 
-    @RequestMapping(method = RequestMethod.GET, value = "getProducts")
+    @RequestMapping(method = RequestMethod.GET, value = "/products")
     public List<ProductDto> getProducts() {
         return Arrays.asList(
                 new ProductDto("name1", "description1", new BigDecimal(100)),
@@ -27,24 +27,24 @@ public class ProductController {
     }
 
 
-    @RequestMapping(method = RequestMethod.GET, value = "getProduct")
-    public ProductDto getProduct(@RequestParam Long productId) {
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}")
+    public ProductDto getProduct(@PathVariable ("id") Long productId) {
         return new ProductDto("name", "description" + productId, new BigDecimal(10).multiply(BigDecimal.valueOf(productId)));
     }
 
-    @PostMapping(value = "createProduct", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
     public String addProduct(@RequestBody ProductDto newProduct) {
         return "Created new Product: \n" + newProduct.toString();
     }
 
-    @PutMapping(value = "updateProduct")
-    public String updateProduct(@RequestParam Long productId, @RequestBody ProductDto productDto) {
+    @PutMapping("/{id}")
+    public String updateProduct(@PathVariable ("id") Long productId, @RequestBody ProductDto productDto) {
 
         return "Product Nr " + productId + " has been updated." + "\nProduct after change: \n" + productDto.toString();
     }
 
-    @DeleteMapping(value = "removeProduct")
-    public String removeProduct(@RequestParam Long productId) {
+    @DeleteMapping(value = "/{id}")
+    public String removeProduct(@PathVariable ("id") Long productId) {
         return "Product Nr " + productId + " has been removed.";
     }
 }
