@@ -4,7 +4,6 @@ import com.kodilla.ecommercee.domain.dto.CartDto;
 import com.kodilla.ecommercee.domain.dto.OrderDto;
 import com.kodilla.ecommercee.domain.dto.ProductDto;
 import com.kodilla.ecommercee.domain.dto.UserDto;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -15,9 +14,9 @@ import java.util.Collections;
 @RequestMapping("/v1/ecommerce/carts")
 public class CartController {
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public CartDto saveCart(@RequestBody UserDto userDto){
-        return new CartDto(1L, new ArrayList<>(), userDto);
+    @PostMapping(value = "/{id}")
+    public CartDto saveCart(@PathVariable("id") Long userId){
+        return new CartDto(1L, new ArrayList<>(), new UserDto(1L));
     }
     @PutMapping(value = "/{cartId}/addProduct/{productId}")
     public CartDto addProduct(@PathVariable("cartId") Long cartId, @PathVariable("productId") Long productId){
