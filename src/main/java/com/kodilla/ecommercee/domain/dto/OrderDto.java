@@ -4,9 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
+import java.math.BigDecimal;
+
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class OrderDto {
-    private Long id;
+
+    private BigDecimal totalPrice;
 }

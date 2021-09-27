@@ -30,6 +30,6 @@ public class CartController {
     }
     @PostMapping(value = "/{cartId}/order")
     public OrderDto saveOrder(@PathVariable("cartId") Long cartId){
-        return new OrderDto(1L);
+        return new OrderDto(new BigDecimal(100));
     }
 }
