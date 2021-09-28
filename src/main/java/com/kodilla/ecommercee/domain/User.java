@@ -29,8 +29,7 @@ public class User {
     @Column (name="isblocked")
     private boolean isBlocked;
 
-//    uncomment when Cart Class is available!
-//    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    @JoinColumn(name = "cart_id")
-//    private Cart cart;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
 }

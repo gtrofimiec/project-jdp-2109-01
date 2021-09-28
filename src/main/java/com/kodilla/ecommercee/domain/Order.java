@@ -1,6 +1,7 @@
 package com.kodilla.ecommercee.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Data
 @Table(name = "Orders")
 public class Order {
 
@@ -20,11 +22,9 @@ public class Order {
     @Column(name = "totalPrice")
     private BigDecimal totalPrice;
 
-
-    //uncomment when Cart.class is done
-/*    @OneToOne
+    @OneToOne()
     @JoinColumn(name = "cart_id")
-    private Cart cart;*/
+    private Cart cart;
 
 
     //uncomment when User.class is done

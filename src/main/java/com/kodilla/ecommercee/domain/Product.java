@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -36,11 +37,10 @@ public class Product {
     @JoinColumn(name = "group_id")
     private Group group;
 
-    //Uncomment after cart cart.class is created
-/*    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name ="Products_has_carts",
             joinColumns = {@JoinColumn(name = "product_id", referencedColumnName = "product_id")},
             inverseJoinColumns = {@JoinColumn(name = "cart_id", referencedColumnName = "cart_id")}
     )
-    private List<Cart> cartList;    */
+    private List<Cart> cartList;
 }
