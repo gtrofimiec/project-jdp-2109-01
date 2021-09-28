@@ -17,16 +17,16 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(name = "Firstname")
+    @Column(name = "firstname")
     private String firstName;
 
-    @Column(name = "Surname")
+    @Column(name = "surname")
     private String surname;
 
-    @Column(name="loggingTime")
+    @Column(name="loggingtime")
     private LocalDateTime loggingTime;
 
-    @Column (name="isBlocked")
+    @Column (name="isblocked")
     private boolean isBlocked;
 
 //    uncomment when Cart Class is available!
