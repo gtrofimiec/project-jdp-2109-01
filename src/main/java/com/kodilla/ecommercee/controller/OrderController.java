@@ -1,6 +1,7 @@
 package com.kodilla.ecommercee.controller;
 
 import com.kodilla.ecommercee.domain.dto.OrderDto;
+import com.kodilla.ecommercee.service.SecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderController {
 
+    private final SecurityService securityService;
+
     @GetMapping
     public List<OrderDto> getOrders() {
         return Arrays.asList(
@@ -21,7 +24,12 @@ public class OrderController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public OrderDto addOrder(@RequestBody OrderDto orderDto) {
+    public OrderDto addOrder(@RequestBody OrderDto orderDto,
+                             @RequestParam("userId") Long userId,
+                             @RequestParam("accessKey") String accessKey) {
+
+        securityService.validateAccess(userId, accessKey);
+
         return orderDto;
     }
 
@@ -37,6 +45,6 @@ public class OrderController {
 
     @DeleteMapping(value = "/{orderId}")
     public void deleteOrder(@PathVariable("orderId") Long orderId) {
-        System.out.println("Order number "+orderId +" deleted.");
+        System.out.println("Order number " + orderId + " deleted.");
     }
 }

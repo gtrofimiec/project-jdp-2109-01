@@ -4,14 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDto {
+public class SaveUserRequest {
 
-    private Long id;
     private String firstname;
     private String surname;
 
