@@ -20,7 +20,7 @@ public class Product {
     @GeneratedValue
     @NotNull
     @Column(name = "product_id")
-    private long id;
+    private Long id;
 
     @NotNull
     @Column(name = "name")
@@ -33,7 +33,6 @@ public class Product {
     @Column(name = "description")
     private String description;
 
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "group_id")
     private Group group;
