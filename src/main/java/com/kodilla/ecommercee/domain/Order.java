@@ -22,7 +22,7 @@ public class Order {
     @Column(name = "totalPrice")
     private BigDecimal totalPrice;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     @JoinColumn(name = "cart_id")
     private Cart cart;
 

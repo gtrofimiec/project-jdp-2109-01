@@ -26,11 +26,11 @@ public class OrderRepositoryTestSuite {
     private CartRepository cartRepository;
 
     @Test
-    public void testSaveOrder(){
+    public void testSaveOrder() {
         //Given
         Cart cart = new Cart();
-        cartRepository.save(cart);
-        Long cartId = cart.getId();
+        Cart savedCart = cartRepository.save(cart);
+        Long cartId = savedCart.getId();
 
         Order order = new Order(new BigDecimal(1000), cart);
         //When
@@ -39,11 +39,11 @@ public class OrderRepositoryTestSuite {
         //Then
         assertEquals(new BigDecimal(1000), savedOrder.getTotalPrice());
         assertEquals(cartId, savedOrder.getCart().getId());
-        //Clean up
+        assertNotNull(cartRepository.findById(cartId));
         orderRepository.deleteById(orderId);
-        cartRepository.deleteById(cartId);
-
+        assertEquals(Optional.empty(), cartRepository.findById(cartId));
     }
+
     @Test
     public void testFindAll(){
         //Given
@@ -71,11 +71,15 @@ public class OrderRepositoryTestSuite {
         assertEquals(2, orders.size());
         assertEquals(new BigDecimal("500.00"), orderRepository.findById(order2Id).get().getTotalPrice());
         assertEquals(new BigDecimal("100.00"), orderRepository.findById(order1Id).get().getTotalPrice());
-        //Clean up
+        assertNotNull(cartRepository.findById(cart1Id));
+        assertNotNull(cartRepository.findById(cart2Id));
+
         orderRepository.deleteById(order1Id);
-        cartRepository.deleteById(cart1Id);
+        assertEquals(Optional.empty(), cartRepository.findById(cart1Id));
+        assertNotNull(cartRepository.findById(cart2Id));
+
         orderRepository.deleteById(order2Id);
-        cartRepository.deleteById(cart2Id);
+        assertEquals(Optional.empty(), cartRepository.findById(cart2Id));
 
     }
     @Test
@@ -83,7 +87,6 @@ public class OrderRepositoryTestSuite {
         //Given
         Cart cart = new Cart();
         cartRepository.save(cart);
-        Long cartId = cart.getId();
 
         Order order = new Order(new BigDecimal("1000.00"), cart);
         orderRepository.save(order);
@@ -94,7 +97,6 @@ public class OrderRepositoryTestSuite {
         assertEquals(new BigDecimal("1000.00"), foundOrder.get().getTotalPrice());
         //Clean up
         orderRepository.deleteById(orderId);
-        cartRepository.deleteById(cartId);
     }
     @Test
     public void testDelete(){
@@ -110,8 +112,7 @@ public class OrderRepositoryTestSuite {
         orderRepository.deleteById(orderId);
         //Then
         assertSame(Optional.empty(), orderRepository.findById(orderId));
-        //Clen up
-        cartRepository.deleteById(cartId);
+        assertSame(Optional.empty(), cartRepository.findById(cartId));
     }
 
 }
