@@ -1,6 +1,5 @@
 package com.kodilla.ecommercee.repository;
 
-import com.kodilla.ecommercee.domain.Group;
 import com.kodilla.ecommercee.domain.Product;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -18,9 +17,9 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
     Product save(Product product);
 
     @Override
-    Optional<Product> findById(Long groupId);
+    Optional<Product> findById(Long productId);
 
     @Override
-    void deleteById(Long groupId);
+    void deleteById(Long productId);
 
 }

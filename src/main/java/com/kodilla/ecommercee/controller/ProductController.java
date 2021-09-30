@@ -1,5 +1,6 @@
 package com.kodilla.ecommercee.controller;
 
+import com.kodilla.ecommercee.domain.dto.GroupDto;
 import com.kodilla.ecommercee.domain.dto.ProductDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -18,16 +19,16 @@ public class ProductController {
 
     @GetMapping(value = "/{id}")
     public ProductDto getOne(@PathVariable("id") Long id) {
-        return new ProductDto("name", "description", new BigDecimal(10));
+        return new ProductDto("name", "description", new BigDecimal(10),new GroupDto(1l,"group"));
     }
 
 
     @GetMapping
     public List<ProductDto> getAll() {
         return Arrays.asList(
-                new ProductDto("name1", "description1", new BigDecimal(100)),
-                new ProductDto("name2", "description2", new BigDecimal(200)),
-                new ProductDto("name3", "description3", new BigDecimal(300))
+                new ProductDto("name1", "description1", new BigDecimal(100),new GroupDto(1l,"group")),
+                new ProductDto("name2", "description2", new BigDecimal(200),new GroupDto(1l,"group")),
+                new ProductDto("name3", "description3", new BigDecimal(300),new GroupDto(1l,"group"))
         );
     }
 
