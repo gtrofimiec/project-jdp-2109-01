@@ -1,9 +1,6 @@
 package com.kodilla.ecommercee.controller;
 
-import com.kodilla.ecommercee.domain.dto.CartDto;
-import com.kodilla.ecommercee.domain.dto.OrderDto;
-import com.kodilla.ecommercee.domain.dto.ProductDto;
-import com.kodilla.ecommercee.domain.dto.UserDto;
+import com.kodilla.ecommercee.domain.dto.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -20,12 +17,12 @@ public class CartController {
     }
     @PutMapping(value = "/{cartId}/addProduct/{productId}")
     public CartDto addProduct(@PathVariable("cartId") Long cartId, @PathVariable("productId") Long productId){
-        return new CartDto(2L, Collections.singletonList(new ProductDto("product", "product", new BigDecimal(1000))), new UserDto(2L));
+        return new CartDto(2L, Collections.singletonList(new ProductDto("product", "product", new BigDecimal(1000), new GroupDto(1l,"group"))), new UserDto(2L));
         //should update cart;
     }
     @PutMapping(value = "/{cartId}/deleteProduct/{productId}")
     public CartDto deleteProduct(@PathVariable("cartId") Long cartId, @PathVariable Long productId){
-        return new CartDto(3L, Collections.singletonList(new ProductDto("product", "product", new BigDecimal(1000))), new UserDto(1L));
+        return new CartDto(3L, Collections.singletonList(new ProductDto("product", "product", new BigDecimal(1000),new GroupDto(1l,"group"))), new UserDto(1L));
         //should update cart;
     }
     @PostMapping(value = "/{cartId}/order")
