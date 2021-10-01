@@ -32,4 +32,9 @@ public class Group {
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
     private List<Product> productList;
+
+    public Group(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

@@ -34,4 +34,8 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;*/
 
+    public Order(BigDecimal totalPrice, Cart cart) {
+        this.totalPrice = totalPrice;
+        this.cart = cart;
+    }
 }

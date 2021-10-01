@@ -28,4 +28,5 @@ public class Cart {
 
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "cartList")
     private List<Product> productList;
+
 }
