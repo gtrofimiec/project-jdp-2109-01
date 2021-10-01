@@ -31,24 +31,16 @@ public class ProductTestSuite {
 
     @Before
     public void cleanUpDataBaseBefore() {
-        try {
-            productRepository.deleteAll();
-            cartRepository.deleteAll();
-            groupRepository.deleteAll();
-        } catch (Exception e) {
-            //do nothing
-        }
+        productRepository.deleteAll();
+        cartRepository.deleteAll();
+        groupRepository.deleteAll();
     }
 
     @After
     public void cleanUpDataBaseAfter() {
-        try {
-            productRepository.deleteAll();
-            cartRepository.deleteAll();
-            groupRepository.deleteAll();
-        } catch (Exception e) {
-            //do nothing
-        }
+        productRepository.deleteAll();
+        cartRepository.deleteAll();
+        groupRepository.deleteAll();
     }
 
     @Test
@@ -58,15 +50,9 @@ public class ProductTestSuite {
         Group group = new Group("group 1");
         Product product = new Product("test name", BigDecimal.ONE, "test description");
 
-        cart.getProductList().
-
-                add(product);
-        product.getCartList().
-
-                add(cart);
-        group.getProductList().
-
-                add(product);
+        cart.getProductList().add(product);
+        product.getCartList().add(cart);
+        group.getProductList().add(product);
         product.setGroup(group);
 
         //When
