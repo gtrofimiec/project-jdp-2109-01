@@ -4,6 +4,7 @@ import com.kodilla.ecommercee.domain.User;
 import com.kodilla.ecommercee.domain.dto.UserDto;
 import com.kodilla.ecommercee.mapper.UserMapper;
 import com.kodilla.ecommercee.repository.UserRepository;
+import com.kodilla.ecommercee.service.SecurityService;
 import com.kodilla.ecommercee.service.UserDbService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ public class UserController {
     UserMapper userMapper;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    SecurityService securityService;
 
     @GetMapping
     public List<UserDto> getAll() {
@@ -36,14 +39,13 @@ public class UserController {
     @GetMapping("/{id}")
     public UserDto getOne(@PathVariable(value = "id") Long id) {
 
-        if (userRepository.findById(id).isPresent()) {
-            return userMapper.mapUserToUserDto(dbService.getOneUser(id));
-        }
-        return null;
+        securityService.validateQuery(id);
+        return userMapper.mapUserToUserDto(dbService.getOneUser(id));
     }
 
     @PostMapping
     public UserDto save(@RequestBody UserDto userDto) {
+
         User user = userMapper.mapUserDtoToUser(userDto);
         return (userMapper.mapUserToUserDto(
                 dbService.save(user)));
@@ -52,7 +54,7 @@ public class UserController {
     @PutMapping
     public UserDto update(@RequestBody UserDto userDto) {
 
-        if (userRepository.findById(userDto.getId()).isPresent()) {
+        if (userDto.getId() != null && userRepository.findById(userDto.getId()).isPresent()) {
             User user = userMapper.mapUserDtoToUser(userDto);
             return userMapper.mapUserToUserDto(dbService.update(user));
         }
@@ -61,6 +63,8 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable(value = "id") Long id) {
+
+        securityService.validateQuery(id);
         dbService.deleteUser(id);
     }
 }
