@@ -1,43 +1,47 @@
 package com.kodilla.ecommercee.controller;
 
-import com.kodilla.ecommercee.domain.UserDto;
+import com.kodilla.ecommercee.domain.dto.UserDto;
+import com.kodilla.ecommercee.mapper.UserMapper;
+import com.kodilla.ecommercee.service.UserDbService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "v1/ecommerce/users/")
+@RequestMapping("/v1/ecommerce/users")
 @RequiredArgsConstructor
+
 public class UserController {
 
+    @Autowired
+    UserDbService dbService;
+    @Autowired
+    UserMapper userMapper;
+
     @GetMapping
-    public List<UserDto> getUsers() {
-        return Arrays.asList(
-                new UserDto(1L, "John", "Smith", "123456", false),
-                new UserDto(2L, "Kate", "Smith", "987654", false)
-        );
+    public List<UserDto> getAll() {
+        return dbService.getAllUsers();
     }
 
-    @GetMapping(value = "{id}")
-    public UserDto getUser(@PathVariable("id") Long id){
-        return new UserDto(0L, "Mike", "Smith", "112233", false);
+    @GetMapping("/{id}")
+    public UserDto getOne(@PathVariable(value = "id") Long id) {
+        return dbService.getOneUser(id);
     }
 
-    @DeleteMapping(value = "{id}")
-    public void deleteUser(@PathVariable("id") Long id) {
-        System.out.println("User " + id + " deleted.");
+    @PostMapping
+    public UserDto save(@RequestBody UserDto userDto) {
+        return dbService.save(userMapper.mapUserDtoToUser(userDto));
     }
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, value = "{id}")
-    public UserDto updateUser(@PathVariable("id") Long id, @RequestBody UserDto userDto){
-        return new UserDto(1L, "John", "Smith", "225588", false);
+    @PutMapping
+    public UserDto update(@RequestBody UserDto userDto) {
+        return dbService.update(userMapper.mapUserDtoToUser(userDto));
     }
 
-    @PatchMapping(value = "{id")
-    public UserDto blockUser(@PathVariable("id") Long id, @RequestBody UserDto userDto){
-        return new UserDto(1L, "John", "Smith", "225588", true);
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable(value = "id") Long id) {
+        dbService.deleteUser(id);
     }
 }
