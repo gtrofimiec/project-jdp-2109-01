@@ -44,6 +44,10 @@ public class UserController {
 
     @PostMapping
     public UserDto save(@RequestBody UserDto userDto) {
+        if (userDto.getId() == null) {
+            userDto.setId(0L);
+        }
+
         User user = userMapper.mapUserDtoToUser(userDto);
         return (userMapper.mapUserToUserDto(
                 dbService.save(user)));
@@ -52,7 +56,7 @@ public class UserController {
     @PutMapping
     public UserDto update(@RequestBody UserDto userDto) {
 
-        if (userRepository.findById(userDto.getId()).isPresent()) {
+        if (userDto.getId() != null && userRepository.findById(userDto.getId()).isPresent()) {
             User user = userMapper.mapUserDtoToUser(userDto);
             return userMapper.mapUserToUserDto(dbService.update(user));
         }

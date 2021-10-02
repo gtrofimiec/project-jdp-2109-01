@@ -50,16 +50,19 @@ public class UserDbService {
     }
 
     public User update(User u) {
-        Long userId = u.getId();
-        if (!userRepository.findById(userId).isPresent()) {
-            return null;
-        }
-        Key key = securityService.generateKey();
-        userRepository.findById(userId).get().setFirstname(u.getFirstname());
-        userRepository.findById(userId).get().setSurname(u.getSurname());
-        keyRepository.findByUserId(userId).setAccessKey(key.getAccessKey());
-        keyRepository.findByUserId(userId).setExpirationTime(key.getExpirationTime());
 
-        return userRepository.save(userRepository.findById(userId).get());
+        Long id = u.getId();
+        User user = userRepository.findById(id).get();
+        Key userKey = keyRepository.findByUserId(id);
+
+        Key generatedKey = securityService.generateKey();
+
+        user.setFirstname(u.getFirstname());
+        user.setSurname(u.getSurname());
+
+        userKey.setAccessKey(generatedKey.getAccessKey());
+        userKey.setExpirationTime(generatedKey.getExpirationTime());
+
+        return userRepository.save(user);
     }
 }
