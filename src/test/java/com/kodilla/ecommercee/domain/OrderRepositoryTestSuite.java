@@ -1,8 +1,7 @@
-package com.kodilla.ecommercee.repository;
-
-import com.kodilla.ecommercee.domain.Cart;
-import com.kodilla.ecommercee.domain.Order;
-
+package com.kodilla.ecommercee.domain;
+import com.kodilla.ecommercee.repository.*;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +23,25 @@ public class OrderRepositoryTestSuite {
     private OrderRepository orderRepository;
     @Autowired
     private CartRepository cartRepository;
+    @Autowired
+    private ProductRepository productRepository;
+    @Autowired
+    private GroupRepository groupRepository;
+
+    @After
+    public void cleanRepositoryAfterTest(){
+        orderRepository.deleteAll();
+        cartRepository.deleteAll();
+        productRepository.deleteAll();
+        groupRepository.deleteAll();
+    }
+    @Before
+    public void cleanRepositoryBeforeTest(){
+        orderRepository.deleteAll();
+        cartRepository.deleteAll();
+        productRepository.deleteAll();
+        groupRepository.deleteAll();
+    }
 
     @Test
     public void testSaveOrder() {
@@ -63,7 +81,6 @@ public class OrderRepositoryTestSuite {
 
         Order order2 = new Order(new BigDecimal("500.00"), cart2);
 
-        orderRepository.deleteAll();
         orderRepository.save(order1);
         orderRepository.save(order2);
 
@@ -107,12 +124,6 @@ public class OrderRepositoryTestSuite {
         Optional<Order> foundOrder = orderRepository.findById(orderId);
         //Then
         assertEquals(new BigDecimal("1000.00"), foundOrder.get().getTotalPrice());
-        //Clean up
-        try {
-            orderRepository.deleteById(orderId);
-        } catch (Exception e){
-            throw new IllegalArgumentException("No such order");
-        }
     }
     @Test
     public void testDelete(){
