@@ -2,7 +2,6 @@ package com.kodilla.ecommercee.service;
 
 import com.kodilla.ecommercee.domain.Key;
 import com.kodilla.ecommercee.domain.User;
-import com.kodilla.ecommercee.domain.dto.UserDto;
 import com.kodilla.ecommercee.mapper.UserMapper;
 import com.kodilla.ecommercee.repository.KeyRepository;
 import com.kodilla.ecommercee.repository.UserRepository;
@@ -27,35 +26,21 @@ public class UserDbService {
     UserMapper userMapper;
 
 
-    public UserDto save(User u) {
+    public User save(User u) {
         Long id = u.getId();
         if (userRepository.findById(id).isPresent()) {
             return null;
         }
         u.setKey(securityService.generateKey());
-        return userMapper.mapUserToUserDto(userRepository.save(u));
+        return userRepository.save(u);
     }
 
-    public List<UserDto> getAllUsers() {
-        List<User> users = new ArrayList<>();
-        users.addAll((Collection<? extends User>) userRepository.findAll());
-        List<UserDto> usersDto = new ArrayList<>();
-        for (User u : users) {
-            UserDto userDto;
-            userDto = userMapper.mapUserToUserDto(u);
-            usersDto.add(userDto);
-        }
-        return usersDto;
+    public List<User> getAllUsers() {
+        return new ArrayList<>((Collection<? extends User>) userRepository.findAll());
     }
 
-    public UserDto getOneUser(Long id) {
-
-        if (userRepository.findById(id).isPresent()) {
-            User u = userRepository.findById(id).get();
-            UserDto userDto;
-            return userDto = userMapper.mapUserToUserDto(u);
-        }
-        return null;
+    public User getOneUser(Long id) {
+        return userRepository.findById(id).get();
     }
 
     public void deleteUser(Long id) {
@@ -64,7 +49,7 @@ public class UserDbService {
         }
     }
 
-    public UserDto update(User u) {
+    public User update(User u) {
         Long userId = u.getId();
         if (!userRepository.findById(userId).isPresent()) {
             return null;
@@ -75,6 +60,6 @@ public class UserDbService {
         keyRepository.findByUserId(userId).setAccessKey(key.getAccessKey());
         keyRepository.findByUserId(userId).setExpirationTime(key.getExpirationTime());
 
-        return userMapper.mapUserToUserDto(userRepository.save(userRepository.findById(userId).get()));
+        return userRepository.save(userRepository.findById(userId).get());
     }
 }

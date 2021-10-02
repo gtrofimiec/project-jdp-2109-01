@@ -1,13 +1,17 @@
 package com.kodilla.ecommercee.controller;
 
+import com.kodilla.ecommercee.domain.User;
 import com.kodilla.ecommercee.domain.dto.UserDto;
 import com.kodilla.ecommercee.mapper.UserMapper;
+import com.kodilla.ecommercee.repository.UserRepository;
 import com.kodilla.ecommercee.service.UserDbService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1/ecommerce/users")
@@ -19,25 +23,40 @@ public class UserController {
     UserDbService dbService;
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    UserRepository userRepository;
 
     @GetMapping
     public List<UserDto> getAll() {
-        return dbService.getAllUsers();
+        return dbService.getAllUsers().stream()
+                .map(x -> userMapper.mapUserToUserDto(x))
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     @GetMapping("/{id}")
     public UserDto getOne(@PathVariable(value = "id") Long id) {
-        return dbService.getOneUser(id);
+
+        if (userRepository.findById(id).isPresent()) {
+            return userMapper.mapUserToUserDto(dbService.getOneUser(id));
+        }
+        return null;
     }
 
     @PostMapping
     public UserDto save(@RequestBody UserDto userDto) {
-        return dbService.save(userMapper.mapUserDtoToUser(userDto));
+        User user = userMapper.mapUserDtoToUser(userDto);
+        return (userMapper.mapUserToUserDto(
+                dbService.save(user)));
     }
 
     @PutMapping
     public UserDto update(@RequestBody UserDto userDto) {
-        return dbService.update(userMapper.mapUserDtoToUser(userDto));
+
+        if (userRepository.findById(userDto.getId()).isPresent()) {
+            User user = userMapper.mapUserDtoToUser(userDto);
+            return userMapper.mapUserToUserDto(dbService.update(user));
+        }
+        return null;
     }
 
     @DeleteMapping("/{id}")
