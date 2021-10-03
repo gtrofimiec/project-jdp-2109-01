@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -15,6 +16,13 @@ import java.util.List;
 @Entity
 @Table(name = "Products")
 public class Product {
+
+    public Product (String name, BigDecimal price, String description){
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.cartList = new ArrayList<>();
+    }
 
     @Id
     @GeneratedValue

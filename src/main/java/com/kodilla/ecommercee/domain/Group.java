@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -14,6 +15,11 @@ import java.util.List;
 @Entity
 @Table(name = "product_groups")
 public class Group {
+
+    public Group(String name){
+        this.name = name;
+        this.productList = new ArrayList<>();
+    }
 
     @Id
     @GeneratedValue
