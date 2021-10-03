@@ -23,24 +23,12 @@ public class OrderRepositoryTestSuite {
     private OrderRepository orderRepository;
     @Autowired
     private CartRepository cartRepository;
-    @Autowired
-    private ProductRepository productRepository;
-    @Autowired
-    private GroupRepository groupRepository;
 
     @After
-    public void cleanRepositoryAfterTest(){
-        orderRepository.deleteAll();
-        cartRepository.deleteAll();
-        productRepository.deleteAll();
-        groupRepository.deleteAll();
-    }
     @Before
-    public void cleanRepositoryBeforeTest(){
+    public void cleanDatabase(){
         orderRepository.deleteAll();
         cartRepository.deleteAll();
-        productRepository.deleteAll();
-        groupRepository.deleteAll();
     }
 
     @Test
@@ -58,11 +46,8 @@ public class OrderRepositoryTestSuite {
         assertEquals(new BigDecimal(1000), savedOrder.getTotalPrice());
         assertEquals(cartId, savedOrder.getCart().getId());
         assertNotNull(cartRepository.findById(cartId));
-        try {
-            orderRepository.deleteById(orderId);
-        } catch (Exception e){
-            throw new IllegalArgumentException("No such order");
-        }
+
+        orderRepository.deleteById(orderId);
         assertEquals(Optional.empty(), cartRepository.findById(cartId));
     }
 
@@ -95,19 +80,11 @@ public class OrderRepositoryTestSuite {
         assertNotNull(cartRepository.findById(cart1Id));
         assertNotNull(cartRepository.findById(cart2Id));
 
-        try {
-            orderRepository.deleteById(order1Id);
-        } catch (Exception e){
-            throw new IllegalArgumentException("No such order");
-        }
+        orderRepository.deleteById(order1Id);
         assertEquals(Optional.empty(), cartRepository.findById(cart1Id));
         assertNotNull(cartRepository.findById(cart2Id));
 
-        try {
-            orderRepository.deleteById(order2Id);
-        } catch (Exception e){
-            throw new IllegalArgumentException("No such order");
-        }
+        orderRepository.deleteById(order2Id);
         assertEquals(Optional.empty(), cartRepository.findById(cart2Id));
 
     }
@@ -136,11 +113,7 @@ public class OrderRepositoryTestSuite {
         orderRepository.save(order);
         Long orderId = order.getId();
         //When
-        try {
-            orderRepository.deleteById(orderId);
-        } catch (Exception e){
-            throw new IllegalArgumentException("No such order");
-        }
+        orderRepository.deleteById(orderId);
         //Then
         assertSame(Optional.empty(), orderRepository.findById(orderId));
         assertSame(Optional.empty(), cartRepository.findById(cartId));
