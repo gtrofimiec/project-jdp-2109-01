@@ -36,10 +36,6 @@ public class SecurityService {
         return key;
     }
 
-    public boolean validateAccess(Long userId) {
-        return keyRepository.findByUserId(userId).getExpirationTime().isBefore(LocalDateTime.now());
-    }
-
     public void validateQuery(Long id) {
 
         Long l = id == null ? 0L : id;
