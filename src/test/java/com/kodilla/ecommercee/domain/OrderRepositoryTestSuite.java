@@ -73,14 +73,6 @@ public class OrderRepositoryTestSuite {
         assertEquals(new BigDecimal("100.00"), orderRepository.findById(order1Id).get().getTotalPrice());
         assertNotNull(cartRepository.findById(cart1Id));
         assertNotNull(cartRepository.findById(cart2Id));
-
-        orderRepository.deleteById(order1Id);
-        assertEquals(Optional.empty(), cartRepository.findById(cart1Id));
-        assertNotNull(cartRepository.findById(cart2Id));
-
-        orderRepository.deleteById(order2Id);
-        assertEquals(Optional.empty(), cartRepository.findById(cart2Id));
-
     }
     @Test
     public void testFindById(){
