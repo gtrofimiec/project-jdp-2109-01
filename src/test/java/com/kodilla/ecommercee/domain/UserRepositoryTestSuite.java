@@ -1,7 +1,9 @@
-package com.kodilla.ecommercee.repository;
+package com.kodilla.ecommercee.domain;
 
 import com.kodilla.ecommercee.domain.Cart;
 import com.kodilla.ecommercee.domain.User;
+import com.kodilla.ecommercee.repository.CartRepository;
+import com.kodilla.ecommercee.repository.UserRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -74,7 +76,7 @@ public class UserRepositoryTestSuite {
     }
 
     @Test
-    public void TestDeleteUser() {
+    public void testDeleteUser() {
         //Given
         User user = new User();
         //When
@@ -86,7 +88,7 @@ public class UserRepositoryTestSuite {
     }
 
     @Test
-    public void TestSaveUserWithCart() {
+    public void testSaveUserWithCart() {
         //Given
         User user = new User();
         Cart cart = new Cart();
@@ -99,7 +101,7 @@ public class UserRepositoryTestSuite {
     }
 
     @Test
-    public void TestDeleteUserWithCart() {
+    public void testDeleteUserWithCart() {
         //Given
         User user = new User();
         Cart cart = new Cart();
@@ -111,6 +113,5 @@ public class UserRepositoryTestSuite {
         //Then
         assertEquals(0, cartRepository.findAll().size());
         assertEquals(0, userRepository.findAll().size());
-
     }
 }
