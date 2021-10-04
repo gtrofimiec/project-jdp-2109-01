@@ -14,6 +14,10 @@ import java.math.BigDecimal;
 @Table(name = "Orders")
 public class Order {
 
+    public Order(BigDecimal totalPrice, Cart cart) {
+        this.totalPrice = totalPrice;
+        this.cart = cart;
+    }
     @Id
     @GeneratedValue
     @Column(name = "order_id")
@@ -26,16 +30,4 @@ public class Order {
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
-
-    //uncomment when User.class is done
-/*    @ManyToOne(
-            targetEntity = User.class,
-            fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;*/
-
-    public Order(BigDecimal totalPrice, Cart cart) {
-        this.totalPrice = totalPrice;
-        this.cart = cart;
-    }
 }

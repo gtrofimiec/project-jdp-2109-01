@@ -15,8 +15,4 @@ public class CartDto {
     private List<ProductDto> products = new ArrayList<>();
     private UserDto userDto;
 
-    public CartDto(Long id, List<ProductDto> products) {
-        this.id = id;
-        this.products = products;
-    }
 }
