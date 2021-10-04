@@ -1,18 +1,18 @@
 package com.kodilla.ecommercee.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Array;
+import java.util.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "Products")
 public class Product {
@@ -23,7 +23,6 @@ public class Product {
         this.description = description;
         this.cartList = new ArrayList<>();
     }
-
     @Id
     @GeneratedValue
     @NotNull
@@ -45,7 +44,13 @@ public class Product {
     @JoinColumn(name = "group_id")
     private Group group;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE,
+            CascadeType.REFRESH,
+            CascadeType.DETACH
+    },
+            fetch = FetchType.EAGER)
     @JoinTable(name ="Products_has_carts",
             joinColumns = {@JoinColumn(name = "product_id", referencedColumnName = "product_id")},
             inverseJoinColumns = {@JoinColumn(name = "cart_id", referencedColumnName = "cart_id")}

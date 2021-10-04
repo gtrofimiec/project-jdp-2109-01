@@ -1,7 +1,8 @@
 package com.kodilla.ecommercee.domain;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -9,7 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "Carts")
 public class Cart {
@@ -24,6 +26,11 @@ public class Cart {
     @Column(name = "cart_id")
     private Long id;
 
-    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "cartList")
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE,
+            CascadeType.REFRESH,
+            CascadeType.DETACH
+    }, fetch = FetchType.EAGER, mappedBy = "cartList")
     private List<Product> productList;
 }
