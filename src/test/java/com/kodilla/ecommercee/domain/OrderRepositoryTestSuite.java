@@ -39,14 +39,10 @@ public class OrderRepositoryTestSuite {
         Order order = new Order(new BigDecimal(1000), cart);
         //When
         Order savedOrder = orderRepository.save(order);
-        Long orderId = savedOrder.getId();
         //Then
         assertEquals(new BigDecimal(1000), savedOrder.getTotalPrice());
         assertEquals(cartId, savedOrder.getCart().getId());
         assertNotNull(cartRepository.findById(cartId));
-
-        orderRepository.deleteById(orderId);
-        assertEquals(Optional.empty(), cartRepository.findById(cartId));
     }
 
     @Test
