@@ -36,6 +36,13 @@ public class SecurityService {
         return key;
     }
 
+    public boolean validateAccess(String userAccessKey) {
+
+        Key key =keyRepository.findByAccessKey(userAccessKey);
+
+        return key.getExpirationTime().isBefore(LocalDateTime.now());
+    }
+
     public void validateQuery(Long id) {
 
         Long l = id == null ? 0L : id;

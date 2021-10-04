@@ -6,5 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface KeyRepository extends CrudRepository<Key,Long> {
+
     Key findByUserId(Long userId);
+    Key findByAccessKey(String accessKey);
 }
