@@ -1,19 +1,23 @@
 package com.kodilla.ecommercee.domain;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
+@Data
 @Entity
 @Table(name = "product_groups")
 public class Group {
+
+    public Group(String name) {
+        this.name = name;
+        this.productList = new ArrayList<>();
+    }
 
     @Id
     @GeneratedValue
