@@ -28,8 +28,6 @@ public class UserDbService {
     @Autowired
     SecurityService securityService;
     @Autowired
-    UserMapper userMapper;
-    @Autowired
     KeyMapper keyMapper;
 
 
@@ -39,7 +37,7 @@ public class UserDbService {
 
         KeyDto newGeneratedKeyDto = securityService.generateKey();
         newUser.setKey(keyMapper.mapKeyDtoToKey(newGeneratedKeyDto));
-        newUser.setId(0L);
+
         newUser.setFirstname(u.getFirstname());
         newUser.setSurname(u.getSurname());
 
