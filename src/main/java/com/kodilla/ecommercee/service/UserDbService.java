@@ -10,6 +10,7 @@ import com.kodilla.ecommercee.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
@@ -54,26 +55,17 @@ public class UserDbService {
         return userRepository.findById(id).get();
     }
 
-
     public void deleteUser(Long id) {
-        if (userRepository.findById(id).isPresent()) {
+
             userRepository.deleteById(id);
-        }
     }
+
 
     public User update(User u) {
 
         Long id = u.getId();
-        User user = userRepository.findById(id).get();
+        User user = userRepository.findById(u.getId()).get();
         Key userKey = keyRepository.findByUserId(id);
-
-        KeyDto receivedKeyDto = keyMapper.mapKeyToKeyDto(u.getKey());
-        KeyDto existingUserKeyDto = keyMapper.mapKeyToKeyDto(keyRepository.findByUserId(u.getId()));
-
-
-        if (!receivedKeyDto.getAccessKey().equals(existingUserKeyDto.getAccessKey())) {
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "You can't change other users!");
-        }
 
         KeyDto generatedKeyDto = securityService.generateKey();
 
@@ -84,20 +76,5 @@ public class UserDbService {
         userKey.setExpirationTime(generatedKeyDto.getExpirationTime());
 
         return userRepository.save(user);
-    }
-
-    public User setTemporary() {
-
-        User tempUser = new User();
-        tempUser.setFirstname("There are a temporary credentials below. Use it to create Your account.");
-        tempUser.setSurname("Your key is valid for 10 minutes.");
-
-        Key temporaryKey = keyMapper.mapKeyDtoToKey(securityService.generateKey());
-        temporaryKey.setExpirationTime(LocalDateTime.now().plusMinutes(10));
-
-        tempUser.setKey(temporaryKey);
-
-        return userRepository.save(tempUser);
-
     }
 }

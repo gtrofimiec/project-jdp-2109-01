@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,17 +41,15 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public UserDto getOne(@PathVariable Long userId) {
-        try {
-            return userMapper.mapUserToUserDto(dbService.getOneUser(userId));
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid User Id!");
-        }
+
+        securityService.validateQuery(userId);
+        return userMapper.mapUserToUserDto(dbService.getOneUser(userId));
     }
 
-    @PostMapping()
-    public UserDto save(@RequestBody UserDto userDto) {
 
-        securityService.isAccessPossible(userDto);
+    @PostMapping()
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public UserDto save(@RequestBody UserDto userDto) {
 
         System.out.println(userDto);
         User user = userMapper.mapUserDtoToUser(userDto);
@@ -62,24 +59,18 @@ public class UserController {
 
 
     @PutMapping
+    @ResponseStatus(value = HttpStatus.RESET_CONTENT)
     public UserDto update(@RequestBody UserDto userDto) {
-
-        securityService.isAccessPossible(userDto);
 
         User user = userMapper.mapUserDtoToUser(userDto);
         return userMapper.mapUserToUserDto(dbService.update(user));
     }
 
-    @DeleteMapping()
-    public void delete(@RequestBody UserDto userDto) {
 
-        securityService.isAccessPossible(userDto);
+    @DeleteMapping("/{userId}")
+    public void delete(@PathVariable Long userId) {
 
-        dbService.deleteUser(userDto.getId());
-    }
-
-    @PostMapping("/tempaccess")
-    public UserDto generateTemporaryAccess() {
-        return userMapper.mapUserToUserDto(dbService.setTemporary());
+        securityService.validateQuery(userId);
+        dbService.deleteUser(userId);
     }
 }
