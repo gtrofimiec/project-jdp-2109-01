@@ -15,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -50,8 +51,15 @@ public class UserDbService {
     }
 
     public User getOneUser(Long id) {
-        return userRepository.findById(id).get();
+
+        User user = Optional.ofNullable(userRepository.findById(id).get()).orElseThrow(
+
+                () -> new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "No such user!")
+        );
+
+        return user;
     }
+
 
     public void deleteUser(Long id) {
 
