@@ -3,8 +3,6 @@ package com.kodilla.ecommercee.controller;
 import com.kodilla.ecommercee.domain.User;
 import com.kodilla.ecommercee.domain.dto.UserDto;
 import com.kodilla.ecommercee.mapper.UserMapper;
-import com.kodilla.ecommercee.repository.UserRepository;
-import com.kodilla.ecommercee.service.SecurityService;
 import com.kodilla.ecommercee.service.UserDbService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +23,6 @@ public class UserController {
     UserDbService dbService;
     @Autowired
     UserMapper userMapper;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    SecurityService securityService;
-
 
     @GetMapping
     public List<UserDto> getAll() {
@@ -42,7 +35,6 @@ public class UserController {
     @GetMapping("/{userId}")
     public UserDto getOne(@PathVariable Long userId) {
 
-        securityService.validateQuery(userId);
         return userMapper.mapUserToUserDto(dbService.getOneUser(userId));
     }
 
@@ -51,7 +43,6 @@ public class UserController {
     @ResponseStatus(value = HttpStatus.CREATED)
     public UserDto save(@RequestBody UserDto userDto) {
 
-        System.out.println(userDto);
         User user = userMapper.mapUserDtoToUser(userDto);
         return (userMapper.mapUserToUserDto(
                 dbService.save(user)));
@@ -70,7 +61,6 @@ public class UserController {
     @DeleteMapping("/{userId}")
     public void delete(@PathVariable Long userId) {
 
-        securityService.validateQuery(userId);
         dbService.deleteUser(userId);
     }
 }
