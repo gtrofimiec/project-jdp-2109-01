@@ -8,7 +8,9 @@ import com.kodilla.ecommercee.service.SecurityService;
 import com.kodilla.ecommercee.service.UserDbService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,42 +31,55 @@ public class UserController {
     @Autowired
     SecurityService securityService;
 
+
     @GetMapping
     public List<UserDto> getAll() {
+
         return dbService.getAllUsers().stream()
                 .map(x -> userMapper.mapUserToUserDto(x))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    @GetMapping("/{id}")
-    public UserDto getOne(@PathVariable(value = "id") Long id) {
-
-        securityService.validateQuery(id);
-        return userMapper.mapUserToUserDto(dbService.getOneUser(id));
+    @GetMapping("/{userId}")
+    public UserDto getOne(@PathVariable Long userId) {
+        try {
+            return userMapper.mapUserToUserDto(dbService.getOneUser(userId));
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid User Id!");
+        }
     }
 
-    @PostMapping
+    @PostMapping()
     public UserDto save(@RequestBody UserDto userDto) {
 
+        securityService.isAccessPossible(userDto);
+
+        System.out.println(userDto);
         User user = userMapper.mapUserDtoToUser(userDto);
         return (userMapper.mapUserToUserDto(
                 dbService.save(user)));
     }
 
+
     @PutMapping
     public UserDto update(@RequestBody UserDto userDto) {
 
-        if (userDto.getId() != null && userRepository.findById(userDto.getId()).isPresent()) {
-            User user = userMapper.mapUserDtoToUser(userDto);
-            return userMapper.mapUserToUserDto(dbService.update(user));
-        }
-        return null;
+        securityService.isAccessPossible(userDto);
+
+        User user = userMapper.mapUserDtoToUser(userDto);
+        return userMapper.mapUserToUserDto(dbService.update(user));
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable(value = "id") Long id) {
+    @DeleteMapping()
+    public void delete(@RequestBody UserDto userDto) {
 
-        securityService.validateQuery(id);
-        dbService.deleteUser(id);
+        securityService.isAccessPossible(userDto);
+
+        dbService.deleteUser(userDto.getId());
+    }
+
+    @PostMapping("/tempaccess")
+    public UserDto generateTemporaryAccess() {
+        return userMapper.mapUserToUserDto(dbService.setTemporary());
     }
 }

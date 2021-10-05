@@ -3,9 +3,6 @@ package com.kodilla.ecommercee.repository;
 import com.kodilla.ecommercee.domain.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
@@ -13,8 +10,9 @@ public interface UserRepository extends CrudRepository<User, Long> {
     User save(User user);
 
     @Override
-    Optional<User> findById(Long userId);
-
-    @Override
     void deleteById(Long userId);
+
+    User findUserByKeyAccessKey(String accessKey);
+
+    User findUserById(Long userId);
 }
