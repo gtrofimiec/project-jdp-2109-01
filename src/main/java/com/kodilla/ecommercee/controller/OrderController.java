@@ -26,7 +26,7 @@ public class OrderController {
 
     @GetMapping
     public List<OrderDto> getOrders() {
-        return orderService.getAll().stream().map(orderMapper::mapOrderToOrderDto).collect(Collectors.toList());
+        return orderMapper.mapToOrderDtoList(orderService.getAll());
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
