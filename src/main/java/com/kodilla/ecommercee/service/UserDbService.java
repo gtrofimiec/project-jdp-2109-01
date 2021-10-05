@@ -4,7 +4,6 @@ import com.kodilla.ecommercee.domain.Key;
 import com.kodilla.ecommercee.domain.User;
 import com.kodilla.ecommercee.domain.dto.KeyDto;
 import com.kodilla.ecommercee.mapper.KeyMapper;
-import com.kodilla.ecommercee.mapper.UserMapper;
 import com.kodilla.ecommercee.repository.KeyRepository;
 import com.kodilla.ecommercee.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,12 +49,11 @@ public class UserDbService {
 
     public User getOneUser(Long id) {
 
-        User user = Optional.ofNullable(userRepository.findById(id).get()).orElseThrow(
+        if (!userRepository.findById(id).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "No such user!");
+        }
 
-                () -> new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "No such user!")
-        );
-
-        return user;
+        return userRepository.findById(id).get();
     }
 
 
@@ -70,6 +68,7 @@ public class UserDbService {
     public User update(User u) {
 
         Long id = u.getId();
+        System.out.println(id);
         if (!userRepository.findById(id).isPresent()) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "No such user!");
         }
