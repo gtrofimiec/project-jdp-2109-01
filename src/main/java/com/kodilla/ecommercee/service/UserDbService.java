@@ -50,7 +50,7 @@ public class UserDbService {
     public User getOneUser(Long id) {
 
         if (!userRepository.findById(id).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "No such user!");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No such user!");
         }
 
         return userRepository.findById(id).get();
@@ -60,7 +60,7 @@ public class UserDbService {
     public void deleteUser(Long id) {
 
         if (!userRepository.findById(id).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "No such user!");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No such user!");
         }
         userRepository.deleteById(id);
     }
@@ -70,7 +70,7 @@ public class UserDbService {
         Long id = u.getId();
         System.out.println(id);
         if (!userRepository.findById(id).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "No such user!");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No such user!");
         }
 
         User user = userRepository.findById(u.getId()).get();
