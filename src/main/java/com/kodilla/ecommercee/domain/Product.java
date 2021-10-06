@@ -1,12 +1,10 @@
 package com.kodilla.ecommercee.domain;
 
 import lombok.*;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.sql.Array;
 import java.util.*;
 
 @NoArgsConstructor
@@ -48,9 +46,10 @@ public class Product {
             CascadeType.PERSIST,
             CascadeType.MERGE,
             CascadeType.REFRESH,
-            CascadeType.DETACH
+            CascadeType.DETACH,
+            CascadeType.REMOVE
     },
-            fetch = FetchType.EAGER)
+            fetch = FetchType.LAZY)
     @JoinTable(name ="Products_has_carts",
             joinColumns = {@JoinColumn(name = "product_id", referencedColumnName = "product_id")},
             inverseJoinColumns = {@JoinColumn(name = "cart_id", referencedColumnName = "cart_id")}

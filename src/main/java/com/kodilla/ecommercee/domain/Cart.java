@@ -30,7 +30,8 @@ public class Cart {
             CascadeType.PERSIST,
             CascadeType.MERGE,
             CascadeType.REFRESH,
-            CascadeType.DETACH
-    }, fetch = FetchType.EAGER, mappedBy = "cartList")
+            CascadeType.DETACH,
+            CascadeType.REMOVE
+    }, fetch = FetchType.LAZY, mappedBy = "cartList")
     private List<Product> productList;
 }
