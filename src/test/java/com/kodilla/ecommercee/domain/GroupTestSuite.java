@@ -3,7 +3,6 @@ package com.kodilla.ecommercee.domain;
 import com.kodilla.ecommercee.repository.GroupRepository;
 import com.kodilla.ecommercee.repository.ProductRepository;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,6 @@ public class GroupTestSuite {
     @Autowired
     private ProductRepository productRepository;
 
-    @Before
     @After
     public void cleanDatabase(){
         groupRepository.deleteAll();
@@ -57,7 +55,6 @@ public class GroupTestSuite {
 
         List<Group> groupList = groupRepository.findAll();
         //Then
-        assertTrue(groupList.size()>0);
         assertEquals(3, groupList.size());
     }
 
@@ -106,12 +103,17 @@ public class GroupTestSuite {
     public void testGroupDelete(){
         //Given
         Group group = new Group("name");
+        Product product = new Product("name1", new BigDecimal(10), "desc1");
         //When
+        group.getProductList().add(product);
+        product.setGroup(group);
         groupRepository.save(group);
+        productRepository.save(product);
         Long groupId = group.getId();
         groupRepository.deleteById(groupId);
         //Then
         assertFalse(groupRepository.existsById(groupId));
         assertEquals(0, groupRepository.findAll().size());
+        assertEquals(0,productRepository.findAll().size());
     }
 }
