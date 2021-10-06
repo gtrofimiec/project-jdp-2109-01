@@ -46,8 +46,7 @@ public class Product {
             CascadeType.PERSIST,
             CascadeType.MERGE,
             CascadeType.REFRESH,
-            CascadeType.DETACH,
-            CascadeType.REMOVE
+            CascadeType.DETACH
     },
             fetch = FetchType.LAZY)
     @JoinTable(name ="Products_has_carts",

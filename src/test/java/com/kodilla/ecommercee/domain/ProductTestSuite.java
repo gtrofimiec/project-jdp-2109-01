@@ -131,6 +131,9 @@ public class ProductTestSuite {
         group.getProductList().add(product1);
         group.getProductList().add(product2);
 
+        cart1.getProductList().add(product1);
+        cart2.getProductList().add(product2);
+
         product1.getCartList().add(cart1);
         product2.getCartList().add(cart2);
         product1.setGroup(group);
@@ -154,7 +157,7 @@ public class ProductTestSuite {
         //Then
         assertEquals(Optional.empty(), productNotFound);
         assertEquals(1, remainingProduct);
-        assertEquals(1, remainingCart);
+        assertEquals(2, remainingCart);
         assertEquals(1, remainingGroup);
     }
 }
