@@ -50,7 +50,6 @@ public class UserController {
 
 
     @PutMapping
-    @ResponseStatus(value = HttpStatus.RESET_CONTENT)
     public UserDto update(@RequestBody UserDto userDto) {
 
         User user = userMapper.mapUserDtoToUser(userDto);
