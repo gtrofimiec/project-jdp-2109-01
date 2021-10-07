@@ -32,6 +32,11 @@ public class UserDbService {
 
     public User save(User u) {
 
+        Long userId=u.getId();
+        if (userRepository.findById(userId).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "User with given Id already exists! Use Update mode.");
+        }
+
         User newUser = new User();
 
         KeyDto newGeneratedKeyDto = securityService.generateKey();
