@@ -12,23 +12,23 @@ public class CartMapper {
 
     private ProductMapper productMapper;
 
-    public Cart mapCartDtoToCart(CartDto cartDto) {
+    public Cart mapToCart(CartDto cartDto) {
         return new Cart(cartDto.getId(), productMapper.mapProductDtoListToProductList(cartDto.getProducts()));
     }
 
-    public CartDto mapCartToCartDto(Cart cart) {
+    public CartDto mapToCartDto(Cart cart) {
         return new CartDto(cart.getId(), productMapper.mapProductListToProductDtoList(cart.getProductList()));
     }
 
-    public List<Cart> mapCartDtoListToCartList(List<CartDto> cartDtoList) {
+    public List<Cart> mapToCartList(List<CartDto> cartDtoList) {
         return cartDtoList.stream()
-                .map(this::mapCartDtoToCart)
+                .map(this::mapToCart)
                 .collect(Collectors.toList());
     }
 
-    public List<CartDto> mapCartListToCartDtoList(List<Cart> cartList) {
+    public List<CartDto> mapToCartDtoList(List<Cart> cartList) {
         return cartList.stream()
-                .map(this::mapCartToCartDto)
+                .map(this::mapToCartDto)
                 .collect(Collectors.toList());
     }
 }

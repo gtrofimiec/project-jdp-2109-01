@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,4 +27,13 @@ public class Cart {
 
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "cartList")
     private List<Product> productList;
+
+
+    public BigDecimal calculateValue() {
+        BigDecimal value = new BigDecimal(0);
+        for (Product product : productList) {
+            value.add(product.getPrice());
+        }
+        return value;
+    }
 }
