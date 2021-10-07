@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @NoArgsConstructor
@@ -20,6 +21,7 @@ public class Order {
     }
     @Id
     @GeneratedValue
+    @NotNull
     @Column(name = "order_id")
     private Long id;
 
