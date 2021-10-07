@@ -19,16 +19,16 @@ public class ProductController {
 
     @GetMapping(value = "/{id}")
     public ProductDto getOne(@PathVariable("id") Long id) {
-        return new ProductDto("name", "description", new BigDecimal(10),new GroupDto(1l,"group"));
+        return new ProductDto("name", "description", new BigDecimal(10),new GroupDto());
     }
 
 
     @GetMapping
     public List<ProductDto> getAll() {
         return Arrays.asList(
-                new ProductDto("name1", "description1", new BigDecimal(100),new GroupDto(1l,"group")),
-                new ProductDto("name2", "description2", new BigDecimal(200),new GroupDto(1l,"group")),
-                new ProductDto("name3", "description3", new BigDecimal(300),new GroupDto(1l,"group"))
+                new ProductDto("name1", "description1", new BigDecimal(100),new GroupDto()),
+                new ProductDto("name2", "description2", new BigDecimal(200),new GroupDto()),
+                new ProductDto("name3", "description3", new BigDecimal(300),new GroupDto())
         );
     }
 
