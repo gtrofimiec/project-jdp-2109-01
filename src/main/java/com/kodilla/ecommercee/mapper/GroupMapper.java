@@ -27,9 +27,4 @@ public class GroupMapper {
                 .map(this::mapGroupToGroupDto)
                 .collect(Collectors.toList());
     }
-//    public List<Group> mapToGroupList(List<GroupDto> groupDtoList) {
-//        return groupDtoList.stream()
-//                .map(this::mapGroupDtoToGroup)
-//                .collect(Collectors.toList());
-//    }
 }

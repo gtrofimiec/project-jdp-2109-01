@@ -27,8 +27,4 @@ public class GroupService {
     public Optional<Group> getGroup(Long groupId) {
         return groupRepository.findById(groupId);
     }
-
-    public void deleteGroup(Long groupId) {
-        groupRepository.deleteById(groupId);
-    }
 }

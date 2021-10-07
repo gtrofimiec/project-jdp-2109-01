@@ -7,7 +7,6 @@ import com.kodilla.ecommercee.service.GroupService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -24,15 +23,10 @@ public class GroupController {
 
     @GetMapping
     public List<GroupDto> getGroups(){
-//        return Arrays.asList(
-//                new GroupDto(1L, "underwear"),
-//                new GroupDto(2L, "jackets")
-//        );
         return groupMapper.mapToGroupDtoList(groupService.getAll());
     }
     @GetMapping("/{groupId}")
     public GroupDto getGroup(@PathVariable ("groupId") Long groupId){
-//        return new GroupDto (1L, "underwear");
         return groupMapper.mapGroupToGroupDto(groupService.getGroup(groupId).get());
     }
 
@@ -44,7 +38,6 @@ public class GroupController {
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, value = "/{groupId}")
     public GroupDto updateGroup(@PathVariable ("groupId") Long groupId, @RequestBody GroupDto groupDto){
-//        return new GroupDto (1L, "updated name");
         groupService.getGroup(groupId);
 
         Group updatedGroup = groupMapper.mapGroupDtoToGroup(groupDto);
