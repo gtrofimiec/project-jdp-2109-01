@@ -4,7 +4,6 @@ import com.kodilla.ecommercee.repository.CartRepository;
 import com.kodilla.ecommercee.repository.GroupRepository;
 import com.kodilla.ecommercee.repository.ProductRepository;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,22 +28,43 @@ public class ProductTestSuite {
     @Autowired
     private CartRepository cartRepository;
 
-    @Before
-    public void cleanUpDataBaseBefore() {
-        productRepository.deleteAll();
-        cartRepository.deleteAll();
-        groupRepository.deleteAll();
-    }
-
     @After
     public void cleanUpDataBaseAfter() {
-        productRepository.deleteAll();
         cartRepository.deleteAll();
+        productRepository.deleteAll();
         groupRepository.deleteAll();
     }
 
     @Test
+    public void testProductFindAll() {
+
+        //Given
+        Cart cart = new Cart();
+        Group group = new Group("group 1");
+        Product product1 = new Product("test 1", BigDecimal.ONE, "test description1");
+        Product product2 = new Product("test 2", BigDecimal.ONE, "test description2");
+
+        group.getProductList().add(product1);
+        group.getProductList().add(product2);
+        cart.getProductList().add(product1);
+        cart.getProductList().add(product2);
+        product1.getCartList().add(cart);
+        product2.getCartList().add(cart);
+
+        groupRepository.save(group);
+        productRepository.save(product1);
+        productRepository.save(product2);
+
+        //When
+        List<Product> productList = productRepository.findAll();
+
+        //Then
+        assertEquals(2, productList.size());
+    }
+
+    @Test
     public void testProductSave() {
+
         //Given
         Cart cart = new Cart();
         Group group = new Group("group 1");
@@ -53,7 +73,6 @@ public class ProductTestSuite {
         cart.getProductList().add(product);
         product.getCartList().add(cart);
         group.getProductList().add(product);
-        product.setGroup(group);
 
         //When
         groupRepository.save(group);
@@ -66,37 +85,10 @@ public class ProductTestSuite {
         assertTrue(productRepository.existsById(id));
     }
 
-    @Test
-    public void testProductFindAll() {
-        //Given
-        Cart cart = new Cart();
-        Group group = new Group("group 1");
-        Product product1 = new Product("test 1", BigDecimal.ONE, "test description1");
-        Product product2 = new Product("test 2", BigDecimal.ONE, "test description2");
-
-        cart.getProductList().add(product1);
-        cart.getProductList().add(product2);
-        group.getProductList().add(product1);
-        group.getProductList().add(product2);
-        product1.getCartList().add(cart);
-        product2.getCartList().add(cart);
-        product1.setGroup(group);
-        product2.setGroup(group);
-
-        groupRepository.save(group);
-        productRepository.save(product1);
-        productRepository.save(product2);
-        cartRepository.save(cart);
-
-        //When
-        List<Product> productList = productRepository.findAll();
-
-        //Then
-        assertEquals(2, productList.size());
-    }
 
     @Test
     public void testProductFindById() {
+
         //Given
         Cart cart = new Cart();
         Group group = new Group("group 1");
@@ -111,6 +103,7 @@ public class ProductTestSuite {
         product2.getCartList().add(cart);
         product1.setGroup(group);
         product2.setGroup(group);
+
 
         groupRepository.save(group);
         productRepository.save(product1);
@@ -127,6 +120,7 @@ public class ProductTestSuite {
 
     @Test
     public void testProductDelete() {
+
         //Given
         Cart cart1 = new Cart();
         Cart cart2 = new Cart();
@@ -134,39 +128,36 @@ public class ProductTestSuite {
         Product product1 = new Product("product 1", BigDecimal.ONE, "test description1");
         Product product2 = new Product("product 2", BigDecimal.ONE, "test description2");
 
-        cart1.getProductList().add(product1);
-        cart2.getProductList().add(product2);
-
         group.getProductList().add(product1);
         group.getProductList().add(product2);
 
+        cart1.getProductList().add(product1);
+        cart2.getProductList().add(product2);
+
         product1.getCartList().add(cart1);
-        product1.setGroup(group);
         product2.getCartList().add(cart2);
+        product1.setGroup(group);
         product2.setGroup(group);
 
         groupRepository.save(group);
+        cartRepository.save(cart1);
+        cartRepository.save(cart2);
         productRepository.save(product1);
         productRepository.save(product2);
-        cartRepository.save(cart1);
 
         //When
         Long id1 = product1.getId();
-        try {
-            productRepository.deleteById(id1);
-        } catch (Exception e) {
-            //do nothing
-        }
+        productRepository.deleteById(id1);
 
         Optional<Product> productNotFound = productRepository.findById(id1);
         int remainingProduct = productRepository.findAll().size();
-        int remainingCart = cartRepository.findAll().size();
         int remainingGroup = groupRepository.findAll().size();
+        int remainingCart = cartRepository.findAll().size();
 
         //Then
         assertEquals(Optional.empty(), productNotFound);
         assertEquals(1, remainingProduct);
-        assertEquals(1, remainingCart);
+        assertEquals(2, remainingCart);
         assertEquals(1, remainingGroup);
     }
 }

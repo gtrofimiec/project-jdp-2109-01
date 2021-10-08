@@ -1,15 +1,16 @@
 package com.kodilla.ecommercee.domain;
 
-
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "product_groups")
 public class Group {
@@ -26,15 +27,16 @@ public class Group {
 
     @Id
     @GeneratedValue
+    @NotNull
     @Column(name = "group_id")
     private Long id;
 
+    @NotNull
     @Column(name = "name")
     private String name;
 
     @OneToMany(targetEntity = Product.class,
             mappedBy = "group",
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)
+            cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<Product> productList;
 }
