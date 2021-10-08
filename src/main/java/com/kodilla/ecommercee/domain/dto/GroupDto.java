@@ -15,9 +15,4 @@ public class GroupDto {
     private Long id;
     private String name;
     private List<ProductDto> productDtoList = new ArrayList<>();
-
-    public GroupDto(String name, List<ProductDto> productDtoList) {
-        this.name = name;
-        this.productDtoList = productDtoList;
-    }
 }
