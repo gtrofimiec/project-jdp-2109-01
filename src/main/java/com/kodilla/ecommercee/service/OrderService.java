@@ -1,11 +1,10 @@
 package com.kodilla.ecommercee.service;
 
+import com.kodilla.ecommercee.controller.exception.OrderConflictException;
 import com.kodilla.ecommercee.controller.exception.OrderNotFoundException;
 import com.kodilla.ecommercee.domain.Order;
 import com.kodilla.ecommercee.repository.OrderRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -35,10 +34,10 @@ public class OrderService {
         orderRepository.deleteById(orderId);
     }
 
-    public Order update(Long orderId, Order order) throws ResponseStatusException {
+    public Order update(Long orderId, Order order) throws OrderConflictException {
         if (orderRepository.existsById(orderId)){
             order.setId(orderId);
             return orderRepository.save(order);
-        }else throw new ResponseStatusException(HttpStatus.CONFLICT, "This order, doesn't exist, choose existing order");
+        }else throw new OrderConflictException();
     }
 }

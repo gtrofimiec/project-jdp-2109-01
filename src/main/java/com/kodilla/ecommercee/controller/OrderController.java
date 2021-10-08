@@ -7,7 +7,6 @@ import com.kodilla.ecommercee.mapper.OrderMapper;
 import com.kodilla.ecommercee.service.OrderService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -40,7 +39,7 @@ public class OrderController {
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, value = "/{orderId}")
-    public OrderDto updateOrder(@PathVariable("orderId") Long orderId, @RequestBody OrderDto orderDto) throws ResponseStatusException {
+    public OrderDto updateOrder(@PathVariable("orderId") Long orderId, @RequestBody OrderDto orderDto) throws OrderNotFoundException {
         Order orderToUpdate = orderMapper.mapOrderDtoToOrder(orderDto);
         Order updatedOrder = orderService.update(orderId, orderToUpdate);
         return orderMapper.mapOrderToOrderDto(updatedOrder);
