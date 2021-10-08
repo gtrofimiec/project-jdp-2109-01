@@ -2,7 +2,9 @@ package com.kodilla.ecommercee.service;
 
 import com.kodilla.ecommercee.domain.Group;
 import com.kodilla.ecommercee.repository.GroupRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +26,10 @@ public class GroupService {
         return groupRepository.save(group);
     }
 
-    public Optional<Group> getGroup(Long groupId) {
+    public Optional<Group> getGroup(Long groupId) throws ResponseStatusException {
+        if(!groupRepository.existsById(groupId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "order not found");
+        }
         return groupRepository.findById(groupId);
     }
 }
