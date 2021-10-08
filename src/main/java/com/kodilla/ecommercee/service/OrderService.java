@@ -1,5 +1,6 @@
 package com.kodilla.ecommercee.service;
 
+import com.kodilla.ecommercee.controller.exception.OrderNotFoundException;
 import com.kodilla.ecommercee.domain.Order;
 import com.kodilla.ecommercee.repository.OrderRepository;
 import org.springframework.http.HttpStatus;
@@ -26,17 +27,12 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
-    public Optional<Order> getOrder(Long orderId){
-        if(!orderRepository.existsById(orderId)){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "order not found");
-        }
-        return orderRepository.findById(orderId);
+    public Order getOrder(Long orderId) throws OrderNotFoundException {
+        return orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
     }
 
-    public void delete(Long orderId){
-        if(!orderRepository.existsById(orderId)){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "order not found");
-        }
+    public void delete(Long orderId) throws OrderNotFoundException {
+        orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
         orderRepository.deleteById(orderId);
     }
 }

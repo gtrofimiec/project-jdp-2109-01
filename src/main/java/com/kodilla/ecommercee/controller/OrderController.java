@@ -1,5 +1,6 @@
 package com.kodilla.ecommercee.controller;
 
+import com.kodilla.ecommercee.controller.exception.OrderNotFoundException;
 import com.kodilla.ecommercee.domain.Order;
 import com.kodilla.ecommercee.domain.dto.OrderDto;
 import com.kodilla.ecommercee.mapper.OrderMapper;
@@ -32,12 +33,12 @@ public class OrderController {
     }
 
     @GetMapping(value = "/{orderId}")
-    public OrderDto getOrder(@PathVariable("orderId") Long orderId) {
-        return orderMapper.mapOrderToOrderDto(orderService.getOrder(orderId).get());
+    public OrderDto getOrder(@PathVariable("orderId") Long orderId) throws OrderNotFoundException {
+        return orderMapper.mapOrderToOrderDto(orderService.getOrder(orderId));
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, value = "/{orderId}")
-    public OrderDto updateOrder(@PathVariable("orderId") Long orderId, @RequestBody OrderDto orderDto) {
+    public OrderDto updateOrder(@PathVariable("orderId") Long orderId, @RequestBody OrderDto orderDto) throws OrderNotFoundException {
         orderService.getOrder(orderId);
 
         Order updatedOrder = orderMapper.mapOrderDtoToOrder(orderDto);
@@ -47,7 +48,7 @@ public class OrderController {
     }
 
     @DeleteMapping(value = "/{orderId}")
-    public void deleteOrder(@PathVariable("orderId") Long orderId) {
+    public void deleteOrder(@PathVariable("orderId") Long orderId) throws OrderNotFoundException {
         orderService.delete(orderId);
     }
 }
