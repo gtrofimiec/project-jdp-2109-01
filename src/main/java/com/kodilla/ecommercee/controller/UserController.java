@@ -15,17 +15,19 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1/ecommerce/users")
-@RequiredArgsConstructor
 
 public class UserController {
 
-    @Autowired
-    UserDbService dbService;
-    @Autowired
-    UserMapper userMapper;
+    private final UserDbService dbService;
+    private final UserMapper userMapper;
+
+    public UserController(UserDbService dbService, UserMapper userMapper) {
+        this.dbService = dbService;
+        this.userMapper = userMapper;
+    }
 
     @GetMapping
-    public List<UserDto> getAll() {
+    public List<UserDto> getAllUsers() {
 
         return dbService.getAllUsers().stream()
                 .map(x -> userMapper.mapUserToUserDto(x))
@@ -33,7 +35,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public UserDto getOne(@PathVariable Long userId) {
+    public UserDto getOneUser(@PathVariable Long userId) {
 
         return userMapper.mapUserToUserDto(dbService.getOneUser(userId));
     }
@@ -41,7 +43,7 @@ public class UserController {
 
     @PostMapping()
     @ResponseStatus(value = HttpStatus.CREATED)
-    public UserDto save(@RequestBody UserDto userDto) {
+    public UserDto saveUser(@RequestBody UserDto userDto) {
 
         User user = userMapper.mapUserDtoToUser(userDto);
         return (userMapper.mapUserToUserDto(
@@ -50,7 +52,7 @@ public class UserController {
 
 
     @PutMapping
-    public UserDto update(@RequestBody UserDto userDto) {
+    public UserDto updateUser(@RequestBody UserDto userDto) {
 
         User user = userMapper.mapUserDtoToUser(userDto);
         return userMapper.mapUserToUserDto(dbService.update(user));
@@ -58,7 +60,7 @@ public class UserController {
 
 
     @DeleteMapping("/{userId}")
-    public void delete(@PathVariable Long userId) {
+    public void deleteUser(@PathVariable Long userId) {
 
         dbService.deleteUser(userId);
     }

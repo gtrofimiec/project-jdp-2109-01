@@ -6,6 +6,7 @@ import com.kodilla.ecommercee.domain.dto.KeyDto;
 import com.kodilla.ecommercee.mapper.KeyMapper;
 import com.kodilla.ecommercee.repository.KeyRepository;
 import com.kodilla.ecommercee.repository.UserRepository;
+import lombok.Value;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -14,25 +15,26 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
 public class UserDbService {
 
-    @Autowired
-    KeyRepository keyRepository;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    SecurityService securityService;
-    @Autowired
-    KeyMapper keyMapper;
+    private final KeyRepository keyRepository;
+    private final UserRepository userRepository;
+    private final SecurityService securityService;
+    private final KeyMapper keyMapper;
 
+    public UserDbService(KeyRepository keyRepository, UserRepository userRepository, SecurityService securityService, KeyMapper keyMapper) {
+        this.keyRepository = keyRepository;
+        this.userRepository = userRepository;
+        this.securityService = securityService;
+        this.keyMapper = keyMapper;
+    }
 
     public User save(User u) {
 
-        Long userId=u.getId();
+        Long userId = u.getId();
         if (userRepository.findById(userId).isPresent()) {
             throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "User with given Id already exists! Use Update mode.");
         }
