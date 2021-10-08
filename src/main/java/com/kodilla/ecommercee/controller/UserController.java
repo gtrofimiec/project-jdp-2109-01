@@ -3,9 +3,8 @@ package com.kodilla.ecommercee.controller;
 import com.kodilla.ecommercee.domain.User;
 import com.kodilla.ecommercee.domain.dto.UserDto;
 import com.kodilla.ecommercee.mapper.UserMapper;
+import com.kodilla.ecommercee.service.SecurityService;
 import com.kodilla.ecommercee.service.UserDbService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,10 +19,12 @@ public class UserController {
 
     private final UserDbService dbService;
     private final UserMapper userMapper;
+    private SecurityService securityService;
 
-    public UserController(UserDbService dbService, UserMapper userMapper) {
+    public UserController(UserDbService dbService, UserMapper userMapper, SecurityService securityService) {
         this.dbService = dbService;
         this.userMapper = userMapper;
+        this.securityService = securityService;
     }
 
     @GetMapping
@@ -45,6 +46,9 @@ public class UserController {
     @ResponseStatus(value = HttpStatus.CREATED)
     public UserDto saveUser(@RequestBody UserDto userDto) {
 
+        securityService.isAccessPossible(userDto);
+
+        System.out.println(userDto);
         User user = userMapper.mapUserDtoToUser(userDto);
         return (userMapper.mapUserToUserDto(
                 dbService.save(user)));
@@ -54,14 +58,25 @@ public class UserController {
     @PutMapping
     public UserDto updateUser(@RequestBody UserDto userDto) {
 
+        securityService.isAccessPossible(userDto);
+
         User user = userMapper.mapUserDtoToUser(userDto);
         return userMapper.mapUserToUserDto(dbService.update(user));
     }
 
 
-    @DeleteMapping("/{userId}")
-    public void deleteUser(@PathVariable Long userId) {
 
-        dbService.deleteUser(userId);
+    @DeleteMapping("/{userId}")
+    public void deleteUser(@RequestBody UserDto userDto) {
+
+        securityService.isAccessPossible(userDto);
+
+        dbService.deleteUser(userDto.getId());
+    }
+
+    @PostMapping("/tempaccess")
+    public UserDto generateTemporaryAccess() {
+        return userMapper.mapUserToUserDto(dbService.setTemporary());
+
     }
 }

@@ -6,12 +6,11 @@ import com.kodilla.ecommercee.domain.dto.KeyDto;
 import com.kodilla.ecommercee.mapper.KeyMapper;
 import com.kodilla.ecommercee.repository.KeyRepository;
 import com.kodilla.ecommercee.repository.UserRepository;
-import lombok.Value;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -93,4 +92,20 @@ public class UserDbService {
 
         return userRepository.save(user);
     }
+
+    public User setTemporary() {
+
+        User tempUser = new User();
+        tempUser.setFirstname("There are a temporary credentials below. Use it to create Your account.");
+        tempUser.setSurname("Your key is valid for 10 minutes.");
+
+        Key temporaryKey = keyMapper.mapKeyDtoToKey(securityService.generateKey());
+        temporaryKey.setExpirationTime(LocalDateTime.now().plusMinutes(10));
+
+        tempUser.setKey(temporaryKey);
+
+        return userRepository.save(tempUser);
+
+    }
+
 }
