@@ -32,6 +32,10 @@ public class Group {
 
     @OneToMany(targetEntity = Product.class,
             mappedBy = "group",
-            cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.REMOVE,
+            },
+            fetch = FetchType.LAZY)
     private List<Product> productList;
 }

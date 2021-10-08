@@ -32,10 +32,9 @@ public class GroupTestSuite {
     public void testCreateGroup(){
         //Given
         Group group = new Group("name");
-        //When
         groupRepository.save(group);
         Long id = group.getId();
-
+        //When
         Optional<Group> savedGroup = groupRepository.findById(id);
         //Then
         assertTrue(savedGroup.isPresent());
@@ -48,11 +47,10 @@ public class GroupTestSuite {
         Group group1 = new Group("name");
         Group group2 = new Group("name2");
         Group group3 = new Group ("name3");
-        //When
         groupRepository.save(group1);
         groupRepository.save(group2);
         groupRepository.save(group3);
-
+        //When
         List<Group> groupList = groupRepository.findAll();
         //Then
         assertEquals(3, groupList.size());
@@ -62,10 +60,9 @@ public class GroupTestSuite {
     public void testGroupFindById(){
         //Given
         Group group = new Group("name");
-        //When
         groupRepository.save(group);
         Long groupId = group.getId();
-
+        //When
         Optional<Group>foundGroupById = groupRepository.findById(groupId);
         //Then
         assertNotNull(foundGroupById);
@@ -104,12 +101,12 @@ public class GroupTestSuite {
         //Given
         Group group = new Group("name");
         Product product = new Product("name1", new BigDecimal(10), "desc1");
-        //When
         group.getProductList().add(product);
         product.setGroup(group);
         groupRepository.save(group);
         productRepository.save(product);
         Long groupId = group.getId();
+        //When
         groupRepository.deleteById(groupId);
         //Then
         assertFalse(groupRepository.existsById(groupId));
