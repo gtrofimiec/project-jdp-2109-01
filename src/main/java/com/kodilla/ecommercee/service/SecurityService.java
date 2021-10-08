@@ -17,11 +17,13 @@ import java.util.Random;
 
 @Service
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class SecurityService {
 
     private UserRepository userRepository;
+
+    public SecurityService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public KeyDto generateKey() {
         String tempAccessKey = "";
@@ -37,8 +39,14 @@ public class SecurityService {
 
     public boolean isAccessPossible(UserDto userDto) {
 
+
+
         Long userProvidedId = userDto.getId();
         String accessKey = userDto.getAccessKey();
+
+        System.out.println(userProvidedId);
+
+
 
         Optional.ofNullable(userRepository.findUserById(userProvidedId)).
                 orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Wrong user's ID ! "));
@@ -52,5 +60,5 @@ public class SecurityService {
 
         return (userProvidedId.equals(userFromDatabaseId)
                 && expirationAccessKeyTime.isAfter(LocalDateTime.now()));
-    }
+ }
 }

@@ -1,0 +1,10 @@
+1. Autoryzacja dotyczy użytowników  - nie admina.
+2. Z powodu niemożliwości przesyłania znakó specjalnych w pasku adresu - autryzacja dokonuje się przez body.
+3. Zautoryzowany użytkownik może:
+- stworzyć włąsby rekord użytkownika (save)
+- zmodyfikować wszystkie swoje dane(update), przy czym ustawienia klucza generowane są automatycznie.
+- usunąć 'się' (delete)
+4. Do utworzenia nowego użytkownika (save) użytkownik potrzebuje klucza tymczasowego dostępnego na endpoincie "/tempaccess";
+5. Po wygaśnieciu klucza użytownik może go zaktualizować na endpoincie "/updatekey" podając swoje Id i dotychczasowy klucz.
+
+Jest prosta możliwość rozbudowy logiki poprzez dodanie funkcji adnimistratora - niemniej zostałą pominięta w tej implementacji.

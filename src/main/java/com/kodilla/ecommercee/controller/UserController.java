@@ -65,8 +65,7 @@ public class UserController {
     }
 
 
-
-    @DeleteMapping("/{userId}")
+    @DeleteMapping()
     public void deleteUser(@RequestBody UserDto userDto) {
 
         securityService.isAccessPossible(userDto);
@@ -79,4 +78,12 @@ public class UserController {
         return userMapper.mapUserToUserDto(dbService.setTemporary());
 
     }
+
+    @PostMapping("/updatekey")
+    public UserDto updateUserKey(@RequestBody UserDto userDto) {
+
+        return userMapper.mapUserToUserDto(dbService.updateKey(userMapper.mapUserDtoToUser(userDto)));
+    }
+
+
 }

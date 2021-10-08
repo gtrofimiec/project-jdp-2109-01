@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 
 @Service
@@ -108,4 +109,32 @@ public class UserDbService {
 
     }
 
+
+    public User updateKey(User providedUser) {
+
+
+        Key providedKey = providedUser.getKey();
+        Long providedId = providedUser.getId();
+
+        if (providedId == null || providedKey == null || providedKey.getAccessKey() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Id and access Key must not be null !");
+        }
+
+        User user = userRepository.findById(providedId).get();
+
+        String providedAccessKey = providedKey.getAccessKey();
+
+        if (Objects.equals(providedId, userRepository.findUserByKeyAccessKey(providedAccessKey).getId())) {
+
+            providedKey.setExpirationTime(LocalDateTime.now().plusMinutes(30));
+            user.setKey(providedKey);
+
+            userRepository.save(user);
+
+            return user;
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "not found user with given id and accessKey!");
+        }
+
+    }
 }
