@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class OrderService {
@@ -34,5 +33,12 @@ public class OrderService {
     public void delete(Long orderId) throws OrderNotFoundException {
         orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
         orderRepository.deleteById(orderId);
+    }
+
+    public Order update(Long orderId, Order order) throws ResponseStatusException {
+        if (orderRepository.existsById(orderId)){
+            order.setId(orderId);
+            return orderRepository.save(order);
+        }else throw new ResponseStatusException(HttpStatus.CONFLICT, "This order, doesn't exist, choose existing order");
     }
 }
