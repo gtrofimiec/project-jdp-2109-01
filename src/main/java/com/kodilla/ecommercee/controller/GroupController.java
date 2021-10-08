@@ -1,5 +1,6 @@
 package com.kodilla.ecommercee.controller;
 
+import com.kodilla.ecommercee.controller.exception.GroupNotFoundException;
 import com.kodilla.ecommercee.domain.Group;
 import com.kodilla.ecommercee.domain.dto.GroupDto;
 import com.kodilla.ecommercee.mapper.GroupMapper;
@@ -27,8 +28,8 @@ public class GroupController {
     }
 
     @GetMapping("/{groupId}")
-    public GroupDto getGroup(@PathVariable ("groupId") Long groupId) {
-        return groupMapper.mapGroupToGroupDto(groupService.getGroup(groupId).get());
+    public GroupDto getGroup(@PathVariable ("groupId") Long groupId) throws GroupNotFoundException {
+        return groupMapper.mapGroupToGroupDto(groupService.getGroup(groupId));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

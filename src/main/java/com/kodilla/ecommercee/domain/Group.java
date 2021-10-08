@@ -20,11 +20,6 @@ public class Group {
         this.productList = new ArrayList<>();
     }
 
-    public Group(String name, List<Product> productList) {
-        this.name = name;
-        this.productList = productList;
-    }
-
     @Id
     @GeneratedValue
     @NotNull
