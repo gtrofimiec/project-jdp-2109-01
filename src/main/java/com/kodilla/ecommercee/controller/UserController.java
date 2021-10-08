@@ -1,43 +1,67 @@
 package com.kodilla.ecommercee.controller;
 
+import com.kodilla.ecommercee.domain.User;
 import com.kodilla.ecommercee.domain.dto.UserDto;
+import com.kodilla.ecommercee.mapper.UserMapper;
+import com.kodilla.ecommercee.service.UserDbService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value = "v1/ecommerce/users/")
-@RequiredArgsConstructor
+@RequestMapping("/v1/ecommerce/users")
+
 public class UserController {
 
+    private final UserDbService dbService;
+    private final UserMapper userMapper;
+
+    public UserController(UserDbService dbService, UserMapper userMapper) {
+        this.dbService = dbService;
+        this.userMapper = userMapper;
+    }
+
     @GetMapping
-    public List<UserDto> getUsers() {
-        return Arrays.asList(
-                new UserDto(1L, "John", "Smith", "123456", false),
-                new UserDto(2L, "Kate", "Smith", "987654", false)
-        );
+    public List<UserDto> getAllUsers() {
+
+        return dbService.getAllUsers().stream()
+                .map(x -> userMapper.mapUserToUserDto(x))
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    @GetMapping(value = "{id}")
-    public UserDto getUser(@PathVariable("id") Long id){
-        return new UserDto(0L, "Mike", "Smith", "112233", false);
+    @GetMapping("/{userId}")
+    public UserDto getOneUser(@PathVariable Long userId) {
+
+        return userMapper.mapUserToUserDto(dbService.getOneUser(userId));
     }
 
-    @DeleteMapping(value = "{id}")
-    public void deleteUser(@PathVariable("id") Long id) {
-        System.out.println("User " + id + " deleted.");
+
+    @PostMapping()
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public UserDto saveUser(@RequestBody UserDto userDto) {
+
+        User user = userMapper.mapUserDtoToUser(userDto);
+        return (userMapper.mapUserToUserDto(
+                dbService.save(user)));
     }
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, value = "{id}")
-    public UserDto updateUser(@PathVariable("id") Long id, @RequestBody UserDto userDto){
-        return new UserDto(1L, "John", "Smith", "225588", false);
+
+    @PutMapping
+    public UserDto updateUser(@RequestBody UserDto userDto) {
+
+        User user = userMapper.mapUserDtoToUser(userDto);
+        return userMapper.mapUserToUserDto(dbService.update(user));
     }
 
-    @PatchMapping(value = "{id")
-    public UserDto blockUser(@PathVariable("id") Long id, @RequestBody UserDto userDto){
-        return new UserDto(1L, "John", "Smith", "225588", true);
+
+    @DeleteMapping("/{userId}")
+    public void deleteUser(@PathVariable Long userId) {
+
+        dbService.deleteUser(userId);
     }
 }
