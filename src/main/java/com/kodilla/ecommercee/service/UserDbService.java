@@ -11,10 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 
 @Service
@@ -94,46 +91,34 @@ public class UserDbService {
         return userRepository.save(user);
     }
 
-    public User setTemporary() {
 
-        User tempUser = new User();
-        tempUser.setFirstname("There are a temporary credentials below. Use it to create Your account.");
-        tempUser.setSurname("Your key is valid for 10 minutes.");
-
-        Key temporaryKey = keyMapper.mapKeyDtoToKey(securityService.generateKey());
-        temporaryKey.setExpirationTime(LocalDateTime.now().plusMinutes(10));
-
-        tempUser.setKey(temporaryKey);
-
-        return userRepository.save(tempUser);
-
-    }
+    public void updateKey(Long providedId, String accessKey) {
 
 
-    public User updateKey(User providedUser) {
-
-
-        Key providedKey = providedUser.getKey();
-        Long providedId = providedUser.getId();
-
-        if (providedId == null || providedKey == null || providedKey.getAccessKey() == null) {
+        if (providedId == null || accessKey == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Id and access Key must not be null !");
         }
 
+        Optional.ofNullable(keyRepository.findByUserId(providedId)).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Not found user with given id!")
+        );
+
+        Optional.ofNullable(keyRepository.findByAccessKey(accessKey)).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Not found user with given accessKey!")
+        );
+
         User user = userRepository.findById(providedId).get();
 
-        String providedAccessKey = providedKey.getAccessKey();
 
-        if (Objects.equals(providedId, userRepository.findUserByKeyAccessKey(providedAccessKey).getId())) {
+        if (Objects.equals(providedId, userRepository.findUserByKeyAccessKey(accessKey).getId())) {
 
-            providedKey.setExpirationTime(LocalDateTime.now().plusMinutes(30));
-            user.setKey(providedKey);
+            Key key = keyRepository.findByAccessKey(accessKey);
+
+            key.setExpirationTime(LocalDateTime.now().plusMinutes(30));
+            user.setKey(key);
 
             userRepository.save(user);
 
-            return user;
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "not found user with given id and accessKey!");
         }
 
     }

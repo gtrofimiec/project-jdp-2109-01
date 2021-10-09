@@ -2,11 +2,8 @@ package com.kodilla.ecommercee.service;
 
 import com.kodilla.ecommercee.domain.User;
 import com.kodilla.ecommercee.domain.dto.KeyDto;
-import com.kodilla.ecommercee.domain.dto.UserDto;
 import com.kodilla.ecommercee.repository.UserRepository;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -28,7 +25,7 @@ public class SecurityService {
     public KeyDto generateKey() {
         String tempAccessKey = "";
         for (int i = 0; i < 5; i++) {
-            tempAccessKey = tempAccessKey.concat(String.valueOf((char) (new Random().nextInt(56) + 34)));
+            tempAccessKey = tempAccessKey.concat(String.valueOf((char) (new Random().nextInt(78) + 48)));
         }
 
         LocalDateTime expirationTime = LocalDateTime.now().plusHours(1);
@@ -37,22 +34,13 @@ public class SecurityService {
         return keyDto;
     }
 
-    public boolean isAccessPossible(UserDto userDto) {
-
-
-
-        Long userProvidedId = userDto.getId();
-        String accessKey = userDto.getAccessKey();
-
-        System.out.println(userProvidedId);
-
-
+    public boolean isAccessPossible(Long userProvidedId, String accessKey) {
 
         Optional.ofNullable(userRepository.findUserById(userProvidedId)).
-                orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Wrong user's ID ! "));
+                orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN, "Your ID wrong! "));
 
         User user = Optional.ofNullable(userRepository.findUserByKeyAccessKey(accessKey)).
-                orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Wrong or invalid access Key ! ")
+                orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN, "Your access Key is wrong or invalid!")
                 );
 
         Long userFromDatabaseId = user.getId();
@@ -60,5 +48,5 @@ public class SecurityService {
 
         return (userProvidedId.equals(userFromDatabaseId)
                 && expirationAccessKeyTime.isAfter(LocalDateTime.now()));
- }
+    }
 }

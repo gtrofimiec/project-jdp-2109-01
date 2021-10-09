@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 @RestController
 @RequestMapping("/v1/ecommerce/users")
 
@@ -35,18 +36,19 @@ public class UserController {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    @GetMapping("/{userId}")
-    public UserDto getOneUser(@PathVariable Long userId) {
+    @GetMapping("/{searchedUserId}")
+    public UserDto getOneUser(@PathVariable Long searchedUserId,
+                              @RequestHeader(value = "userId") Long userId,
+                              @RequestHeader(value = "accessKey") String accessKey) {
 
-        return userMapper.mapUserToUserDto(dbService.getOneUser(userId));
+        securityService.isAccessPossible(userId, accessKey);
+
+        return userMapper.mapUserToUserDto(dbService.getOneUser(searchedUserId));
     }
-
 
     @PostMapping()
     @ResponseStatus(value = HttpStatus.CREATED)
     public UserDto saveUser(@RequestBody UserDto userDto) {
-
-        securityService.isAccessPossible(userDto);
 
         System.out.println(userDto);
         User user = userMapper.mapUserDtoToUser(userDto);
@@ -54,35 +56,26 @@ public class UserController {
                 dbService.save(user)));
     }
 
-
     @PutMapping
     public UserDto updateUser(@RequestBody UserDto userDto) {
-
-        securityService.isAccessPossible(userDto);
 
         User user = userMapper.mapUserDtoToUser(userDto);
         return userMapper.mapUserToUserDto(dbService.update(user));
     }
 
 
-    @DeleteMapping()
-    public void deleteUser(@RequestBody UserDto userDto) {
+    @DeleteMapping("/{userId}")
+    public void deleteUser(@PathVariable Long userId) {
 
-        securityService.isAccessPossible(userDto);
-
-        dbService.deleteUser(userDto.getId());
+        dbService.deleteUser(userId);
     }
 
-    @PostMapping("/tempaccess")
-    public UserDto generateTemporaryAccess() {
-        return userMapper.mapUserToUserDto(dbService.setTemporary());
-
-    }
 
     @PostMapping("/updatekey")
-    public UserDto updateUserKey(@RequestBody UserDto userDto) {
+    public void updateUserKey(@RequestHeader(value = "userId") Long userId,
+                                @RequestHeader(value = "accessKey") String accessKey) {
 
-        return userMapper.mapUserToUserDto(dbService.updateKey(userMapper.mapUserDtoToUser(userDto)));
+         dbService.updateKey(userId, accessKey);
     }
 
 
