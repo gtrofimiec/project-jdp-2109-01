@@ -25,8 +25,7 @@ public class UserRepositoryTestSuite {
 
     @Autowired
     CartRepository cartRepository;
-
-    @Before
+    
     @After
     public void deleteData() {
         userRepository.deleteAll();
