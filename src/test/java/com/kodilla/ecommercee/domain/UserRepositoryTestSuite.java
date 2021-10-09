@@ -36,14 +36,24 @@ public class UserRepositoryTestSuite {
     @Test
     public void testSaveUser() {
         //Given
-        User user = new User();
+        User user1 = new User();
+        User user2 = new User();
+        user2.setFirstname("John");
+        user2.setSurname("McClane");
         //When
-        userRepository.save(user);
+        userRepository.save(user1);
+        userRepository.save(user2);
+        Long user1Id = user1.getId();
+        Long user2Id = user2.getId();
+        Optional<User> resultUser1 = userRepository.findById(user1Id);
+        Optional<User> resultUser2 = userRepository.findById(user2Id);
+        String user2Name = userRepository.findUserById(user2Id).getFirstname();
+        String user2Surname = userRepository.findUserById(user2Id).getSurname();
         //Then
-        Long id = user.getId();
-        Optional<User> resultUser = userRepository.findById(id);
-        assertTrue(resultUser.isPresent());
-        System.out.println("test 1");
+        assertTrue(resultUser1.isPresent());
+        assertTrue(resultUser2.isPresent());
+        assertEquals("John", user2Name);
+        assertEquals("McClane", user2Surname);
     }
 
     @Test
@@ -57,7 +67,6 @@ public class UserRepositoryTestSuite {
         int result = userRepository.findAll().size();
         //Then
         assertEquals(2,result);
-        System.out.println("test 2");
     }
 
     @Test
