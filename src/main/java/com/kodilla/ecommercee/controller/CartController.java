@@ -12,21 +12,24 @@ import java.util.Collections;
 public class CartController {
 
     @PostMapping(value = "/{id}")
-    public CartDto saveCart(@PathVariable("id") Long userId){
-        return new CartDto(1L, new ArrayList<>(), new UserDto(1L));
+    public CartDto saveCart(@PathVariable("id") Long userId) {
+        return new CartDto(1L, new ArrayList<>(), new UserDto());
     }
+
     @PutMapping(value = "/{cartId}/addProduct/{productId}")
-    public CartDto addProduct(@PathVariable("cartId") Long cartId, @PathVariable("productId") Long productId){
-        return new CartDto(2L, Collections.singletonList(new ProductDto("product", "product", new BigDecimal(1000), new GroupDto(1l,"group"))), new UserDto(2L));
+    public CartDto addProduct(@PathVariable("cartId") Long cartId, @PathVariable("productId") Long productId) {
+        return new CartDto(2L, Collections.singletonList(new ProductDto("product", "product", new BigDecimal(1000), new GroupDto(1l, "group"))), new UserDto());
         //should update cart;
     }
+
     @PutMapping(value = "/{cartId}/deleteProduct/{productId}")
-    public CartDto deleteProduct(@PathVariable("cartId") Long cartId, @PathVariable Long productId){
-        return new CartDto(3L, Collections.singletonList(new ProductDto("product", "product", new BigDecimal(1000),new GroupDto(1l,"group"))), new UserDto(1L));
+    public CartDto deleteProduct(@PathVariable("cartId") Long cartId, @PathVariable Long productId) {
+        return new CartDto(3L, Collections.singletonList(new ProductDto("product", "product", new BigDecimal(1000), new GroupDto(1l, "group"))), new UserDto());
         //should update cart;
     }
+
     @PostMapping(value = "/{cartId}/order")
-    public OrderDto saveOrder(@PathVariable("cartId") Long cartId){
+    public OrderDto saveOrder(@PathVariable("cartId") Long cartId) {
         return new OrderDto(new BigDecimal(100));
     }
 }

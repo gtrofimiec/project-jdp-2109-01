@@ -1,16 +1,13 @@
 package com.kodilla.ecommercee.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @NoArgsConstructor
-@AllArgsConstructor
-@Entity
 @Data
+@Entity
 @Table(name = "Users")
 public class User {
 
@@ -20,16 +17,13 @@ public class User {
     private Long id;
 
     @Column(name = "firstname")
-    private String firstName;
+    private String firstname;
 
     @Column(name = "surname")
     private String surname;
 
-    @Column(name="loggingtime")
-    private LocalDateTime loggingTime;
-
-    @Column (name="isblocked")
-    private boolean isBlocked;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Key key;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "cart_id")
