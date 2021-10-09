@@ -1,5 +1,6 @@
 package com.kodilla.ecommercee.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class CartDto {
+
     private Long id;
     private List<ProductDto> products = new ArrayList<>();
 }

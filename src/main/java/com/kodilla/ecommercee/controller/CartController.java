@@ -13,11 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.*;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/ecommerce/carts")
@@ -37,22 +32,21 @@ public class CartController {
     @PutMapping(value = "/{cartId}/addProduct/{productId}")
     public CartDto addProduct(@PathVariable("cartId") Long cartId, @PathVariable("productId") Long productId){
         Cart cart = cartService.getCart(cartId).get();
-        Product product = productService.getProduct(productId);
+        Product product = productService.getProduct(productId).get();
         cart.getProductList().add(product);
         Cart updatedCart = cartService.saveCart(cart);
         return cartMapper.mapToCartDto(updatedCart);
     }
     @PutMapping(value = "/{cartId}/deleteProduct/{productId}")
-    public CartDto deleteProduct(@PathVariable("cartId") Long cartId, @PathVariable Long productId){
+    public CartDto deleteProduct(@PathVariable("cartId") Long cartId, @PathVariable Long productId) {
         Cart cart = cartService.getCart(cartId).get();
         cart.getProductList().remove(productId);
         Cart updatedCart = cartService.saveCart(cart);
         return cartMapper.mapToCartDto(updatedCart);
     }
     @PostMapping(value = "/{cartId}/order")
-    public OrderDto saveOrder(@PathVariable("cartId") Long cartId){
+    public OrderDto saveOrder(@PathVariable("cartId") Long cartId) {
         Cart cart = cartService.getCart(cartId).get();
-
         Order order = new Order(cart.calculateValue(),cart);
         orderService.saveOrder(order);
         return orderMapper.mapToOrderDto(order);
