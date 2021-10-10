@@ -16,7 +16,7 @@ public class CartMapper {
 
     public Cart mapToCart(CartDto cartDto) {
         ProductMapper productMapper = new ProductMapper();
-        return new Cart(cartDto.getId(), productMapper.mapProductDtoListToProductList(cartDto.getProducts()));
+        return new Cart(cartDto.getId(), new ArrayList<Product>());
     }
 
     public CartDto mapToCartDto(Cart cart) {
