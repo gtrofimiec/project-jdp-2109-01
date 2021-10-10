@@ -1,8 +1,13 @@
 package com.kodilla.ecommercee.controller;
 
+import com.kodilla.ecommercee.domain.Group;
+import com.kodilla.ecommercee.domain.Product;
 import com.kodilla.ecommercee.domain.dto.GroupDto;
 import com.kodilla.ecommercee.domain.dto.ProductDto;
+import com.kodilla.ecommercee.repository.GroupRepository;
+import com.kodilla.ecommercee.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,12 +21,15 @@ import java.util.List;
 
 public class ProductController {
 
+    @Autowired
+    ProductRepository productRepository;
+    @Autowired
+    GroupRepository groupRepository;
 
     @GetMapping(value = "/{id}")
     public ProductDto getOne(@PathVariable("id") Long id) {
         return new ProductDto("name", "description", new BigDecimal(10),new GroupDto(1l,"group"));
     }
-
 
     @GetMapping
     public List<ProductDto> getAll() {
@@ -33,9 +41,12 @@ public class ProductController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ProductDto save(@RequestBody ProductDto productDto) {
-        System.out.println("Saved!");
-        return productDto;
+    public void save(@RequestBody Product product) {
+        Product product1 = new Product("name1", new BigDecimal(100), "description1");
+        Group group = new Group("group");
+        groupRepository.save(group);
+        product1.setGroup(group);
+        productRepository.save(product1);
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, value = "/{id}")

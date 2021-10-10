@@ -20,35 +20,32 @@ public class CartController {
 
     private final CartService cartService;
     private final CartMapper cartMapper;
-    private final ProductService productService;
     private final OrderMapper orderMapper;
-    private final OrderService orderService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public void saveCart(@RequestBody CartDto cartDto){
         Cart cart = cartMapper.mapToCart(cartDto);
         cartService.saveCart(cart);
     }
+
     @PutMapping(value = "/{cartId}/addProduct/{productId}")
     public CartDto addProduct(@PathVariable("cartId") Long cartId, @PathVariable("productId") Long productId){
         Cart cart = cartService.getCart(cartId).get();
-        Product product = productService.getProduct(productId).get();
-        cart.getProductList().add(product);
-        Cart updatedCart = cartService.saveCart(cart);
-        return cartMapper.mapToCartDto(updatedCart);
+        Cart upadtedCart = cartService.addProductToCart(cart, productId);
+        return cartMapper.mapToCartDto(upadtedCart);
     }
+
     @PutMapping(value = "/{cartId}/deleteProduct/{productId}")
     public CartDto deleteProduct(@PathVariable("cartId") Long cartId, @PathVariable Long productId) {
         Cart cart = cartService.getCart(cartId).get();
-        cart.getProductList().remove(productId);
-        Cart updatedCart = cartService.saveCart(cart);
+        Cart updatedCart = cartService.deleteProductFromCart(cart, productId);
         return cartMapper.mapToCartDto(updatedCart);
     }
+
     @PostMapping(value = "/{cartId}/order")
     public OrderDto saveOrder(@PathVariable("cartId") Long cartId) {
         Cart cart = cartService.getCart(cartId).get();
-        Order order = new Order(cart.calculateValue(),cart);
-        orderService.saveOrder(order);
+        Order order = cartService.createOrder(cart);
         return orderMapper.mapToOrderDto(order);
     }
 }

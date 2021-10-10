@@ -6,15 +6,28 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductMapper {
 
-    public List<ProductDto> mapProductListToProductDtoList(List<Product> productList) {
-        return new ArrayList<ProductDto>();
+    public Product mapToProduct(ProductDto productDto) {
+        return new Product(productDto.getName(), productDto.getPrice(), productDto.getDescription());
     }
 
-    public List<Product> mapProductDtoListToProductList(List<ProductDto> productDtoList) {
-        return new ArrayList<Product>();
+    public ProductDto mapToProductDto(Product product) {
+        return new ProductDto(product.getName(), product.getDescription(), product.getPrice());
+    }
+
+    public List<ProductDto> mapToProductDtoList(List<Product> productList) {
+        return productList.stream()
+                .map(this::mapToProductDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<Product> mapToProductList(List<ProductDto> productDtoList) {
+        return productDtoList.stream()
+                .map(this::mapToProduct)
+                .collect(Collectors.toList());
     }
 }

@@ -27,13 +27,4 @@ public class Cart {
 
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "cartList")
     private List<Product> productList;
-
-
-    public BigDecimal calculateValue() {
-        BigDecimal value = new BigDecimal(0);
-        for (Product product : productList) {
-            value.add(product.getPrice());
-        }
-        return value;
-    }
 }
