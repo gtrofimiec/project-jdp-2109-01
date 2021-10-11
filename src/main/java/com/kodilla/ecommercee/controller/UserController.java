@@ -1,5 +1,7 @@
 package com.kodilla.ecommercee.controller;
 
+import com.kodilla.ecommercee.controller.exception.UserConflictException;
+import com.kodilla.ecommercee.controller.exception.UserNotFoundException;
 import com.kodilla.ecommercee.domain.User;
 import com.kodilla.ecommercee.domain.dto.UserDto;
 import com.kodilla.ecommercee.mapper.UserMapper;
@@ -7,7 +9,6 @@ import com.kodilla.ecommercee.service.UserDbService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -30,7 +31,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public UserDto getOneUser(@PathVariable Long userId) {
+    public UserDto getOneUser(@PathVariable Long userId) throws UserNotFoundException{
 
         return userMapper.mapUserToUserDto(userService.getOneUser(userId));
     }
@@ -38,7 +39,7 @@ public class UserController {
 
     @PostMapping()
     @ResponseStatus(value = HttpStatus.CREATED)
-    public UserDto saveUser(@RequestBody UserDto userDto) {
+    public UserDto saveUser(@RequestBody UserDto userDto) throws UserConflictException {
 
         User user = userMapper.mapUserDtoToUser(userDto);
         return (userMapper.mapUserToUserDto(
@@ -47,7 +48,7 @@ public class UserController {
 
 
     @PutMapping
-    public UserDto updateUser(@RequestBody UserDto userDto) {
+    public UserDto updateUser(@RequestBody UserDto userDto) throws UserNotFoundException {
 
         User user = userMapper.mapUserDtoToUser(userDto);
         return userMapper.mapUserToUserDto(userService.update(user));
@@ -55,7 +56,7 @@ public class UserController {
 
 
     @DeleteMapping("/{userId}")
-    public void deleteUser(@PathVariable Long userId) {
+    public void deleteUser(@PathVariable Long userId) throws UserNotFoundException {
 
         userService.deleteUser(userId);
     }

@@ -1,22 +1,19 @@
 package com.kodilla.ecommercee.service;
 
+import com.kodilla.ecommercee.controller.exception.UserConflictException;
+import com.kodilla.ecommercee.controller.exception.UserNotFoundException;
 import com.kodilla.ecommercee.domain.Key;
 import com.kodilla.ecommercee.domain.User;
 import com.kodilla.ecommercee.domain.dto.KeyDto;
 import com.kodilla.ecommercee.mapper.KeyMapper;
 import com.kodilla.ecommercee.repository.KeyRepository;
 import com.kodilla.ecommercee.repository.UserRepository;
-import lombok.Value;
 import org.hibernate.Filter;
 import org.hibernate.Session;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 
@@ -37,11 +34,11 @@ public class UserDbService {
         this.entityManager = entityManager;
     }
 
-    public User save(User u) {
+    public User save(User u) throws UserConflictException {
 
         Long userId = u.getId();
         if (userRepository.findById(userId).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "User with given Id already exists! Use Update mode.");
+            throw new UserConflictException();
         }
 
         User newUser = new User();
@@ -66,30 +63,30 @@ public class UserDbService {
         return userList;
     }
 
-    public User getOneUser(Long id) {
+    public User getOneUser(Long id) throws UserNotFoundException {
 
-        if (!userRepository.findById(id).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No such user!");
+        if (!userRepository.findById(id).isPresent()||userRepository.findById(id).get().isDeleted()) {
+            throw new UserNotFoundException();
         }
 
         return userRepository.findById(id).get();
     }
 
 
-    public void deleteUser(Long id) {
+    public void deleteUser(Long id) throws UserNotFoundException {
 
         if (!userRepository.findById(id).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No such user!");
+            throw new UserNotFoundException();
         }
         userRepository.deleteById(id);
     }
 
-    public User update(User u) {
+    public User update(User u) throws UserNotFoundException {
 
         Long id = u.getId();
         System.out.println(id);
-        if (!userRepository.findById(id).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No such user!");
+        if (!userRepository.findById(id).isPresent()||userRepository.findById(id).get().isDeleted()) {
+            throw new UserNotFoundException();
         }
 
         User user = userRepository.findById(u.getId()).get();
