@@ -21,10 +21,15 @@ public class GroupService {
     }
 
     public Group saveGroup(final Group group) throws GroupNotFoundException {
-        return groupRepository.save(group);
+        if(!groupRepository.existsById(group.getId())) {
+            throw new GroupNotFoundException();
+        } else {
+            return groupRepository.save(group);
+        }
     }
 
     public Group getGroup(final Long groupId) throws GroupNotFoundException {
-        return groupRepository.findById(groupId).orElseThrow(GroupNotFoundException::new);
+        return groupRepository.findById(groupId)
+                .orElseThrow(GroupNotFoundException::new);
     }
 }
