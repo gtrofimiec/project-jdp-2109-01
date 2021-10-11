@@ -5,6 +5,9 @@ import com.kodilla.ecommercee.domain.User;
 import com.kodilla.ecommercee.domain.dto.UserDto;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class UserMapper {
 
@@ -28,5 +31,9 @@ public class UserMapper {
         key.setExpirationTime(userDto.getExpirationTime());
         user.setKey(key);
         return user;
+    }
+
+    public List<UserDto> mapToUserDtoList(List<User> users){
+        return users.stream().map(this::mapUserToUserDto).collect(Collectors.toList());
     }
 }

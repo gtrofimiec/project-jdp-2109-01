@@ -4,40 +4,35 @@ import com.kodilla.ecommercee.domain.User;
 import com.kodilla.ecommercee.domain.dto.UserDto;
 import com.kodilla.ecommercee.mapper.UserMapper;
 import com.kodilla.ecommercee.service.UserDbService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1/ecommerce/users")
 
 public class UserController {
 
-    private final UserDbService dbService;
+    private final UserDbService userService;
     private final UserMapper userMapper;
 
     public UserController(UserDbService dbService, UserMapper userMapper) {
-        this.dbService = dbService;
+        this.userService = dbService;
         this.userMapper = userMapper;
     }
 
     @GetMapping
-    public List<UserDto> getAllUsers() {
+    public List<UserDto> getAllUsers(@RequestParam(value = "isDeleted", required = false, defaultValue = "false") boolean isDeleted) {
 
-        return dbService.getAllUsers().stream()
-                .map(x -> userMapper.mapUserToUserDto(x))
-                .collect(Collectors.toCollection(ArrayList::new));
+        return userMapper.mapToUserDtoList(userService.getAllUsers(isDeleted));
     }
 
     @GetMapping("/{userId}")
     public UserDto getOneUser(@PathVariable Long userId) {
 
-        return userMapper.mapUserToUserDto(dbService.getOneUser(userId));
+        return userMapper.mapUserToUserDto(userService.getOneUser(userId));
     }
 
 
@@ -47,7 +42,7 @@ public class UserController {
 
         User user = userMapper.mapUserDtoToUser(userDto);
         return (userMapper.mapUserToUserDto(
-                dbService.save(user)));
+                userService.save(user)));
     }
 
 
@@ -55,13 +50,13 @@ public class UserController {
     public UserDto updateUser(@RequestBody UserDto userDto) {
 
         User user = userMapper.mapUserDtoToUser(userDto);
-        return userMapper.mapUserToUserDto(dbService.update(user));
+        return userMapper.mapUserToUserDto(userService.update(user));
     }
 
 
     @DeleteMapping("/{userId}")
     public void deleteUser(@PathVariable Long userId) {
 
-        dbService.deleteUser(userId);
+        userService.deleteUser(userId);
     }
 }

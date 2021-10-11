@@ -2,6 +2,10 @@ package com.kodilla.ecommercee.domain;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
+import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
 
@@ -9,6 +13,9 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(name = "Users")
+@SQLDelete(sql = "UPDATE Users SET deleted = true WHERE user_id = ?")
+@FilterDef(name = "deletedUserFilter", parameters = @ParamDef(name = "isDeleted", type = "boolean"))
+@Filter(name = "deletedUserFilter", condition = "deleted = :isDeleted")
 public class User {
 
     @Id
@@ -28,4 +35,6 @@ public class User {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "cart_id")
     private Cart cart;
+
+    private boolean deleted = false;
 }
