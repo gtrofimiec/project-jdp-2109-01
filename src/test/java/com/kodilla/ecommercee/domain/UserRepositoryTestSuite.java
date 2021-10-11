@@ -1,15 +1,12 @@
 package com.kodilla.ecommercee.domain;
 
-import com.kodilla.ecommercee.domain.Cart;
-import com.kodilla.ecommercee.domain.User;
 import com.kodilla.ecommercee.repository.CartRepository;
 import com.kodilla.ecommercee.repository.UserRepository;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
@@ -18,6 +15,7 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class UserRepositoryTestSuite {
 
     @Autowired
@@ -25,12 +23,6 @@ public class UserRepositoryTestSuite {
 
     @Autowired
     CartRepository cartRepository;
-    
-    @After
-    public void deleteData() {
-        userRepository.deleteAll();
-        cartRepository.deleteAll();
-    }
 
     @Test
     public void testSaveUser() {
@@ -63,6 +55,7 @@ public class UserRepositoryTestSuite {
         //When
         userRepository.save(user1);
         userRepository.save(user2);
+        userRepository.deleteById(user1.getId());
         int result = userRepository.findAll().size();
         //Then
         assertEquals(2,result);
@@ -92,7 +85,9 @@ public class UserRepositoryTestSuite {
         Long id = user.getId();
         userRepository.deleteById(id);
         //Then
-        assertEquals(0,userRepository.findAll().size());
+        assertEquals(1,userRepository.findAll().size());
+        assertTrue(userRepository.existsById(id));
+        assertTrue(userRepository.findById(id).get().isDeleted());
     }
 
     @Test
@@ -113,13 +108,15 @@ public class UserRepositoryTestSuite {
         //Given
         User user = new User();
         Cart cart = new Cart();
-        user.setCart(cart);
+    //    user.setCart(cart);
         //When
         userRepository.save(user);
         Long id = user.getId();
         userRepository.deleteById(id);
         //Then
-        assertEquals(0, cartRepository.findAll().size());
-        assertEquals(0, userRepository.findAll().size());
+    //    assertEquals(1, cartRepository.findAll().size());
+        assertEquals(1, userRepository.findAll().size());
+        assertTrue(userRepository.findAll().get(0).isDeleted());
+        //TODO test should be changed after cart has soft delete
     }
 }
