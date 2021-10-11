@@ -1,51 +1,70 @@
 package com.kodilla.ecommercee.controller;
 
-import com.kodilla.ecommercee.domain.dto.GroupDto;
+import com.kodilla.ecommercee.controller.exception.GroupNotFoundException;
+import com.kodilla.ecommercee.controller.exception.ProductNotFoundException;
+import com.kodilla.ecommercee.domain.Product;
 import com.kodilla.ecommercee.domain.dto.ProductDto;
-import lombok.RequiredArgsConstructor;
+import com.kodilla.ecommercee.mapper.ProductMapper;
+import com.kodilla.ecommercee.repository.GroupRepository;
+import com.kodilla.ecommercee.service.ProductService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
 @RequestMapping("/v1/ecommerce/products")
-@RequiredArgsConstructor
-
 public class ProductController {
 
+    private final ProductService productService;
+    private final ProductMapper productMapper;
+    private final GroupRepository groupRepository; //change to GroupService
 
-    @GetMapping(value = "/{id}")
-    public ProductDto getOne(@PathVariable("id") Long id) {
-        return new ProductDto("name", "description", new BigDecimal(10),new GroupDto(1l,"group"));
+    public ProductController(ProductService productService, ProductMapper productMapper, GroupRepository groupRepository) {
+        this.productService = productService;
+        this.productMapper = productMapper;
+        this.groupRepository = groupRepository;
     }
 
+    @GetMapping(value = "/{id}")
+    public ProductDto getOne(@PathVariable("id") Long id) throws ProductNotFoundException {
+        return productMapper.mapToProductDto(
+                productService.get(id));
+    }
 
     @GetMapping
     public List<ProductDto> getAll() {
-        return Arrays.asList(
-                new ProductDto("name1", "description1", new BigDecimal(100),new GroupDto(1l,"group")),
-                new ProductDto("name2", "description2", new BigDecimal(200),new GroupDto(1l,"group")),
-                new ProductDto("name3", "description3", new BigDecimal(300),new GroupDto(1l,"group"))
-        );
+        return productMapper.mapToProductDtoList(
+                productService.getAll());
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ProductDto save(@RequestBody ProductDto productDto) {
-        System.out.println("Saved!");
-        return productDto;
+    public ProductDto save(@RequestBody ProductDto productDto) throws GroupNotFoundException {
+        Product product = productMapper.mapToProduct(productDto);
+        Long groupId = productDto.getGroupDto().getId();
+        String groupName = //groupService.get(groupId)
+                groupRepository.findById(groupId).orElseThrow(GroupNotFoundException::new) //delete when GroupService is ready
+                        .getName();
+        product.getGroup().setName(groupName);
+        productService.save(product);
+        return productMapper.mapToProductDto(product);
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, value = "/{id}")
-    public ProductDto update(@PathVariable("id") Long id, @RequestBody ProductDto productDto) {
-        System.out.println("Product has been changed!");
-        return productDto;
+    public ProductDto update(@PathVariable("id") Long id, @RequestBody ProductDto productDto) throws GroupNotFoundException {
+        Product product = productMapper.mapToProduct(productDto);
+        product.setId(id);
+        Long groupId = productDto.getGroupDto().getId();
+        String groupName = //groupService.get(groupId)
+                groupRepository.findById(groupId).orElseThrow(GroupNotFoundException::new) //delete when GroupService is ready
+                        .getName();
+        product.getGroup().setName(groupName);
+        productService.save(product);
+        return productMapper.mapToProductDto(product);
     }
 
     @DeleteMapping(value = "/{id}")
-    public void delete(@PathVariable("id") Long id) {
-        System.out.println("Product with "+id +" id, has been successfully deleted.");
+    public void delete(@PathVariable("id") Long id) throws ProductNotFoundException {
+        productService.delete(id);
     }
 }
