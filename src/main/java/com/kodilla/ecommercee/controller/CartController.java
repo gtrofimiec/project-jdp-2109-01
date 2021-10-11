@@ -1,5 +1,7 @@
 package com.kodilla.ecommercee.controller;
 
+import com.kodilla.ecommercee.controller.exception.CartNotFoundException;
+import com.kodilla.ecommercee.controller.exception.ProductNotFoundException;
 import com.kodilla.ecommercee.domain.Cart;
 import com.kodilla.ecommercee.domain.Order;
 import com.kodilla.ecommercee.domain.Product;
@@ -20,7 +22,6 @@ public class CartController {
 
     private final CartService cartService;
     private final CartMapper cartMapper;
-    private final OrderMapper orderMapper;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public void saveCart(@RequestBody CartDto cartDto){
@@ -29,23 +30,25 @@ public class CartController {
     }
 
     @PutMapping(value = "/{cartId}/addProduct/{productId}")
-    public CartDto addProduct(@PathVariable("cartId") Long cartId, @PathVariable("productId") Long productId){
-        Cart cart = cartService.getCart(cartId).get();
+    public CartDto addProduct(@PathVariable("cartId") Long cartId, @PathVariable("productId") Long productId)
+            throws CartNotFoundException, ProductNotFoundException {
+        Cart cart = cartService.getCart(cartId);
         Cart upadtedCart = cartService.addProductToCart(cart, productId);
         return cartMapper.mapToCartDto(upadtedCart);
     }
 
     @PutMapping(value = "/{cartId}/deleteProduct/{productId}")
-    public CartDto deleteProduct(@PathVariable("cartId") Long cartId, @PathVariable Long productId) {
-        Cart cart = cartService.getCart(cartId).get();
+    public CartDto deleteProduct(@PathVariable("cartId") Long cartId, @PathVariable Long productId)
+            throws CartNotFoundException, ProductNotFoundException {
+        Cart cart = cartService.getCart(cartId);
         Cart updatedCart = cartService.deleteProductFromCart(cart, productId);
         return cartMapper.mapToCartDto(updatedCart);
     }
 
     @PostMapping(value = "/{cartId}/order")
-    public OrderDto saveOrder(@PathVariable("cartId") Long cartId) {
-        Cart cart = cartService.getCart(cartId).get();
-        Order order = cartService.createOrder(cart);
-        return orderMapper.mapToOrderDto(order);
+    public OrderDto saveOrder(@PathVariable("cartId") Long cartId) throws CartNotFoundException {
+        Cart cart = cartService.getCart(cartId);
+        OrderDto orderDto = cartService.createOrder(cart);
+        return orderDto;
     }
 }
