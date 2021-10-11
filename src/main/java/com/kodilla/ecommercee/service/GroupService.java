@@ -20,7 +20,7 @@ public class GroupService {
         return groupRepository.findAll();
     }
 
-    public Group saveGroup(final Group group) {
+    public Group saveGroup(final Group group) throws GroupNotFoundException {
         return groupRepository.save(group);
     }
 
