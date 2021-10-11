@@ -33,14 +33,14 @@ public class GroupController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public GroupDto createGroup(@RequestBody GroupDto groupDto) {
+    public GroupDto createGroup(@RequestBody GroupDto groupDto) throws GroupNotFoundException {
         Group group = groupMapper.mapGroupDtoToGroup(groupDto);
         Group createdGroup = groupService.saveGroup(group);
         return groupMapper.mapGroupToGroupDto(createdGroup);
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, value = "/{groupId}")
-    public GroupDto updateGroup(@PathVariable ("groupId") Long groupId, @RequestBody GroupDto groupDto) {
+    public GroupDto updateGroup(@PathVariable ("groupId") Long groupId, @RequestBody GroupDto groupDto) throws GroupNotFoundException {
         Group updatedGroup = groupMapper.mapGroupDtoToGroup(groupDto);
         updatedGroup.setId(groupId);
         updatedGroup = groupService.saveGroup(updatedGroup);
