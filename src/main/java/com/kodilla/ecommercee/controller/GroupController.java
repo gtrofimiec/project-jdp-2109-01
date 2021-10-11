@@ -1,5 +1,6 @@
 package com.kodilla.ecommercee.controller;
 
+import com.kodilla.ecommercee.controller.exception.GroupAlreadyExistsException;
 import com.kodilla.ecommercee.controller.exception.GroupNotFoundException;
 import com.kodilla.ecommercee.domain.Group;
 import com.kodilla.ecommercee.domain.dto.GroupDto;
@@ -33,7 +34,7 @@ public class GroupController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public GroupDto createGroup(@RequestBody GroupDto groupDto) throws GroupNotFoundException {
+    public GroupDto createGroup(@RequestBody GroupDto groupDto) throws GroupAlreadyExistsException {
         Group group = groupMapper.mapGroupDtoToGroup(groupDto);
         Group createdGroup = groupService.saveGroup(group);
         return groupMapper.mapGroupToGroupDto(createdGroup);
