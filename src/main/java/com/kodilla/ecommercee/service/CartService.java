@@ -1,5 +1,6 @@
 package com.kodilla.ecommercee.service;
 
+import com.kodilla.ecommercee.controller.exception.CartAlreadyExistsException;
 import com.kodilla.ecommercee.controller.exception.CartNotFoundException;
 import com.kodilla.ecommercee.controller.exception.ProductNotFoundException;
 import com.kodilla.ecommercee.domain.Cart;
@@ -26,13 +27,17 @@ public class CartService {
         return cartRepository.findById(id).orElseThrow(CartNotFoundException::new);
     }
 
-    public Cart saveCart (final Cart cart) {
-        return  cartRepository.save(cart);
+    public Cart saveCart (final Cart cart) throws CartAlreadyExistsException {
+        if (cartRepository.existsById(cart.getId())) {
+            throw new CartAlreadyExistsException();
+        } else {
+            return  cartRepository.save(cart);
+        }
     }
 
     public Cart addProductToCart (Cart cart, final long productId)
-            throws CartNotFoundException, ProductNotFoundException {
-        Product product = productService.getProduct(productId).get();
+            throws ProductNotFoundException {
+        Product product = productService.getProduct(productId).orElseThrow(ProductNotFoundException::new);
         cart.getProductList().add(product);
         product.getCartList().add(cart);
         cartRepository.save(cart);
@@ -40,8 +45,8 @@ public class CartService {
     }
 
     public Cart deleteProductFromCart (final Cart cart, final long productId)
-            throws CartNotFoundException, ProductNotFoundException {
-        Product product = productService.getProduct(productId).get();
+            throws ProductNotFoundException {
+        Product product = productService.getProduct(productId).orElseThrow(ProductNotFoundException::new);
         cart.getProductList().remove(product);
         product.getCartList().remove(cart);
         cartRepository.save(cart);

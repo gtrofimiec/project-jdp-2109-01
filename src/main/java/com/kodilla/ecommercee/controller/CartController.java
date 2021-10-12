@@ -19,9 +19,10 @@ public class CartController {
     private final CartMapper cartMapper;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void saveCart(@RequestBody CartDto cartDto){
+    public CartDto saveCart(@RequestBody CartDto cartDto){
         Cart cart = cartMapper.mapToCart(cartDto);
         cartService.saveCart(cart);
+        return cartMapper.mapToCartDto(cart);
     }
 
     @PutMapping(value = "/{cartId}/addProduct/{productId}")
