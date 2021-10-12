@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
@@ -18,19 +19,14 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class UserRepositoryTestSuite {
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+public class UserTestSuite {
 
     @Autowired
     UserRepository userRepository;
 
     @Autowired
     CartRepository cartRepository;
-    
-    @After
-    public void deleteData() {
-        userRepository.deleteAll();
-        cartRepository.deleteAll();
-    }
 
     @Test
     public void testSaveUser() {
@@ -119,7 +115,8 @@ public class UserRepositoryTestSuite {
         Long id = user.getId();
         userRepository.deleteById(id);
         //Then
-        assertEquals(0, cartRepository.findAll().size());
+        assertEquals(1, cartRepository.findAll().size());
+        assertTrue(cartRepository.findById(cart.getId()).get().isDeleted());
         assertEquals(0, userRepository.findAll().size());
     }
 }

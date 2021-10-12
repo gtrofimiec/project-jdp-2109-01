@@ -23,8 +23,8 @@ public class OrderController {
     }
 
     @GetMapping
-    public List<OrderDto> getOrders() {
-        return orderMapper.mapToOrderDtoList(orderService.getAll());
+    public List<OrderDto> getOrders(@RequestParam(value = "isDeleted", required = false, defaultValue = "false") boolean isDeleted) {
+        return orderMapper.mapToOrderDtoList(orderService.getAll(isDeleted));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

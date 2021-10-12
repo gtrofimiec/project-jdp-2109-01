@@ -1,14 +1,13 @@
 package com.kodilla.ecommercee.domain;
 
 import com.kodilla.ecommercee.repository.CartRepository;
-import com.kodilla.ecommercee.repository.OrderRepository;
 import com.kodilla.ecommercee.repository.ProductRepository;
 import com.kodilla.ecommercee.repository.UserRepository;
-import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
@@ -20,6 +19,7 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class CartTestSuite {
 
     @Autowired
@@ -28,17 +28,6 @@ public class CartTestSuite {
     private CartRepository cartRepository;
     @Autowired
     private ProductRepository productRepository;
-    @Autowired
-    private OrderRepository orderRepository;
-
-    @After
-    public void cleanUpDataBaseAfterEachTest() {
-
-        userRepository.deleteAll();
-        cartRepository.deleteAll();
-        productRepository.deleteAll();
-        orderRepository.deleteAll();
-    }
 
     @Test
     public void shouldFindAllCarts() {
@@ -131,8 +120,8 @@ public class CartTestSuite {
         int availableCart = cartRepository.findAll().size();
 
         //Then
-        assertEquals(Optional.empty(), removedCart);
-        assertEquals(1, availableCart);
+        assertEquals(2, availableCart);
         assertEquals(2, availableProduct);
+        assertTrue(removedCart.get().isDeleted());
     }
 }
