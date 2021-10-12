@@ -58,8 +58,8 @@ public class CartService {
                 .map(product -> product.getPrice())
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         Order order = new Order(value,cart);
-        orderService.saveOrder(order);
-        return orderMapper.mapToOrderDto(order);
+        orderService.save(order);
+        return orderMapper.mapOrderToOrderDto(order);
 
     }
 
