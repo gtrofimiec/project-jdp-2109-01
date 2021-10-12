@@ -6,7 +6,6 @@ import com.kodilla.ecommercee.controller.exception.ProductNotFoundException;
 import com.kodilla.ecommercee.domain.Cart;
 import com.kodilla.ecommercee.domain.Order;
 import com.kodilla.ecommercee.domain.Product;
-import com.kodilla.ecommercee.domain.dto.OrderDto;
 import com.kodilla.ecommercee.mapper.OrderMapper;
 import com.kodilla.ecommercee.repository.CartRepository;
 import lombok.RequiredArgsConstructor;
@@ -53,13 +52,13 @@ public class CartService {
         return cart;
     }
 
-    public OrderDto createOrder(final Cart cart) {
+    public Order createOrder(final Cart cart) {
         BigDecimal value = cart.getProductList().stream()
                 .map(product -> product.getPrice())
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         Order order = new Order(value,cart);
         orderService.save(order);
-        return orderMapper.mapOrderToOrderDto(order);
+        return order;
 
     }
 

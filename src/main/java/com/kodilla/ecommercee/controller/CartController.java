@@ -1,10 +1,13 @@
 package com.kodilla.ecommercee.controller;
 
+import com.kodilla.ecommercee.controller.exception.CartAlreadyExistsException;
 import com.kodilla.ecommercee.controller.exception.CartNotFoundException;
 import com.kodilla.ecommercee.controller.exception.ProductNotFoundException;
 import com.kodilla.ecommercee.domain.Cart;
+import com.kodilla.ecommercee.domain.Order;
 import com.kodilla.ecommercee.domain.dto.*;
 import com.kodilla.ecommercee.mapper.CartMapper;
+import com.kodilla.ecommercee.mapper.OrderMapper;
 import com.kodilla.ecommercee.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -17,9 +20,10 @@ public class CartController {
 
     private final CartService cartService;
     private final CartMapper cartMapper;
+    private final OrderMapper orderMapper;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public CartDto saveCart(@RequestBody CartDto cartDto){
+    public CartDto saveCart(@RequestBody CartDto cartDto) throws CartAlreadyExistsException {
         Cart cart = cartMapper.mapToCart(cartDto);
         cartService.saveCart(cart);
         return cartMapper.mapToCartDto(cart);
@@ -44,7 +48,7 @@ public class CartController {
     @PostMapping(value = "/{cartId}/order")
     public OrderDto saveOrder(@PathVariable("cartId") Long cartId) throws CartNotFoundException {
         Cart cart = cartService.getCart(cartId);
-        OrderDto orderDto = cartService.createOrder(cart);
-        return orderDto;
+        Order order = cartService.createOrder(cart);
+        return orderMapper.mapOrderToOrderDto(order);
     }
 }
