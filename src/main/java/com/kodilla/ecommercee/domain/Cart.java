@@ -3,12 +3,12 @@ package com.kodilla.ecommercee.domain;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Filter;
-import org.hibernate.annotations.FilterDef;
-import org.hibernate.annotations.ParamDef;
-import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +18,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "Carts")
-@SQLDelete(sql = "UPDATE Carts SET deleted = true WHERE cart_id = ?")
-@FilterDef(name = "deletedCartFilter", parameters = @ParamDef(name = "isDeleted", type = "boolean"))
-@Filter(name = "deletedCartFilter", condition = "deleted = :isDeleted")
+@Where(clause = "deleted = false")
 public class Cart {
 
     public Cart() {

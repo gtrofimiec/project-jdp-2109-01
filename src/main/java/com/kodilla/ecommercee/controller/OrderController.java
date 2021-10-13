@@ -23,14 +23,8 @@ public class OrderController {
     }
 
     @GetMapping
-    public List<OrderDto> getOrders(@RequestParam(value = "isDeleted", required = false, defaultValue = "false") boolean isDeleted) {
-        return orderMapper.mapToOrderDtoList(orderService.getAll(isDeleted));
-    }
-
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public OrderDto addOrder(@RequestBody OrderDto orderDto) {
-        Order order = orderMapper.mapOrderDtoToOrder(orderDto);
-        return orderMapper.mapOrderToOrderDto(orderService.save(order));
+    public List<OrderDto> getOrders() {
+        return orderMapper.mapToOrderDtoList(orderService.getAll());
     }
 
     @GetMapping(value = "/{orderId}")
@@ -39,9 +33,8 @@ public class OrderController {
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, value = "/{orderId}")
-    public OrderDto updateOrder(@PathVariable("orderId") Long orderId, @RequestBody OrderDto orderDto) throws OrderNotFoundException {
-        Order orderToUpdate = orderMapper.mapOrderDtoToOrder(orderDto);
-        Order updatedOrder = orderService.update(orderId, orderToUpdate);
+    public OrderDto updateOrder(@PathVariable("orderId") Long orderId) throws OrderNotFoundException {
+        Order updatedOrder = orderService.update(orderId);
         return orderMapper.mapOrderToOrderDto(updatedOrder);
     }
 

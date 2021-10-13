@@ -1,10 +1,10 @@
 package com.kodilla.ecommercee.domain;
 import com.kodilla.ecommercee.repository.*;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
@@ -16,13 +16,18 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class OrderTestSuite {
 
     @Autowired
     private OrderRepository orderRepository;
     @Autowired
     private CartRepository cartRepository;
+
+    @After
+    public void cleanDatabase(){
+        orderRepository.deleteAll();
+        cartRepository.deleteAll();
+    }
 
     @Test
     public void testSaveOrder() {
@@ -96,10 +101,8 @@ public class OrderTestSuite {
         //When
         orderRepository.deleteById(orderId);
         //Then
-        assertEquals(1, orderRepository.findAll().size());
+        assertEquals(Optional.empty(), orderRepository.findById(orderId));
         assertEquals(1, cartRepository.findAll().size());
-        assertTrue(orderRepository.findById(orderId).get().isDeleted());
-        assertTrue(cartRepository.findById(cartId).get().isDeleted());
     }
 
 }
