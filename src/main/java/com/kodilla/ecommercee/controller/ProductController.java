@@ -33,6 +33,7 @@ public class ProductController {
                 productService.get(id));
     }
 
+
     @GetMapping
     public List<ProductDto> getAll() {
         return productMapper.mapToProductDtoList(

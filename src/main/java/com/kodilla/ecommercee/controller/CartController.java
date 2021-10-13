@@ -1,35 +1,54 @@
 package com.kodilla.ecommercee.controller;
 
+import com.kodilla.ecommercee.controller.exception.CartAlreadyExistsException;
+import com.kodilla.ecommercee.controller.exception.CartNotFoundException;
+import com.kodilla.ecommercee.controller.exception.ProductNotFoundException;
+import com.kodilla.ecommercee.domain.Cart;
+import com.kodilla.ecommercee.domain.Order;
 import com.kodilla.ecommercee.domain.dto.*;
+import com.kodilla.ecommercee.mapper.CartMapper;
+import com.kodilla.ecommercee.mapper.OrderMapper;
+import com.kodilla.ecommercee.service.CartService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/v1/ecommerce/carts")
 public class CartController {
 
-    @PostMapping(value = "/{id}")
-    public CartDto saveCart(@PathVariable("id") Long userId) {
-        return new CartDto(1L, new ArrayList<>(), new UserDto());
+    private final CartService cartService;
+    private final CartMapper cartMapper;
+    private final OrderMapper orderMapper;
+
+    @PostMapping(value = "/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public CartDto saveCart(@PathVariable("userId") Long userId, @RequestBody CartDto cartDto) throws CartAlreadyExistsException {
+        Cart cart = cartMapper.mapToCart(cartDto);
+        cartService.saveCart(userId,cart);
+        return cartMapper.mapToCartDto(cart);
     }
 
     @PutMapping(value = "/{cartId}/addProduct/{productId}")
-    public CartDto addProduct(@PathVariable("cartId") Long cartId, @PathVariable("productId") Long productId) {
-        return new CartDto(2L, Collections.singletonList(new ProductDto("product", "product", new BigDecimal(1000), new GroupDto(1l, "group"))), new UserDto());
-        //should update cart;
+    public CartDto addProduct(@PathVariable("cartId") Long cartId, @PathVariable("productId") Long productId)
+            throws CartNotFoundException, ProductNotFoundException {
+        Cart cart = cartService.getCart(cartId);
+        Cart upadtedCart = cartService.addProductToCart(cart, productId);
+        return cartMapper.mapToCartDto(upadtedCart);
     }
 
     @PutMapping(value = "/{cartId}/deleteProduct/{productId}")
-    public CartDto deleteProduct(@PathVariable("cartId") Long cartId, @PathVariable Long productId) {
-        return new CartDto(3L, Collections.singletonList(new ProductDto("product", "product", new BigDecimal(1000), new GroupDto(1l, "group"))), new UserDto());
-        //should update cart;
+    public CartDto deleteProduct(@PathVariable("cartId") Long cartId, @PathVariable Long productId)
+            throws CartNotFoundException, ProductNotFoundException {
+        Cart cart = cartService.getCart(cartId);
+        Cart updatedCart = cartService.deleteProductFromCart(cart, productId);
+        return cartMapper.mapToCartDto(updatedCart);
     }
 
     @PostMapping(value = "/{cartId}/order")
-    public OrderDto saveOrder(@PathVariable("cartId") Long cartId){
-        return new OrderDto(new BigDecimal(100), new CartDto());
+    public OrderDto saveOrder(@PathVariable("cartId") Long cartId) throws CartNotFoundException {
+        Cart cart = cartService.getCart(cartId);
+        Order order = cartService.createOrder(cart);
+        return orderMapper.mapOrderToOrderDto(order);
     }
 }

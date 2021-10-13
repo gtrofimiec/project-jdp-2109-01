@@ -3,9 +3,9 @@ package com.kodilla.ecommercee.controller.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
-public class ProductNotFoundException extends ResponseStatusException {
+public class CartNotFoundException extends ResponseStatusException {
 
-    public ProductNotFoundException() {
-        super(HttpStatus.NOT_FOUND, "Product not found");
+    public CartNotFoundException() {
+        super(HttpStatus.NOT_FOUND, "Cart not found");
     }
 }
