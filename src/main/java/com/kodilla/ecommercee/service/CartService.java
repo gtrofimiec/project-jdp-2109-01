@@ -24,7 +24,7 @@ public class CartService {
 
 
     public Cart getCart (final long id) throws CartNotFoundException {
-        return cartRepository.findById(id).orElseThrow(CartNotFoundException::new);
+        return cartRepository.findById(id).get();
     }
 
     public Cart saveCart (final long userId, final Cart cart) throws CartAlreadyExistsException {
@@ -40,7 +40,7 @@ public class CartService {
 
     public Cart addProductToCart (Cart cart, final long productId)
             throws ProductNotFoundException {
-        Product product = productService.getProduct(productId).orElseThrow(ProductNotFoundException::new);
+        Product product = productService.getProduct(productId).get();
         cart.getProductList().add(product);
         product.getCartList().add(cart);
         cartRepository.save(cart);
