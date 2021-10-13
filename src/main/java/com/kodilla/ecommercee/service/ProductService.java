@@ -22,7 +22,7 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public Product get(final Long id) throws ProductNotFoundException {
+    public Product getProduct(final Long id) throws ProductNotFoundException {
         Product product = productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
         return product;
     }

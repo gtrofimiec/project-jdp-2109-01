@@ -30,7 +30,7 @@ public class ProductController {
     @GetMapping(value = "/{id}")
     public ProductDto getOne(@PathVariable("id") Long id) throws ProductNotFoundException {
         return productMapper.mapToProductDto(
-                productService.get(id));
+                productService.getProduct(id));
     }
 
 

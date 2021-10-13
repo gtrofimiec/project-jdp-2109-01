@@ -76,7 +76,7 @@ public class ProductTestSuite {
         updatedProduct.setId(productId);
 
         productService.update(updatedProduct);
-        Product actualProduct = productService.get(productId);
+        Product actualProduct = productService.getProduct(productId);
 
         //Then
         assertTrue(productRepository.existsById(productId));
@@ -133,7 +133,7 @@ public class ProductTestSuite {
 
         //When
         Long id = product1.getId();
-        Product actualProduct = productService.get(id);
+        Product actualProduct = productService.getProduct(id);
 
         //Then
         assertEquals(product1.getName(), actualProduct.getName());

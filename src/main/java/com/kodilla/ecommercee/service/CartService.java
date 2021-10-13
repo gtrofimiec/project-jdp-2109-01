@@ -40,7 +40,7 @@ public class CartService {
 
     public Cart addProductToCart (Cart cart, final long productId)
             throws ProductNotFoundException {
-        Product product = productService.getProduct(productId).get();
+        Product product = productService.getProduct(productId);
         cart.getProductList().add(product);
         product.getCartList().add(cart);
         cartRepository.save(cart);
@@ -49,7 +49,7 @@ public class CartService {
 
     public Cart deleteProductFromCart (final Cart cart, final long productId)
             throws ProductNotFoundException {
-        Product product = productService.getProduct(productId).orElseThrow(ProductNotFoundException::new);
+        Product product = productService.getProduct(productId);
         cart.getProductList().remove(product);
         product.getCartList().remove(cart);
         cartRepository.save(cart);
