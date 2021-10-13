@@ -1,8 +1,8 @@
-#E-commerce
+# E-commerce
 
 Back-end mechanism for an e-commerce application, written in JAVA. This is a group project, prepared during Java Developer Bootcamp in [Kodilla](http://kodilla.com)
 
-##Tools and libraries:
+## Tools and libraries:
 
 - Java 11
 - IntelliJ IDEA
@@ -15,9 +15,9 @@ Back-end mechanism for an e-commerce application, written in JAVA. This is a gro
 	- MySQL
 	- H2 - for tests
 
-##Main assumptions:
+## Main assumptions:
 
-- Our e-commerce app has 5 groups of endpoints (documented in Swagger - run app and open in a browser [API documentation](http://localhost:8080/swagger-ui.html):
+- Our e-commerce app has 5 groups of endpoints (documented in Swagger - run app and open in a browser [API documentation](http://localhost:8080/swagger-ui.html)):
 
 |Group of Endpoints|Description                      |Http Methods                                   |Example request             |
 |------------------|---------------------------------|-----------------------------------------------|----------------------------|
@@ -29,13 +29,13 @@ Back-end mechanism for an e-commerce application, written in JAVA. This is a gro
 
 - For business purposes we use soft delete in the app, to avoid permanent deletion of records.
 
-##How to run application
+## How to run application
 
 1. Clone or download from repository, and build a project.
 2. Prepare database in accordance with application.properties file located in resources package (main package).
 3. To see how application works, you can run it (Ecommerce Application.class) and use prepared request(look at the table above) in the Postman.
 
-##Ideas for improvement
+## Ideas for improvement
 
 1. We wanted to add user authentication and authorisation(limit access to certain endpoints). In order to achieve that, we were considering using Spring Security.
 2. There is possibility to provide users access to history of their orders - thanks to used soft delete.

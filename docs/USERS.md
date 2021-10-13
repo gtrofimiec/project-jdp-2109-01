@@ -1,6 +1,6 @@
-#Example requests
+# Example requests
 
-##USERS
+## USERS
 
 - POST http://localhost:8080/v1/ecommerce/users
 

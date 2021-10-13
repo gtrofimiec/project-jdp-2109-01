@@ -1,6 +1,6 @@
-#Example requests
+# Example requests
 
-##CARTS
+## CARTS
 
 - POST http://localhost:8080/v1/ecommerce/carts/2
 
