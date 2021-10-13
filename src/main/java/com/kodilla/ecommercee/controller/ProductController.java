@@ -6,7 +6,7 @@ import com.kodilla.ecommercee.controller.exception.ProductNotFoundException;
 import com.kodilla.ecommercee.domain.Product;
 import com.kodilla.ecommercee.domain.dto.ProductDto;
 import com.kodilla.ecommercee.mapper.ProductMapper;
-import com.kodilla.ecommercee.repository.GroupRepository;
+import com.kodilla.ecommercee.service.GroupService;
 import com.kodilla.ecommercee.service.ProductService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -19,12 +19,12 @@ public class ProductController {
 
     private final ProductService productService;
     private final ProductMapper productMapper;
-    private final GroupRepository groupRepository; //change to GroupService
+    private final GroupService groupService;
 
-    public ProductController(ProductService productService, ProductMapper productMapper, GroupRepository groupRepository) {
+    public ProductController(ProductService productService, ProductMapper productMapper, GroupService groupService) {
         this.productService = productService;
         this.productMapper = productMapper;
-        this.groupRepository = groupRepository;
+        this.groupService = groupService;
     }
 
     @GetMapping(value = "/{id}")
@@ -44,9 +44,7 @@ public class ProductController {
     public ProductDto save(@RequestBody ProductDto productDto) throws GroupNotFoundException, ProductExistsException {
         Product product = productMapper.mapToProduct(productDto);
         Long groupId = productDto.getGroupDto().getId();
-        String groupName = //groupService.get(groupId)
-                groupRepository.findById(groupId).orElseThrow(GroupNotFoundException::new) //delete when GroupService is ready
-                        .getName();
+        String groupName = groupService.getOne(groupId).getName();
         product.getGroup().setName(groupName);
         productService.save(product);
         return productMapper.mapToProductDto(product);
@@ -57,9 +55,7 @@ public class ProductController {
         Product product = productMapper.mapToProduct(productDto);
         product.setId(id);
         Long groupId = productDto.getGroupDto().getId();
-        String groupName = //groupService.get(groupId)
-                groupRepository.findById(groupId).orElseThrow(GroupNotFoundException::new) //delete when GroupService is ready
-                        .getName();
+        String groupName = groupService.getOne(groupId).getName();
         product.getGroup().setName(groupName);
         productService.save(product);
         return productMapper.mapToProductDto(product);
