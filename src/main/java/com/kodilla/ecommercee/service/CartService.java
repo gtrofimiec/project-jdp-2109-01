@@ -6,7 +6,7 @@ import com.kodilla.ecommercee.controller.exception.ProductNotFoundException;
 import com.kodilla.ecommercee.domain.Cart;
 import com.kodilla.ecommercee.domain.Order;
 import com.kodilla.ecommercee.domain.Product;
-import com.kodilla.ecommercee.mapper.OrderMapper;
+import com.kodilla.ecommercee.domain.User;
 import com.kodilla.ecommercee.repository.CartRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,16 +20,20 @@ public class CartService {
     private final CartRepository cartRepository;
     private final ProductService productService;
     private final OrderService orderService;
-    private final OrderMapper orderMapper;
+    private final UserDbService userDbService;
+
 
     public Cart getCart (final long id) throws CartNotFoundException {
         return cartRepository.findById(id).orElseThrow(CartNotFoundException::new);
     }
 
-    public Cart saveCart (final Cart cart) throws CartAlreadyExistsException {
+    public Cart saveCart (final long userId, final Cart cart) throws CartAlreadyExistsException {
         if (cartRepository.existsById(cart.getId())) {
             throw new CartAlreadyExistsException();
         } else {
+            User user = userDbService.getOneUser(userId);
+            user.setCart(cart);
+            userDbService.update(user);
             return  cartRepository.save(cart);
         }
     }

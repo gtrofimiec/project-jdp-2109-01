@@ -22,10 +22,10 @@ public class CartController {
     private final CartMapper cartMapper;
     private final OrderMapper orderMapper;
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public CartDto saveCart(@RequestBody CartDto cartDto) throws CartAlreadyExistsException {
+    @PostMapping(value = "/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public CartDto saveCart(@PathVariable("userId") Long userId, @RequestBody CartDto cartDto) throws CartAlreadyExistsException {
         Cart cart = cartMapper.mapToCart(cartDto);
-        cartService.saveCart(cart);
+        cartService.saveCart(userId,cart);
         return cartMapper.mapToCartDto(cart);
     }
 
