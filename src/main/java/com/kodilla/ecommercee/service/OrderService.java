@@ -2,6 +2,7 @@ package com.kodilla.ecommercee.service;
 
 import com.kodilla.ecommercee.controller.exception.OrderConflictException;
 import com.kodilla.ecommercee.controller.exception.OrderNotFoundException;
+import com.kodilla.ecommercee.domain.Cart;
 import com.kodilla.ecommercee.domain.Order;
 import com.kodilla.ecommercee.repository.CartRepository;
 import com.kodilla.ecommercee.repository.OrderRepository;
@@ -39,7 +40,10 @@ public class OrderService {
         orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
         Order order = orderRepository.findById(orderId).get();
         order.setDeleted(true);
-        cartRepository.findById(order.getCart().getId()).get().setDeleted(true);
+        orderRepository.save(order);
+        Cart cart = cartRepository.findById(order.getCart().getId()).get();
+        cart.setDeleted(true);
+        cartRepository.save(cart);
     }
 
     public Order update(Long orderId) throws OrderConflictException {

@@ -1,6 +1,11 @@
 package com.kodilla.ecommercee.controller;
 
+import com.kodilla.ecommercee.domain.Cart;
+import com.kodilla.ecommercee.domain.Order;
 import com.kodilla.ecommercee.domain.dto.*;
+import com.kodilla.ecommercee.repository.CartRepository;
+import com.kodilla.ecommercee.repository.OrderRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -10,6 +15,11 @@ import java.util.Collections;
 @RestController
 @RequestMapping("/v1/ecommerce/carts")
 public class CartController {
+
+    @Autowired
+    OrderRepository orderRepository;
+    @Autowired
+    CartRepository cartRepository;
 
     @PostMapping(value = "/{id}")
     public CartDto saveCart(@PathVariable("id") Long userId) {
@@ -29,7 +39,8 @@ public class CartController {
     }
 
     @PostMapping(value = "/{cartId}/order")
-    public OrderDto saveOrder(@PathVariable("cartId") Long cartId){
-        return new OrderDto(new BigDecimal(100), new CartDto());
+    public Order saveOrder(@PathVariable("cartId") Long cartId){
+        Cart cart = cartRepository.save(new Cart());
+        return orderRepository.save(new Order(new BigDecimal(100), cart));
     }
 }
