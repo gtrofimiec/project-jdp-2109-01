@@ -22,15 +22,24 @@ public class GroupService {
     }
 
     public Group saveGroup(final Group group) throws GroupAlreadyExistsException {
-        if(groupRepository.existsById(group.getId())) {
-            throw new GroupAlreadyExistsException();
-        } else {
+        if(!groupRepository.existsById(group.getId())) {
             return groupRepository.save(group);
+        } else {
+            throw new GroupAlreadyExistsException();
         }
     }
 
-    public Group getGroup(final Long groupId) throws GroupNotFoundException {
+    public Group getOne(final Long groupId) throws GroupNotFoundException {
         return groupRepository.findById(groupId)
                 .orElseThrow(GroupNotFoundException::new);
+    }
+
+    public Group update(final Long groupId, Group group) throws GroupNotFoundException {
+        if(groupRepository.existsById(groupId)) {
+            group.setId(groupId);
+            return groupRepository.save(group);
+        } else {
+            throw new GroupNotFoundException();
+        }
     }
 }
