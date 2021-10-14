@@ -18,6 +18,13 @@ public class Cart {
         this.productList = new ArrayList<>();
     }
 
+    public Cart(Long id, List<Product> productList, User user) {
+        this.id = id;
+        this.productList = productList;
+        this.user = user;
+        this.deleted = false;
+    }
+
     @GeneratedValue
     @NotNull
     @Id

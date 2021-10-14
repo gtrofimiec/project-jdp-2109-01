@@ -32,8 +32,7 @@ public class CartService {
             throw new CartAlreadyExistsException();
         } else {
             User user = userDbService.getOneUser(userId);
-            user.setCart(cart);
-            userDbService.update(user);
+            cart.setUser(user);
             return  cartRepository.save(cart);
         }
     }
