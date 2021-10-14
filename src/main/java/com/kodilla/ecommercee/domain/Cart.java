@@ -23,6 +23,11 @@ public class Cart {
         this.productList = new ArrayList<>();
     }
 
+    public Cart(Long id, List<Product> productList) {
+        this.id = id;
+        this.productList = productList;
+    }
+
     @GeneratedValue
     @NotNull
     @Id
@@ -38,5 +43,5 @@ public class Cart {
     }, fetch = FetchType.LAZY, mappedBy = "cartList")
     private List<Product> productList;
 
-    private boolean deleted;
+    private boolean deleted = false;
 }
