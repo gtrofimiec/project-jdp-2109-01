@@ -24,8 +24,6 @@ public class Cart {
     private Long id;
 
     @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE,
             CascadeType.REFRESH,
             CascadeType.DETACH,
             CascadeType.REMOVE
