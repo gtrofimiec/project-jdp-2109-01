@@ -3,27 +3,24 @@ package com.kodilla.ecommercee.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Filter;
-import org.hibernate.annotations.FilterDef;
-import org.hibernate.annotations.ParamDef;
-import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "accessKeys")
-@SQLDelete(sql = "UPDATE access_keys SET deleted = true WHERE id = ?")
-@FilterDef(name = "deletedKeyFilter", parameters = @ParamDef(name = "isDeleted", type = "boolean"))
-@Filter(name = "deletedKeyFilter", condition = "deleted = :isDeleted")
+@Table(name = "access_keys")
+@Where(clause = "deleted = false")
 public class Key {
 
     @Id
     @GeneratedValue
-    @Column(name = "id")
+    @Column(name = "key_id")
     private Long id;
 
     @Column(name = "accessKey")

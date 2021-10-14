@@ -32,10 +32,7 @@ public class Group {
 
     @OneToMany(targetEntity = Product.class,
             mappedBy = "group",
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.REMOVE,
-            },
-            fetch = FetchType.LAZY)
+            cascade = {CascadeType.MERGE,CascadeType.REMOVE},
+            fetch = FetchType.EAGER)
     private List<Product> productList;
 }

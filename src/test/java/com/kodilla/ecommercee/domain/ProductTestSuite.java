@@ -41,20 +41,19 @@ public class ProductTestSuite {
         //Given
         Cart cart = new Cart();
         Group group = new Group("group 1");
+        groupRepository.save(group);
+
         Product product1 = new Product("test 1", BigDecimal.ONE, "test description1");
         Product product2 = new Product("test 2", BigDecimal.ONE, "test description2");
+        productRepository.save(product1);
+        productRepository.save(product2);
 
-        group.getProductList().add(product1);
-        group.getProductList().add(product2);
         cart.getProductList().add(product1);
         cart.getProductList().add(product2);
         product1.getCartList().add(cart);
         product2.getCartList().add(cart);
 
-        groupRepository.save(group);
-        productRepository.save(product1);
-        productRepository.save(product2);
-
+        cartRepository.save(cart);
         //When
         List<Product> productList = productRepository.findAll();
 
@@ -62,29 +61,27 @@ public class ProductTestSuite {
         assertEquals(2, productList.size());
     }
 
+
     @Test
     public void testProductSave() {
 
         //Given
-        Cart cart = new Cart();
         Group group = new Group("group 1");
-        Product product = new Product("test name", BigDecimal.ONE, "test description");
+        groupRepository.save(group);
 
-        cart.getProductList().add(product);
-        product.getCartList().add(cart);
-        group.getProductList().add(product);
+        Product product = new Product("test name", BigDecimal.ONE, "test description");
+        product.setGroup(group);
 
         //When
-        groupRepository.save(group);
         productRepository.save(product);
-        cartRepository.save(cart);
 
         //Then
         Long id = product.getId();
 
         assertTrue(productRepository.existsById(id));
+        assertEquals("group 1", productRepository.findById(id).get().getGroup().getName());
+        assertEquals("test name", groupRepository.findById(group.getId()).get().getProductList().get(0).getName());
     }
-
 
     @Test
     public void testProductFindById() {
@@ -92,22 +89,20 @@ public class ProductTestSuite {
         //Given
         Cart cart = new Cart();
         Group group = new Group("group 1");
+        groupRepository.save(group);
+
         Product product1 = new Product("test 1", BigDecimal.ONE, "test description1");
         Product product2 = new Product("test 2", BigDecimal.ONE, "test description2");
+        product1.setGroup(group);
+        product2.setGroup(group);
+        productRepository.save(product1);
+        productRepository.save(product2);
 
         cart.getProductList().add(product1);
         cart.getProductList().add(product2);
-        group.getProductList().add(product1);
-        group.getProductList().add(product2);
         product1.getCartList().add(cart);
         product2.getCartList().add(cart);
-        product1.setGroup(group);
-        product2.setGroup(group);
 
-
-        groupRepository.save(group);
-        productRepository.save(product1);
-        productRepository.save(product2);
         cartRepository.save(cart);
 
         //When
@@ -125,25 +120,22 @@ public class ProductTestSuite {
         Cart cart1 = new Cart();
         Cart cart2 = new Cart();
         Group group = new Group("group 1");
+        groupRepository.save(group);
+
         Product product1 = new Product("product 1", BigDecimal.ONE, "test description1");
         Product product2 = new Product("product 2", BigDecimal.ONE, "test description2");
-
-        group.getProductList().add(product1);
-        group.getProductList().add(product2);
+        product1.setGroup(group);
+        product2.setGroup(group);
+        productRepository.save(product1);
+        productRepository.save(product2);
 
         cart1.getProductList().add(product1);
         cart2.getProductList().add(product2);
-
         product1.getCartList().add(cart1);
         product2.getCartList().add(cart2);
-        product1.setGroup(group);
-        product2.setGroup(group);
 
-        groupRepository.save(group);
         cartRepository.save(cart1);
         cartRepository.save(cart2);
-        productRepository.save(product1);
-        productRepository.save(product2);
 
         //When
         Long id1 = product1.getId();

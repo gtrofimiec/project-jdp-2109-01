@@ -1,7 +1,6 @@
 package com.kodilla.ecommercee.domain;
 
 import com.kodilla.ecommercee.repository.CartRepository;
-import com.kodilla.ecommercee.repository.OrderRepository;
 import com.kodilla.ecommercee.repository.ProductRepository;
 import com.kodilla.ecommercee.repository.UserRepository;
 import org.junit.After;
@@ -9,7 +8,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
@@ -21,7 +19,6 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class CartTestSuite {
 
     @Autowired
@@ -31,17 +28,25 @@ public class CartTestSuite {
     @Autowired
     private ProductRepository productRepository;
 
+    @After
+    public void cleanUpDataBaseAfterEachTest() {
+        cartRepository.deleteAll();
+        userRepository.deleteAll();
+        productRepository.deleteAll();
+    }
+
     @Test
     public void shouldFindAllCarts() {
 
         //Given
         User user = new User();
+        userRepository.save(user);
+
         Cart cart1 = new Cart();
         Cart cart2 = new Cart();
 
-        user.setCart(cart1);
+        cart1.setUser(user);
 
-        userRepository.save(user);
         cartRepository.save(cart1);
         cartRepository.save(cart2);
 
@@ -57,18 +62,19 @@ public class CartTestSuite {
 
         //Given
         User user = new User();
-        Cart cart = new Cart();
+        userRepository.save(user);
+
         Product product1 = new Product("product1", new BigDecimal(100), "desc1");
         Product product2 = new Product("product2", new BigDecimal(200), "desc2");
+        productRepository.save(product1);
+        productRepository.save(product2);
 
-        user.setCart(cart);
+        Cart cart = new Cart();
 
+        cart.setUser(user);
         cart.getProductList().add(product1);
         cart.getProductList().add(product2);
 
-        userRepository.save(user);
-        productRepository.save(product1);
-        productRepository.save(product2);
         cartRepository.save(cart);
 
         //When

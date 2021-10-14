@@ -8,18 +8,19 @@ import javax.persistence.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @NoArgsConstructor
 @Data
 @Entity
 @Table(name = "Users")
-@SQLDelete(sql = "UPDATE Users SET deleted = true WHERE user_id = ?")
-@FilterDef(name = "deletedUserFilter", parameters = @ParamDef(name = "isDeleted", type = "boolean"))
-@Filter(name = "deletedUserFilter", condition = "deleted = :isDeleted")
+@Where(clause = "deleted = false")
 public class User {
 
     @Id
     @GeneratedValue
+    @NotNull
     @Column(name = "user_id")
     private Long id;
 
@@ -32,9 +33,8 @@ public class User {
     @OneToOne(cascade = CascadeType.ALL)
     private Key key;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "cart_id")
-    private Cart cart;
+    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER, mappedBy = "user", targetEntity = Cart.class)
+    private List<Cart> carts;
 
     private boolean deleted = false;
 }

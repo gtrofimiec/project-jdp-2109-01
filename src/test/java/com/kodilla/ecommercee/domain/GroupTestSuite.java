@@ -100,11 +100,12 @@ public class GroupTestSuite {
     public void testGroupDelete(){
         //Given
         Group group = new Group("name");
-        Product product = new Product("name1", new BigDecimal(10), "desc1");
-        group.getProductList().add(product);
-        product.setGroup(group);
         groupRepository.save(group);
+
+        Product product = new Product("name1", new BigDecimal(10), "desc1");
+        product.setGroup(group);
         productRepository.save(product);
+
         Long groupId = group.getId();
         //When
         groupRepository.deleteById(groupId);

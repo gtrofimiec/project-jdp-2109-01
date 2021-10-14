@@ -26,12 +26,12 @@ public class Cart {
     @Column(name = "cart_id")
     private Long id;
 
-    @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE,
-            CascadeType.REFRESH,
-            CascadeType.DETACH,
-            CascadeType.REMOVE
-    }, fetch = FetchType.LAZY, mappedBy = "cartList")
+    @ManyToMany(mappedBy = "cartList")
     private List<Product> productList;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    private boolean deleted = false;
 }

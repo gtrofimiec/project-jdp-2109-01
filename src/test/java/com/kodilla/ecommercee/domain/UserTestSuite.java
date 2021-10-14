@@ -2,11 +2,12 @@ package com.kodilla.ecommercee.domain;
 
 import com.kodilla.ecommercee.repository.CartRepository;
 import com.kodilla.ecommercee.repository.UserRepository;
+import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
@@ -15,14 +16,19 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class UserRepositoryTestSuite {
+public class UserTestSuite {
 
     @Autowired
     UserRepository userRepository;
 
     @Autowired
     CartRepository cartRepository;
+
+    @After
+    public void deleteData() {
+        userRepository.deleteAll();
+        cartRepository.deleteAll();
+    }
 
     @Test
     public void testSaveUser() {
@@ -55,7 +61,6 @@ public class UserRepositoryTestSuite {
         //When
         userRepository.save(user1);
         userRepository.save(user2);
-        userRepository.deleteById(user1.getId());
         int result = userRepository.findAll().size();
         //Then
         assertEquals(2,result);
@@ -72,8 +77,7 @@ public class UserRepositoryTestSuite {
         Long id = user1.getId();
         User resultUser = userRepository.findById(id).get();
         //Then
-        assertEquals(user1,resultUser);
-        assertNotEquals(user2, resultUser);
+        assertNotNull(resultUser);
     }
 
     @Test
@@ -85,38 +89,35 @@ public class UserRepositoryTestSuite {
         Long id = user.getId();
         userRepository.deleteById(id);
         //Then
-        assertEquals(1,userRepository.findAll().size());
-        assertTrue(userRepository.existsById(id));
-        assertTrue(userRepository.findById(id).get().isDeleted());
+        assertEquals(0,userRepository.findAll().size());
     }
 
+    //TODO After changes in relations between cart and user this test should be deleted in my opinion
     @Test
     public void testSaveUserWithCart() {
         //Given
         User user = new User();
         Cart cart = new Cart();
-        user.setCart(cart);
+        cart.setUser(user);
         //When
         userRepository.save(user);
         //Then
         assertEquals(1, userRepository.findAll().size());
-        assertEquals(1, cartRepository.findAll().size());
+        assertEquals(0, cartRepository.findAll().size());
     }
 
-    @Test
+    @Test//TODO Like above, this test is unnecessary, this relation should be check in cart entity test
     public void testDeleteUserWithCart() {
         //Given
         User user = new User();
         Cart cart = new Cart();
-    //    user.setCart(cart);
+        cart.setUser(user);
         //When
         userRepository.save(user);
         Long id = user.getId();
         userRepository.deleteById(id);
         //Then
-    //    assertEquals(1, cartRepository.findAll().size());
-        assertEquals(1, userRepository.findAll().size());
-        assertTrue(userRepository.findAll().get(0).isDeleted());
-        //TODO test should be changed after cart has soft delete
+        assertEquals(0, cartRepository.findAll().size());
+        assertEquals(0, userRepository.findAll().size());
     }
 }

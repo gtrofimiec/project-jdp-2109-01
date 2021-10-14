@@ -25,9 +25,8 @@ public class UserController {
     }
 
     @GetMapping
-    public List<UserDto> getAllUsers(@RequestParam(value = "isDeleted", required = false, defaultValue = "false") boolean isDeleted) {
-
-        return userMapper.mapToUserDtoList(userService.getAllUsers(isDeleted));
+    public List<UserDto> getAllUsers() {
+        return userMapper.mapToUserDtoList(userService.getAllUsers());
     }
 
     @GetMapping("/{userId}")

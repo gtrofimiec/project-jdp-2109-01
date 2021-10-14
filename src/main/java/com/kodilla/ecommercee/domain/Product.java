@@ -42,13 +42,7 @@ public class Product {
     @JoinColumn(name = "group_id")
     private Group group;
 
-    @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE,
-            CascadeType.REFRESH,
-            CascadeType.DETACH
-    },
-            fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(name ="Products_has_carts",
             joinColumns = {@JoinColumn(name = "product_id", referencedColumnName = "product_id")},
             inverseJoinColumns = {@JoinColumn(name = "cart_id", referencedColumnName = "cart_id")}

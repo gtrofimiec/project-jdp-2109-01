@@ -8,12 +8,9 @@ import com.kodilla.ecommercee.domain.dto.KeyDto;
 import com.kodilla.ecommercee.mapper.KeyMapper;
 import com.kodilla.ecommercee.repository.KeyRepository;
 import com.kodilla.ecommercee.repository.UserRepository;
-import org.hibernate.Filter;
-import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -52,20 +49,13 @@ public class UserDbService {
         return userRepository.save(newUser);
     }
 
-    public List<User> getAllUsers(boolean isDeleted) {
-        Session session = entityManager.unwrap(Session.class);
-        Filter filter = session.enableFilter("deletedUserFilter");
-        filter.setParameter("isDeleted", isDeleted);
-        Iterable<User> users =  userRepository.findAll();
-        session.disableFilter("deletedUserFilter");
-        List<User> userList = new ArrayList<>();
-        users.iterator().forEachRemaining(userList::add);
-        return userList;
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
     public User getOneUser(Long id) throws UserNotFoundException {
 
-        if (!userRepository.findById(id).isPresent()||userRepository.findById(id).get().isDeleted()) {
+        if (!userRepository.findById(id).isPresent()){//||userRepository.findById(id).get().isDeleted()) {
             throw new UserNotFoundException();
         }
 
@@ -78,7 +68,11 @@ public class UserDbService {
         if (!userRepository.findById(id).isPresent()) {
             throw new UserNotFoundException();
         }
-        userRepository.deleteById(id);
+        User user = userRepository.findUserById(id);
+        user.setDeleted(true);
+        Key key = user.getKey();
+        key.setDeleted(true);
+        userRepository.save(user);
     }
 
     public User update(User u) throws UserNotFoundException {
