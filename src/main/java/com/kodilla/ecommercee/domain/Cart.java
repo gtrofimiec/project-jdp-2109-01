@@ -1,9 +1,8 @@
 package com.kodilla.ecommercee.domain;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.annotations.*;
+import lombok.Data;
 
 import javax.persistence.*;
 import javax.persistence.CascadeType;
@@ -14,8 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "Carts")
 @Where(clause = "deleted = false")
