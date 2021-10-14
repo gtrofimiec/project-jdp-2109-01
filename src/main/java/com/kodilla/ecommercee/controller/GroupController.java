@@ -11,7 +11,7 @@ import java.util.List;
 public class GroupController {
 
     @GetMapping
-    public List<GroupDto> getGroups(){
+    public List<GroupDto> getGroups() {
         return Arrays.asList(
                 new GroupDto(1L, "underwear"),
                 new GroupDto(2L, "jackets")
@@ -29,6 +29,4 @@ public class GroupController {
     public GroupDto updateGroup(@PathVariable ("groupId") Long groupId, @RequestBody GroupDto groupDto){
         return new GroupDto (1L, "updated name");
     }
-
-
 }

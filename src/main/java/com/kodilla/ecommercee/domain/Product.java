@@ -1,6 +1,10 @@
 package com.kodilla.ecommercee.domain;
 
 import lombok.*;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
+import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -54,4 +58,7 @@ public class Product {
             inverseJoinColumns = {@JoinColumn(name = "cart_id", referencedColumnName = "cart_id")}
     )
     private List<Cart> cartList;
+
+    @Column(name="deleted")
+    private boolean deleted = false;
 }
