@@ -17,6 +17,8 @@ Back-end mechanism for an e-commerce application, written in JAVA. This is a gro
 
 ## Main assumptions:
 
+- For business purposes we use soft delete in the app, to avoid permanent deletion of records.
+
 - Our e-commerce app has 5 groups of endpoints (documented in Swagger - run app and open in a browser [API documentation](http://localhost:8080/swagger-ui.html)):
 
 |Group of Endpoints|Description                      |Http Methods                                   |Example request             |
@@ -27,7 +29,6 @@ Back-end mechanism for an e-commerce application, written in JAVA. This is a gro
 |Carts             |Cart with products added by user |POST(cart, order), PUT(add, and delete product)|[Carts](docs/CARTS.md)      |
 |Orders            |Order based on cart              |GET(all, by order ID), POST, PUT, DELETE       |[Orders](docs/ORDERS.md)    |
 
-- For business purposes we use soft delete in the app, to avoid permanent deletion of records.
 
 ## How to run application
 

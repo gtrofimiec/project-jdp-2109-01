@@ -4,7 +4,7 @@
 
 - POST http://localhost:8080/v1/ecommerce/products
 
-    - Method is adding new product record. 
+    - Request is adding new product record. 
     - Requires JSON. 
     - Returns saved product in JSON.
 
@@ -42,17 +42,19 @@
 
 - GET http://localhost:8080/v1/ecommerce/products
 
-    - Method is returning all available products in JSON.
+    - Request is returning all available products in JSON.
     - Doesn't require any parameter.
+
 
 - GET http://localhost:8080/v1/ecommerce/products/3
 
-    - Method is returning chosen product in JSON. 
+    - Request is returning chosen product in JSON. 
     - Require a path variable (id of a product).
+  
 
 - PUT http://localhost:8080/v1/ecommerce/products/4
 
-    - Method is updating chosen product.
+    - Request is updating chosen product.
     - Requires a path variable(id of a product), and JSON value of the updated product.
     - Returns updated product.
 
@@ -69,6 +71,6 @@
 ```
 - DELETE http://localhost:8080/v1/ecommerce/products/5
 
-    - Method is deleting chosen product.
+    - Request is deleting chosen product.
     - Requires a path variable(id of a product). 
     - Doesn't return anything.
