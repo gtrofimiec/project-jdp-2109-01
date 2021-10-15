@@ -48,8 +48,6 @@ public class Product {
     private Group group;
 
     @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE,
             CascadeType.REFRESH,
             CascadeType.DETACH
     },
