@@ -34,9 +34,9 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<ProductDto> getProducts() {
+    public List<ProductDto> getProducts(@RequestParam(value = "isDeleted", required = false, defaultValue = "false") boolean isDeleted) {
         return productMapper.mapToProductDtoList(
-                productService.getAll());
+                productService.getProducts(isDeleted));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

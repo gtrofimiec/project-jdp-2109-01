@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +30,8 @@ public class ProductTestSuite {
     private GroupRepository groupRepository;
     @Autowired
     private CartRepository cartRepository;
+    @Autowired
+    EntityManager entityManager;
 
     @After
     public void cleanUpDataBaseAfter() {
@@ -106,10 +109,11 @@ public class ProductTestSuite {
         productService.save(product2);
 
         //When
-        List<Product> productList = productService.getAll();
+        List<Product> productList = productService.getProducts(false);
 
         //Then
         assertEquals(2, productList.size());
+
     }
 
     @Test

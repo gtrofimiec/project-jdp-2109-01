@@ -1,6 +1,10 @@
 package com.kodilla.ecommercee.domain;
 
 import lombok.*;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -11,6 +15,10 @@ import java.util.*;
 @Getter
 @Setter
 @Entity
+
+@FilterDef(name = "deletedProductsFilter", parameters = @ParamDef(name = "deleted", type = "boolean"))
+@Filter(name = "deletedProductsFilter", condition = "deleted = :deleted")
+@Where(clause = "deleted = false")
 @Table(name = "Products")
 public class Product {
 
@@ -37,6 +45,9 @@ public class Product {
 
     @Column(name = "description")
     private String description;
+
+    @Column (name = "deleted")
+    private boolean deleted = false;
 
     @ManyToOne
     @JoinColumn(name = "group_id")
