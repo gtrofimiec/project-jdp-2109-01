@@ -1,8 +1,6 @@
 package com.kodilla.ecommercee.domain;
 
-import com.kodilla.ecommercee.repository.CartRepository;
-import com.kodilla.ecommercee.repository.GroupRepository;
-import com.kodilla.ecommercee.repository.ProductRepository;
+import com.kodilla.ecommercee.repository.*;
 import com.kodilla.ecommercee.service.ProductService;
 import org.junit.After;
 import org.junit.Test;
@@ -32,12 +30,17 @@ public class ProductTestSuite {
     private CartRepository cartRepository;
     @Autowired
     EntityManager entityManager;
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    OrderRepository orderRepository;
+
 
     @After
     public void cleanUpDataBaseAfter() {
-        cartRepository.deleteAll();
+        userRepository.deleteAll();
         productRepository.deleteAll();
-        groupRepository.deleteAll();
+        orderRepository.deleteAll();
     }
 
     @Test
@@ -145,6 +148,11 @@ public class ProductTestSuite {
 
     @Test
     public void testProductDelete() {
+
+        userRepository.deleteAll();
+        cartRepository.deleteAll();
+        productRepository.deleteAll();
+        orderRepository.deleteAll();
 
         //Given
         Cart cart1 = new Cart();
