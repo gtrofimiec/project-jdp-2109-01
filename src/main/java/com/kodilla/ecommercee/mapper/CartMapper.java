@@ -12,12 +12,18 @@ public class CartMapper {
 
     public Cart mapToCart(CartDto cartDto) {
         ProductMapper productMapper = new ProductMapper();
-        return new Cart(cartDto.getId(), productMapper.mapToProductList(cartDto.getProducts()));
+        Cart cart = new Cart();
+        cart.setId(cartDto.getId());
+        cart.setProductList(productMapper.mapToProductList(cartDto.getProducts()));
+        return cart;
     }
 
     public CartDto mapToCartDto(Cart cart) {
         ProductMapper productMapper = new ProductMapper();
-        return new CartDto(cart.getId(), productMapper.mapToProductDtoList(cart.getProductList()));
+        CartDto cartDto = new CartDto();
+        cartDto.setId(cart.getId());
+        cartDto.setProducts(productMapper.mapToProductDtoList(cart.getProductList()));
+        return cartDto;
     }
 
     public List<Cart> mapToCartList(List<CartDto> cartDtoList) {

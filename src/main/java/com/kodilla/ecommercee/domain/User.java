@@ -1,11 +1,9 @@
 package com.kodilla.ecommercee.domain;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@NoArgsConstructor
 @Data
 @Entity
 @Table(name = "Users")

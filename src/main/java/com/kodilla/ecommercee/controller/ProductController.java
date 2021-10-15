@@ -1,7 +1,7 @@
 package com.kodilla.ecommercee.controller;
 
 import com.kodilla.ecommercee.controller.exception.GroupNotFoundException;
-import com.kodilla.ecommercee.controller.exception.ProductExistsException;
+import com.kodilla.ecommercee.controller.exception.ProductAlreadyExistsException;
 import com.kodilla.ecommercee.controller.exception.ProductNotFoundException;
 import com.kodilla.ecommercee.domain.Product;
 import com.kodilla.ecommercee.domain.dto.ProductDto;
@@ -28,20 +28,19 @@ public class ProductController {
     }
 
     @GetMapping(value = "/{id}")
-    public ProductDto getOne(@PathVariable("id") Long id) throws ProductNotFoundException {
+    public ProductDto getProduct(@PathVariable("id") Long productId) throws ProductNotFoundException {
         return productMapper.mapToProductDto(
-                productService.getProduct(id));
+                productService.getProduct(productId));
     }
 
-
     @GetMapping
-    public List<ProductDto> getAll() {
+    public List<ProductDto> getProducts() {
         return productMapper.mapToProductDtoList(
                 productService.getAll());
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ProductDto save(@RequestBody ProductDto productDto) throws GroupNotFoundException, ProductExistsException {
+    public ProductDto saveProduct(@RequestBody ProductDto productDto) throws GroupNotFoundException, ProductAlreadyExistsException {
         Product product = productMapper.mapToProduct(productDto);
         Long groupId = productDto.getGroupDto().getId();
         String groupName = groupService.getOne(groupId).getName();
@@ -51,9 +50,9 @@ public class ProductController {
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, value = "/{id}")
-    public ProductDto update(@PathVariable("id") Long id, @RequestBody ProductDto productDto) throws GroupNotFoundException, ProductNotFoundException {
+    public ProductDto updateProduct(@PathVariable("id") Long productId, @RequestBody ProductDto productDto) throws GroupNotFoundException, ProductNotFoundException {
         Product product = productMapper.mapToProduct(productDto);
-        product.setId(id);
+        product.setId(productId);
         Long groupId = productDto.getGroupDto().getId();
         String groupName = groupService.getOne(groupId).getName();
         product.getGroup().setName(groupName);
@@ -62,7 +61,7 @@ public class ProductController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public void delete(@PathVariable("id") Long id) throws ProductNotFoundException {
+    public void deleteProduct(@PathVariable("id") Long id) throws ProductNotFoundException {
         productService.delete(id);
     }
 }

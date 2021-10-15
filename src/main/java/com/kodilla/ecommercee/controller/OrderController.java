@@ -30,12 +30,14 @@ public class OrderController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public OrderDto addOrder(@RequestBody OrderDto orderDto) {
         Order order = orderMapper.mapOrderDtoToOrder(orderDto);
-        return orderMapper.mapOrderToOrderDto(orderService.save(order));
+        order = orderService.save(order);
+        return orderMapper.mapOrderToOrderDto(order);
     }
 
     @GetMapping(value = "/{orderId}")
     public OrderDto getOrder(@PathVariable("orderId") Long orderId) throws OrderNotFoundException {
-        return orderMapper.mapOrderToOrderDto(orderService.getOrder(orderId));
+        Order order = orderService.getOrder(orderId);
+        return orderMapper.mapOrderToOrderDto(order);
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, value = "/{orderId}")

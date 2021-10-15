@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 import java.util.*;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -21,6 +20,7 @@ public class Product {
         this.description = description;
         this.cartList = new ArrayList<>();
     }
+
     @Id
     @GeneratedValue
     @NotNull

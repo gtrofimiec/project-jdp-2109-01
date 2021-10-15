@@ -6,6 +6,6 @@ import org.springframework.web.server.ResponseStatusException;
 public class GroupAlreadyExistsException extends ResponseStatusException {
 
     public GroupAlreadyExistsException() {
-        super(HttpStatus.CONFLICT, "Group already exists! Choose another one");
+        super(HttpStatus.CONFLICT, "Group already exists");
     }
 }

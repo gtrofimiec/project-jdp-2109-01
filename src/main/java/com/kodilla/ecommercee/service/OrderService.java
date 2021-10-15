@@ -1,6 +1,6 @@
 package com.kodilla.ecommercee.service;
 
-import com.kodilla.ecommercee.controller.exception.OrderConflictException;
+import com.kodilla.ecommercee.controller.exception.OrderAlreadyExistsException;
 import com.kodilla.ecommercee.controller.exception.OrderNotFoundException;
 import com.kodilla.ecommercee.domain.Order;
 import com.kodilla.ecommercee.repository.OrderRepository;
@@ -17,11 +17,11 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
-    public List<Order> getAll(){
+    public List<Order> getAll() {
         return orderRepository.findAll();
     }
 
-    public Order save(Order order){
+    public Order save(Order order) {
         return orderRepository.save(order);
     }
 
@@ -34,10 +34,11 @@ public class OrderService {
         orderRepository.deleteById(orderId);
     }
 
-    public Order update(Long orderId, Order order) throws OrderConflictException {
-        if (orderRepository.existsById(orderId)){
-            order.setId(orderId);
-            return orderRepository.save(order);
-        }else throw new OrderConflictException();
+    public Order update(Long orderId, Order order) throws OrderAlreadyExistsException {
+        if (!orderRepository.existsById(orderId)) {
+            throw new OrderAlreadyExistsException();
+        }
+        order.setId(orderId);
+        return orderRepository.save(order);
     }
 }

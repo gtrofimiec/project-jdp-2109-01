@@ -1,12 +1,11 @@
 package com.kodilla.ecommercee.service;
 
-import com.kodilla.ecommercee.controller.exception.ProductExistsException;
+import com.kodilla.ecommercee.controller.exception.ProductAlreadyExistsException;
 import com.kodilla.ecommercee.controller.exception.ProductNotFoundException;
 import com.kodilla.ecommercee.domain.Product;
 import com.kodilla.ecommercee.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -27,10 +26,10 @@ public class ProductService {
         return product;
     }
 
-    public Product save(final Product product) throws ProductExistsException {
+    public Product save(final Product product) throws ProductAlreadyExistsException {
         Long id = product.getId();
         if (id != null && productRepository.existsById(id) ) {
-            throw new ProductExistsException();
+            throw new ProductAlreadyExistsException();
         }
         return productRepository.save(product);
     }
