@@ -6,8 +6,6 @@ import com.kodilla.ecommercee.domain.dto.KeyDto;
 import com.kodilla.ecommercee.mapper.KeyMapper;
 import com.kodilla.ecommercee.repository.KeyRepository;
 import com.kodilla.ecommercee.repository.UserRepository;
-import lombok.Value;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -15,7 +13,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 
 @Service
 public class UserDbService {

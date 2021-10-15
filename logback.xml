@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<configuration>
+
+    <appender name="Console"
+              class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}): %msg%n%throwable
+            </Pattern>
+        </layout>
+    </appender>
+
+    <appender name="USER-FILE" class="ch.qos.logback.core.FileAppender">
+        <file>usersActivity.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %-4relative [%thread] %-5level %logger{35} -%class{0} %msg %n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="analytics" level="TRACE" additivity="false">
+        <appender-ref ref="USER-FILE"/>
+    </logger>
+
+    <root level="info">
+        <appender-ref ref="Console"/>
+    </root>
+</configuration>
