@@ -8,37 +8,41 @@ import com.kodilla.ecommercee.domain.Order;
 import com.kodilla.ecommercee.domain.Product;
 import com.kodilla.ecommercee.domain.User;
 import com.kodilla.ecommercee.repository.CartRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
 @Service
-@RequiredArgsConstructor
 public class CartService {
 
     private final CartRepository cartRepository;
     private final ProductService productService;
     private final OrderService orderService;
-    private final UserDbService userDbService;
+    private final UserService userService;
 
+    public CartService(CartRepository cartRepository, ProductService productService, OrderService orderService, UserService userService) {
+        this.cartRepository = cartRepository;
+        this.productService = productService;
+        this.orderService = orderService;
+        this.userService = userService;
+    }
 
-    public Cart getCart (final long id) throws CartNotFoundException {
+    public Cart getCart(final long id) throws CartNotFoundException {
         return cartRepository.findById(id).get();
     }
 
-    public Cart saveCart (final long userId, final Cart cart) throws CartAlreadyExistsException {
+    public Cart saveCart(final long userId, final Cart cart) throws CartAlreadyExistsException {
         if (cartRepository.existsById(cart.getId())) {
             throw new CartAlreadyExistsException();
         } else {
-            User user = userDbService.getOneUser(userId);
+            User user = userService.getOneUser(userId);
             user.setCart(cart);
-            userDbService.update(user);
-            return  cartRepository.save(cart);
+            userService.update(user);
+            return cartRepository.save(cart);
         }
     }
 
-    public Cart addProductToCart (Cart cart, final long productId)
+    public Cart addProductToCart(Cart cart, final long productId)
             throws ProductNotFoundException {
         Product product = productService.getProduct(productId);
         cart.getProductList().add(product);
@@ -47,7 +51,7 @@ public class CartService {
         return cart;
     }
 
-    public Cart deleteProductFromCart (final Cart cart, final long productId)
+    public Cart deleteProductFromCart(final Cart cart, final long productId)
             throws ProductNotFoundException {
         Product product = productService.getProduct(productId);
         cart.getProductList().remove(product);
@@ -60,10 +64,8 @@ public class CartService {
         BigDecimal value = cart.getProductList().stream()
                 .map(product -> product.getPrice())
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-        Order order = new Order(value,cart);
+        Order order = new Order(value, cart);
         orderService.save(order);
         return order;
-
     }
-
 }

@@ -1,42 +1,37 @@
 package com.kodilla.ecommercee.service;
 
+import com.kodilla.ecommercee.controller.exception.UserAlreadyExistsException;
+import com.kodilla.ecommercee.controller.exception.UserNotFoundException;
 import com.kodilla.ecommercee.domain.Key;
 import com.kodilla.ecommercee.domain.User;
 import com.kodilla.ecommercee.domain.dto.KeyDto;
 import com.kodilla.ecommercee.mapper.KeyMapper;
 import com.kodilla.ecommercee.repository.KeyRepository;
 import com.kodilla.ecommercee.repository.UserRepository;
-import lombok.Value;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-
 @Service
-public class UserDbService {
+public class UserService {
 
     private final KeyRepository keyRepository;
     private final UserRepository userRepository;
     private final SecurityService securityService;
     private final KeyMapper keyMapper;
 
-    public UserDbService(KeyRepository keyRepository, UserRepository userRepository, SecurityService securityService, KeyMapper keyMapper) {
+    public UserService(KeyRepository keyRepository, UserRepository userRepository, SecurityService securityService, KeyMapper keyMapper) {
         this.keyRepository = keyRepository;
         this.userRepository = userRepository;
         this.securityService = securityService;
         this.keyMapper = keyMapper;
     }
 
-    public User save(User u) {
+    public User save(User u) throws UserAlreadyExistsException {
 
         Long userId = u.getId();
         if (userRepository.findById(userId).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "User with given Id already exists! Use Update mode.");
+            throw new UserAlreadyExistsException();
         }
 
         User newUser = new User();
@@ -51,33 +46,29 @@ public class UserDbService {
     }
 
     public List<User> getAllUsers() {
-        return new ArrayList<>((Collection<? extends User>) userRepository.findAll());
+        return userRepository.findAll();
     }
 
-    public User getOneUser(Long id) {
-
+    public User getOneUser(Long id) throws UserNotFoundException {
         if (!userRepository.findById(id).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No such user!");
+            throw new UserNotFoundException();
         }
-
         return userRepository.findById(id).get();
     }
 
-
-    public void deleteUser(Long id) {
-
+    public void deleteUser(Long id) throws UserNotFoundException {
         if (!userRepository.findById(id).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No such user!");
+            throw new UserNotFoundException();
         }
         userRepository.deleteById(id);
     }
 
-    public User update(User u) {
+    public User update(User u) throws UserNotFoundException {
 
         Long id = u.getId();
         System.out.println(id);
         if (!userRepository.findById(id).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No such user!");
+            throw new UserNotFoundException();
         }
 
         User user = userRepository.findById(u.getId()).get();

@@ -26,12 +26,14 @@ public class ProductMapper {
 
     public ProductDto mapToProductDto(final Product product) {
         Group group = product.getGroup();
+        GroupDto groupDto = new GroupDto();
+        groupDto.setId(group.getId());
+        groupDto.setName(group.getName());
         return new ProductDto(
                 product.getName(),
                 product.getDescription(),
                 product.getPrice(),
-                new GroupDto(group.getId(), group.getName())
-        );
+                groupDto);
     }
 
     public List<ProductDto> mapToProductDtoList(final List<Product> productList) {

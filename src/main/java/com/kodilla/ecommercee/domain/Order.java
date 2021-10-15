@@ -1,6 +1,5 @@
 package com.kodilla.ecommercee.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,7 +8,6 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Data
 @Table(name = "Orders")
@@ -19,6 +17,7 @@ public class Order {
         this.totalPrice = totalPrice;
         this.cart = cart;
     }
+
     @Id
     @GeneratedValue
     @NotNull

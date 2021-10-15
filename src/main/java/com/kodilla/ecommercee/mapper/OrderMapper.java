@@ -17,10 +17,15 @@ public class OrderMapper {
 
     public Order mapOrderDtoToOrder(OrderDto orderDto){
         CartMapper cartMapper = new CartMapper();
-        return new Order(orderDto.getTotalPrice(), cartMapper.mapToCart(orderDto.getCartDto()));
+        Order order = new Order();
+        order.setTotalPrice(orderDto.getTotalPrice());
+        order.setCart(cartMapper.mapToCart(orderDto.getCartDto()));
+        return order;
     }
 
     public List<OrderDto> mapToOrderDtoList(List<Order> orders){
-        return orders.stream().map(this::mapOrderToOrderDto).collect(Collectors.toList());
+        return orders.stream()
+                .map(this::mapOrderToOrderDto)
+                .collect(Collectors.toList());
     }
 }

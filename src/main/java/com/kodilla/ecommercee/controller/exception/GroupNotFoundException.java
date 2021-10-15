@@ -6,6 +6,6 @@ import org.springframework.web.server.ResponseStatusException;
 public class GroupNotFoundException extends ResponseStatusException {
 
     public GroupNotFoundException() {
-        super(HttpStatus.NOT_FOUND, "group not found");
+        super(HttpStatus.NOT_FOUND, "Group not found");
     }
 }

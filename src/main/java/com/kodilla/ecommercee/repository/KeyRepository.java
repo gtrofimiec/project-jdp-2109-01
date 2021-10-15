@@ -11,5 +11,4 @@ public interface KeyRepository extends CrudRepository<Key, Long> {
 
     Key findByUserId(Long userId);
 
-    Optional<Key> findByAccessKey(String accessKey);
 }
