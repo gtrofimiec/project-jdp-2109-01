@@ -1,21 +1,15 @@
 package com.kodilla.ecommercee.domain;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.*;
+import lombok.Data;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "Carts")
 @Where(clause = "deleted = false")
@@ -25,8 +19,12 @@ public class Cart {
         this.productList = new ArrayList<>();
     }
 
+    public Cart(Long id, List<Product> productList) {
+        this.id = id;
+        this.productList = productList;
+    }
+
     @GeneratedValue
-    @NotNull
     @Id
     @Column(name = "cart_id")
     private Long id;
@@ -40,6 +38,6 @@ public class Cart {
     }, fetch = FetchType.LAZY, mappedBy = "cartList")
     private List<Product> productList;
 
-    @Column(name="deleted")
+    @Column(name = "deleted")
     private boolean deleted = false;
 }
