@@ -12,14 +12,14 @@ public class GroupMapper {
 
     public GroupDto mapGroupToGroupDto(Group group) {
         GroupDto groupDto = new GroupDto();
-        groupDto.setId(group.getId());
+        //groupDto.setId(group.getId());
         groupDto.setName(group.getName());
         return groupDto;
     }
 
     public Group mapGroupDtoToGroup(GroupDto groupDto) {
         Group group = new Group();
-        group.setId(groupDto.getId());
+        //group.setId(groupDto.getId());
         group.setName(groupDto.getName());
         return group;
     }

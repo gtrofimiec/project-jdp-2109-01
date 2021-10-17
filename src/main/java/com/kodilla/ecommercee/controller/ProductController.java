@@ -42,8 +42,7 @@ public class ProductController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ProductDto saveProduct(@RequestBody ProductDto productDto) throws GroupNotFoundException, ProductAlreadyExistsException {
         Product product = productMapper.mapToProduct(productDto);
-        Long groupId = productDto.getGroupDto().getId();
-        String groupName = groupService.getOne(groupId).getName();
+        String groupName = groupService.getOne(productDto.getGroupId()).getName();
         product.getGroup().setName(groupName);
         productService.save(product);
         return productMapper.mapToProductDto(product);
@@ -53,8 +52,7 @@ public class ProductController {
     public ProductDto updateProduct(@PathVariable("id") Long productId, @RequestBody ProductDto productDto) throws GroupNotFoundException, ProductNotFoundException {
         Product product = productMapper.mapToProduct(productDto);
         product.setId(productId);
-        Long groupId = productDto.getGroupDto().getId();
-        String groupName = groupService.getOne(groupId).getName();
+        String groupName = groupService.getOne(productDto.getGroupId()).getName();
         product.getGroup().setName(groupName);
         productService.update(product);
         return productMapper.mapToProductDto(product);

@@ -1,5 +1,6 @@
 package com.kodilla.ecommercee.domain;
 
+import com.kodilla.ecommercee.service.GroupService;
 import lombok.*;
 
 import javax.persistence.*;
