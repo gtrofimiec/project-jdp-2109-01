@@ -2,6 +2,7 @@ package com.kodilla.ecommercee.domain;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -9,13 +10,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "accessKeys")
-
+@Where(clause = "deleted = false")
+@Table(name = "access_keys")
 public class Key {
 
     @Id
     @GeneratedValue
-    @Column(name = "id")
+    @Column(name = "key_id")
     private Long id;
 
     @Column(name = "accessKey")
@@ -23,6 +24,9 @@ public class Key {
 
     @Column(name = "expirationTime")
     private LocalDateTime expirationTime;
+
+    @Column(name = "deleted")
+    private boolean deleted;
 
     @OneToOne(mappedBy = "key")
     private User user;

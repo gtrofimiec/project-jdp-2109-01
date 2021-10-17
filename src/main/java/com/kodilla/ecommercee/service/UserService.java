@@ -27,13 +27,7 @@ public class UserService {
         this.keyMapper = keyMapper;
     }
 
-    public User save(User u) throws UserAlreadyExistsException {
-
-        Long userId = u.getId();
-        if (userRepository.findById(userId).isPresent()) {
-            throw new UserAlreadyExistsException();
-        }
-
+    public User save(User u) {
         User newUser = new User();
 
         KeyDto newGeneratedKeyDto = securityService.generateKey();
@@ -60,19 +54,20 @@ public class UserService {
         if (!userRepository.findById(id).isPresent()) {
             throw new UserNotFoundException();
         }
-        userRepository.deleteById(id);
+        User user = userRepository.findById(id).get();
+        user.setDeleted(true);
+        Key key = user.getKey();
+        key.setDeleted(true);
+        userRepository.save(user);
     }
 
-    public User update(User u) throws UserNotFoundException {
-
-        Long id = u.getId();
-        System.out.println(id);
-        if (!userRepository.findById(id).isPresent()) {
+    public User update(User u, Long userId) throws UserNotFoundException {
+        if (!userRepository.findById(userId).isPresent()) {
             throw new UserNotFoundException();
         }
 
-        User user = userRepository.findById(u.getId()).get();
-        Key userKey = keyRepository.findByUserId(id);
+        User user = userRepository.findById(userId).get();
+        Key userKey = keyRepository.findByUserId(userId);
 
         KeyDto generatedKeyDto = securityService.generateKey();
 
