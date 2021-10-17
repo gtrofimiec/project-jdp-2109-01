@@ -11,7 +11,6 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "Carts")
-@SQLDelete(sql = "UPDATE Carts SET deleted = true WHERE cart_id=?")
 @Where(clause = "deleted = false")
 public class Cart {
 
@@ -24,13 +23,13 @@ public class Cart {
     @Column(name = "cart_id")
     private Long id;
 
+    @Column(name = "deleted")
+    private boolean deleted = false;
+
     @ManyToMany(cascade = {
             CascadeType.REFRESH,
             CascadeType.DETACH,
             CascadeType.REMOVE
     }, fetch = FetchType.LAZY, mappedBy = "cartList")
     private List<Product> productList;
-
-    @Column(name = "deleted")
-    private boolean deleted = false;
 }
