@@ -1,7 +1,6 @@
 package com.kodilla.ecommercee.domain;
 
 import com.kodilla.ecommercee.repository.CartRepository;
-import com.kodilla.ecommercee.repository.OrderRepository;
 import com.kodilla.ecommercee.repository.ProductRepository;
 import com.kodilla.ecommercee.repository.UserRepository;
 import org.junit.After;
@@ -28,8 +27,6 @@ public class CartTestSuite {
     private CartRepository cartRepository;
     @Autowired
     private ProductRepository productRepository;
-    @Autowired
-    private OrderRepository orderRepository;
 
     @After
     public void cleanUpDataBaseAfterEachTest() {
@@ -37,7 +34,6 @@ public class CartTestSuite {
         userRepository.deleteAll();
         cartRepository.deleteAll();
         productRepository.deleteAll();
-        orderRepository.deleteAll();
     }
 
     @Test
