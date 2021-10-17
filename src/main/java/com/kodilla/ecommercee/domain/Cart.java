@@ -1,7 +1,6 @@
 package com.kodilla.ecommercee.domain;
 
 import lombok.Data;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -10,8 +9,8 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "Carts")
 @Where(clause = "deleted = false")
+@Table(name = "Carts")
 public class Cart {
 
     public Cart() {

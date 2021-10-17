@@ -2,6 +2,7 @@ package com.kodilla.ecommercee.domain;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -10,6 +11,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Entity
 @Data
+@Where(clause = "deleted = false")
 @Table(name = "Orders")
 public class Order {
 
@@ -26,6 +28,9 @@ public class Order {
 
     @Column(name = "totalPrice")
     private BigDecimal totalPrice;
+
+    @Column(name = "deleted")
+    private boolean deleted = false;
 
     @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     @JoinColumn(name = "cart_id")

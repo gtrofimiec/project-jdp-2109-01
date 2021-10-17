@@ -9,13 +9,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "accessKeys")
-
+@Table(name = "access_keys")
 public class Key {
 
     @Id
     @GeneratedValue
-    @Column(name = "id")
+    @Column(name = "key_id")
     private Long id;
 
     @Column(name = "accessKey")

@@ -10,7 +10,6 @@ import com.kodilla.ecommercee.domain.User;
 import com.kodilla.ecommercee.repository.CartRepository;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
 import java.math.BigDecimal;
 
 @Service

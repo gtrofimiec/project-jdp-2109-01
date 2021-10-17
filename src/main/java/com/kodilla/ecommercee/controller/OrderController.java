@@ -27,13 +27,6 @@ public class OrderController {
         return orderMapper.mapToOrderDtoList(orderService.getAll());
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public OrderDto addOrder(@RequestBody OrderDto orderDto) {
-        Order order = orderMapper.mapOrderDtoToOrder(orderDto);
-        order = orderService.save(order);
-        return orderMapper.mapOrderToOrderDto(order);
-    }
-
     @GetMapping(value = "/{orderId}")
     public OrderDto getOrder(@PathVariable("orderId") Long orderId) throws OrderNotFoundException {
         Order order = orderService.getOrder(orderId);
