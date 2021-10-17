@@ -28,9 +28,8 @@ public class CartController {
     }
 
     @PostMapping(value = "/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public CartDto saveCart(@PathVariable("userId") Long userId, @RequestBody CartDto cartDto) throws CartAlreadyExistsException {
-        Cart cart = cartMapper.mapToCart(cartDto);
-        cartService.saveCart(userId, cart);
+    public CartDto saveCart(@PathVariable("userId") Long userId) throws CartAlreadyExistsException {
+        Cart cart = cartService.saveCart(userId);
         return cartMapper.mapToCartDto(cart);
     }
 
