@@ -1,6 +1,5 @@
 package com.kodilla.ecommercee.service;
 
-import com.kodilla.ecommercee.controller.exception.UserAlreadyExistsException;
 import com.kodilla.ecommercee.controller.exception.UserNotFoundException;
 import com.kodilla.ecommercee.domain.Key;
 import com.kodilla.ecommercee.domain.User;

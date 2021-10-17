@@ -25,9 +25,9 @@ public class UserController {
     }
 
     @GetMapping
-    public List<UserDto> getUsers(@RequestParam(value = "isDeleted", required = false, defaultValue = "false") boolean isDeleted) {
+    public List<UserDto> getUsers() {
         return userService.getAllUsers().stream()
-                .map(x -> userMapper.mapUserToUserDto(x))
+                .map(userMapper::mapUserToUserDto)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
