@@ -10,7 +10,6 @@ public class UserMapper {
 
     public UserDto mapUserToUserDto(User user) {
         UserDto userDto = new UserDto();
-        userDto.setId(user.getId());
         userDto.setFirstname(user.getFirstname());
         userDto.setSurname(user.getSurname());
         userDto.setAccessKey(user.getKey().getAccessKey());
@@ -20,7 +19,6 @@ public class UserMapper {
 
     public User mapUserDtoToUser(UserDto userDto) {
         User user = new User();
-        user.setId(userDto.getId());
         user.setFirstname(userDto.getFirstname());
         user.setSurname(userDto.getSurname());
         Key key = new Key();

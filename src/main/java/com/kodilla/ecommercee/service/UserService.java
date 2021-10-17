@@ -1,11 +1,12 @@
 package com.kodilla.ecommercee.service;
 
-import com.kodilla.ecommercee.controller.exception.UserAlreadyExistsException;
 import com.kodilla.ecommercee.controller.exception.UserNotFoundException;
+import com.kodilla.ecommercee.domain.Cart;
 import com.kodilla.ecommercee.domain.Key;
 import com.kodilla.ecommercee.domain.User;
 import com.kodilla.ecommercee.domain.dto.KeyDto;
 import com.kodilla.ecommercee.mapper.KeyMapper;
+import com.kodilla.ecommercee.repository.CartRepository;
 import com.kodilla.ecommercee.repository.KeyRepository;
 import com.kodilla.ecommercee.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -19,21 +20,17 @@ public class UserService {
     private final UserRepository userRepository;
     private final SecurityService securityService;
     private final KeyMapper keyMapper;
+    private final CartRepository cartRepository;
 
-    public UserService(KeyRepository keyRepository, UserRepository userRepository, SecurityService securityService, KeyMapper keyMapper) {
+    public UserService(KeyRepository keyRepository, UserRepository userRepository, SecurityService securityService, KeyMapper keyMapper, CartRepository cartRepository) {
         this.keyRepository = keyRepository;
         this.userRepository = userRepository;
         this.securityService = securityService;
         this.keyMapper = keyMapper;
+        this.cartRepository = cartRepository;
     }
 
-    public User save(User u) throws UserAlreadyExistsException {
-
-        Long userId = u.getId();
-        if (userRepository.findById(userId).isPresent()) {
-            throw new UserAlreadyExistsException();
-        }
-
+    public User save(User u) {
         User newUser = new User();
 
         KeyDto newGeneratedKeyDto = securityService.generateKey();
@@ -60,28 +57,32 @@ public class UserService {
         if (!userRepository.findById(id).isPresent()) {
             throw new UserNotFoundException();
         }
-        userRepository.deleteById(id);
+        User user = userRepository.findById(id).get();
+        user.setDeleted(true);
+        Cart cart = user.getCart();
+        if (cart != null ) {
+            cart.setDeleted(true);
+            cartRepository.save(cart);
+        }
+        userRepository.save(user);
     }
 
-    public User update(User u) throws UserNotFoundException {
-
-        Long id = u.getId();
-        System.out.println(id);
-        if (!userRepository.findById(id).isPresent()) {
+    public User update(User user, Long userId) throws UserNotFoundException {
+        if (!userRepository.findById(userId).isPresent()) {
             throw new UserNotFoundException();
         }
 
-        User user = userRepository.findById(u.getId()).get();
-        Key userKey = keyRepository.findByUserId(id);
+        User savedUser = userRepository.findById(userId).get();
+        Key userKey = keyRepository.findByUserId(userId);
 
         KeyDto generatedKeyDto = securityService.generateKey();
 
-        user.setFirstname(u.getFirstname());
-        user.setSurname(u.getSurname());
+        savedUser.setFirstname(user.getFirstname());
+        savedUser.setSurname(user.getSurname());
 
         userKey.setAccessKey(generatedKeyDto.getAccessKey());
         userKey.setExpirationTime(generatedKeyDto.getExpirationTime());
 
-        return userRepository.save(user);
+        return userRepository.save(savedUser);
     }
 }

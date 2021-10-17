@@ -27,7 +27,7 @@ public class UserController {
     @GetMapping
     public List<UserDto> getUsers() {
         return userService.getAllUsers().stream()
-                .map(x -> userMapper.mapUserToUserDto(x))
+                .map(userMapper::mapUserToUserDto)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
@@ -37,7 +37,7 @@ public class UserController {
         return userMapper.mapUserToUserDto(user);
     }
 
-    @PostMapping()
+    @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
     public UserDto saveUser(@RequestBody UserDto userDto) {
         User user = userMapper.mapUserDtoToUser(userDto);
@@ -45,10 +45,10 @@ public class UserController {
         return userMapper.mapUserToUserDto(user);
     }
 
-    @PutMapping
-    public UserDto updateUser(@RequestBody UserDto userDto) {
+    @PutMapping("/{userId}")
+    public UserDto updateUser(@PathVariable("userId") Long userId, @RequestBody UserDto userDto) {
         User user = userMapper.mapUserDtoToUser(userDto);
-        user = userService.update(user);
+        user = userService.update(user, userId);
         return userMapper.mapUserToUserDto(user);
     }
 

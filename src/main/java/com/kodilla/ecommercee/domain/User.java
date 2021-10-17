@@ -1,11 +1,13 @@
 package com.kodilla.ecommercee.domain;
 
 import lombok.Data;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
 @Data
 @Entity
+@Where(clause = "deleted = false")
 @Table(name = "Users")
 public class User {
 
@@ -26,4 +28,7 @@ public class User {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "cart_id")
     private Cart cart;
+
+    @Column(name = "deleted")
+    private boolean deleted = false;
 }
