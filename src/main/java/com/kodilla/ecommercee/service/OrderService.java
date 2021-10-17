@@ -2,6 +2,7 @@ package com.kodilla.ecommercee.service;
 
 import com.kodilla.ecommercee.controller.exception.OrderAlreadyExistsException;
 import com.kodilla.ecommercee.controller.exception.OrderNotFoundException;
+import com.kodilla.ecommercee.domain.Cart;
 import com.kodilla.ecommercee.domain.Order;
 import com.kodilla.ecommercee.repository.OrderRepository;
 import org.springframework.stereotype.Service;
@@ -30,8 +31,11 @@ public class OrderService {
     }
 
     public void delete(Long orderId) throws OrderNotFoundException {
-        orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
-        orderRepository.deleteById(orderId);
+        Order order = orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
+        Cart cart = order.getCart();
+        cart.setDeleted(true);
+        order.setDeleted(true);
+        orderRepository.save(order);
     }
 
     public Order update(Long orderId, Order order) throws OrderAlreadyExistsException {
