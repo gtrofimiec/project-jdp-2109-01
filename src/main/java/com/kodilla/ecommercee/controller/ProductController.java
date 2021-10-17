@@ -56,7 +56,7 @@ public class ProductController {
         Long groupId = productDto.getGroupDto().getId();
         String groupName = groupService.getOne(groupId).getName();
         product.getGroup().setName(groupName);
-        productService.save(product);
+        productService.update(product);
         return productMapper.mapToProductDto(product);
     }
 

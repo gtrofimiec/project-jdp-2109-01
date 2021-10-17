@@ -1,6 +1,5 @@
 package com.kodilla.ecommercee.controller;
 
-import com.kodilla.ecommercee.controller.exception.CartAlreadyExistsException;
 import com.kodilla.ecommercee.controller.exception.CartNotFoundException;
 import com.kodilla.ecommercee.controller.exception.ProductNotFoundException;
 import com.kodilla.ecommercee.domain.Cart;
@@ -10,7 +9,6 @@ import com.kodilla.ecommercee.domain.dto.OrderDto;
 import com.kodilla.ecommercee.mapper.CartMapper;
 import com.kodilla.ecommercee.mapper.OrderMapper;
 import com.kodilla.ecommercee.service.CartService;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,7 +26,7 @@ public class CartController {
     }
 
     @PostMapping(value = "/{userId}")
-    public CartDto saveCart(@PathVariable("userId") Long userId) throws CartAlreadyExistsException {
+    public CartDto saveCart(@PathVariable("userId") Long userId) {
         Cart cart = cartService.saveCart(userId);
         return cartMapper.mapToCartDto(cart);
     }

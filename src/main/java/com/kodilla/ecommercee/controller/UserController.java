@@ -7,9 +7,7 @@ import com.kodilla.ecommercee.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1/ecommerce/users")
@@ -26,14 +24,12 @@ public class UserController {
 
     @GetMapping
     public List<UserDto> getUsers() {
-        return userService.getAllUsers().stream()
-                .map(userMapper::mapUserToUserDto)
-                .collect(Collectors.toCollection(ArrayList::new));
+        return userMapper.mapToUserDtoList(userService.getAllUsers());
     }
 
     @GetMapping("/{userId}")
     public UserDto getUser(@PathVariable Long userId) {
-        User user = userService.getOneUser(userId);
+        User user = userService.getUser(userId);
         return userMapper.mapUserToUserDto(user);
     }
 
@@ -48,7 +44,8 @@ public class UserController {
     @PutMapping("/{userId}")
     public UserDto updateUser(@PathVariable("userId") Long userId, @RequestBody UserDto userDto) {
         User user = userMapper.mapUserDtoToUser(userDto);
-        user = userService.update(user, userId);
+        user.setId(userId);
+        user = userService.update(user);
         return userMapper.mapUserToUserDto(user);
     }
 
