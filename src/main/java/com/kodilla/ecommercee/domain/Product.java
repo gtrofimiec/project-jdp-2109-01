@@ -1,12 +1,8 @@
 package com.kodilla.ecommercee.domain;
 
 import lombok.*;
-import org.hibernate.annotations.*;
 
 import javax.persistence.*;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.*;
@@ -16,7 +12,6 @@ import java.util.*;
 @Setter
 @Entity
 @Table(name = "Products")
-@Where(clause = "deleted = false")
 public class Product {
 
     public Product(String name, BigDecimal price, String description) {
@@ -57,7 +52,4 @@ public class Product {
             inverseJoinColumns = {@JoinColumn(name = "cart_id", referencedColumnName = "cart_id")}
     )
     private List<Cart> cartList;
-
-    @Column(name="deleted")
-    private boolean deleted = false;
 }
