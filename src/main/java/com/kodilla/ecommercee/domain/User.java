@@ -30,5 +30,5 @@ public class User {
     private Cart cart;
 
     @Column(name = "deleted")
-    private boolean deleted;
+    private boolean deleted = false;
 }

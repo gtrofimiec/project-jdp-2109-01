@@ -32,8 +32,9 @@ public class CartService {
         return cartRepository.findById(id).get();
     }
 
-    public Cart saveCart(final long userId, final Cart cart) throws CartAlreadyExistsException {
-        if (cartRepository.existsById(cart.getId())) {
+    public Cart saveCart(final long userId) throws CartAlreadyExistsException {
+        Cart cart = new Cart();
+        if (cart.getId() != null && cartRepository.existsById(cart.getId())) {
             throw new CartAlreadyExistsException();
         } else {
             User user = userService.getOneUser(userId);
