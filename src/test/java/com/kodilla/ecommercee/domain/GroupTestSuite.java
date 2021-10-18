@@ -70,6 +70,24 @@ public class GroupTestSuite {
     }
 
     @Test
+    public void testGroupFindByName(){
+        //Given
+        Group group1 = new Group("first group");
+        groupRepository.save(group1);
+
+        Group group2 = new Group("second group");
+        groupRepository.save(group2);
+        //When
+        Group group1FoundByName = groupRepository.findByName("first group");
+        Group group2FoundByName = groupRepository.findByName("second group");
+        //Then
+        assertNotNull(group1FoundByName);
+        assertNotNull(group2FoundByName);
+        assertEquals("first group", group1FoundByName.getName());
+        assertEquals("second group", group2FoundByName.getName());
+    }
+
+    @Test
     public void testGroupSaveWithProducts() {
         //Given
         Group group = new Group("name");
