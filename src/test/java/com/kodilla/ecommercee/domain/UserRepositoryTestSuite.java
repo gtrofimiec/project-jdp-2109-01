@@ -24,12 +24,12 @@ public class UserRepositoryTestSuite {
     CartRepository cartRepository;
 
     @After
-   public void after() {
+    public void after() {
         userRepository.deleteAll();
     }
 
     @Before
-   public void before() {
+    public void before() {
         userRepository.deleteAll();
     }
 
@@ -107,6 +107,7 @@ public class UserRepositoryTestSuite {
         userRepository.save(user);
         //Then
         assertEquals(1, userRepository.findAll().size());
+        assertEquals(1, cartRepository.findAll().size());
     }
 
     @Test
@@ -121,5 +122,6 @@ public class UserRepositoryTestSuite {
         userRepository.deleteById(id);
         //Then
         assertEquals(0, userRepository.findAll().size());
+        assertEquals(0, cartRepository.findAll().size());
     }
 }
