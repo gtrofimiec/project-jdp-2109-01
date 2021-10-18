@@ -4,6 +4,7 @@ import com.kodilla.ecommercee.controller.exception.GroupNotFoundException;
 import com.kodilla.ecommercee.domain.Product;
 import com.kodilla.ecommercee.domain.dto.ProductDto;
 import com.kodilla.ecommercee.service.GroupService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
 @Service
 public class ProductMapper {
 
+    @Autowired
     private GroupService groupService;
 
     public Product mapToProduct(final ProductDto productDto) throws GroupNotFoundException {
