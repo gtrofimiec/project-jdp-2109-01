@@ -29,10 +29,7 @@
           "name" : "First Product",
           "description" : "Super Product",
           "price" : 1000,
-          "groupDto" : {
-            "id" : 2,
-            "name" : "Second Group"
-          }
+          "groupId" : 2
         }
      ]
     }

@@ -13,30 +13,21 @@
     "name" : "First Product",
     "description" : "Super Product",
     "price" : 1000,
-    "groupDto" : {
-        "id" : 2,
-        "name" : "Second Group"
-    }
+    "groupId" : 2
 }
 
 {
     "name" : "Second Product",
     "description" : "Better Product",
     "price" : 500,
-    "groupDto" : {
-        "id" : 1,
-        "name" : "New name of a group"
-    }
+    "groupId" : 1
 }
 
 {
     "name" : "Third Product",
     "description" : "Bad Product",
     "price" : 500,
-    "groupDto" : {
-        "id" : 1,
-        "name" : "New name of a group"
-    }
+    "groupId" : 1
 }
 ```
 
