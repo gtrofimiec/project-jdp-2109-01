@@ -16,8 +16,7 @@ import java.util.*;
 @Setter
 @Entity
 
-@FilterDef(name = "deletedProductsFilter", parameters = @ParamDef(name = "deleted", type = "boolean"))
-@Filter(name = "deletedProductsFilter", condition = "deleted = :deleted")
+@Where(clause = "deleted = false")
 @Table(name = "Products")
 public class Product {
 

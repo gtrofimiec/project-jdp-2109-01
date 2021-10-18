@@ -112,7 +112,7 @@ public class ProductTestSuite {
         productService.save(product2);
 
         //When
-        List<Product> productList = productService.getProducts(false);
+        List<Product> productList = productService.getProducts();
 
         //Then
         assertEquals(2, productList.size());
@@ -183,7 +183,7 @@ public class ProductTestSuite {
         int remainingCart = cartRepository.findAll().size();
 
         //Then
-        assertEquals(2, remainingProduct);
+        assertEquals(1, remainingProduct);
         assertEquals(2, remainingCart);
         assertEquals(1, remainingGroup);
     }
