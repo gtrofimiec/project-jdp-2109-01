@@ -11,6 +11,8 @@ Back-end mechanism for an e-commerce application, written in JAVA. This is a gro
 - Lombok version 1.18.20
 - JUnit4
 - Springfox Swagger2 version 2.9.2
+- Circe/Ci
+- Hibernate
 - Databases:
 	- MySQL
 	- H2 - for tests
@@ -38,5 +40,12 @@ Back-end mechanism for an e-commerce application, written in JAVA. This is a gro
 
 ## Ideas for improvement
 
-1. We wanted to add user authentication and authorisation(limit access to certain endpoints). In order to achieve that, we were considering using Spring Security.
+1. We wanted to add user authentication and authorisation(limit access to certain endpoints). In order to achieve that, we were considering using Spring Security,
+but finally we've decided to use a simple validator based on the mechanism: "key - password". Additionally, we have prepared a registration of the User's activity based on "loggers".
+Extra features with example implementations are available (as drafts) on branches:
+
+- Simple Validator,
+
+- User Logging
+
 2. There is possibility to provide users access to history of their orders - thanks to used soft delete.

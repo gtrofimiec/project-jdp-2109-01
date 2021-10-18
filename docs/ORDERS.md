@@ -19,7 +19,23 @@
     - Request is updating chosen order. 
     - Requires a path variable (id of an order).
     - Returns updated order in JSON.
-
+```
+{
+  "totalPrice": 1000, 
+  "cartDto": {
+     "id": 13, 
+     "products": {
+        "name" : "First Product",
+        "description" : "Super Product",
+        "price" : 1000,
+        "groupDto" : {
+          "id" : 2,
+          "name" : "Second Group"
+        }
+    }
+  }
+}
+```
 
 - DELETE http://localhost:8080/v1/ecommerce/orders/14
 

@@ -9,7 +9,6 @@
     - Returns saved user in JSON.
 ```
 {
-  "id": 6,
   "firstname": "Marilyn ",
   "surname": "Monroe",
   "accessKey": "96#QI",
@@ -18,7 +17,6 @@
 ```
 ```
 {
-  "id": 8,
   "firstname": "Antonio",
   "surname": "Banderas",
   "accessKey": ")?9K%",
@@ -27,7 +25,6 @@
 ```
 ```
 {
-  "id": 10,
   "firstname": "John",
   "surname": "Smith",
   "accessKey": "@pa>C",
@@ -53,7 +50,6 @@
 
 ```
 {
-  "id": 6,
   "firstname": "Jack ",
   "surname": "Wild",
   "accessKey": "J#-'P",

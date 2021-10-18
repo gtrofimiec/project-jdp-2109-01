@@ -9,12 +9,10 @@
     - Returns saved group in JSON.
 ```
 {
-    "id" : 1,
     "name" : "First Group"
 }
 
 {
-    "id" : 2,
     "name" : "Second Group"
 }
 ```
@@ -37,7 +35,6 @@
     - Returns updated group in JSON.
 ```
 {
-    "id" : 1,
     "name" : "New name of a group"
 }
 ```
