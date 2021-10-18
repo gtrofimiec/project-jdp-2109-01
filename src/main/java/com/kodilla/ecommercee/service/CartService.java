@@ -3,7 +3,6 @@ package com.kodilla.ecommercee.service;
 import com.kodilla.ecommercee.controller.exception.CartAlreadyExistsException;
 import com.kodilla.ecommercee.controller.exception.CartNotFoundException;
 import com.kodilla.ecommercee.controller.exception.ProductNotFoundException;
-import com.kodilla.ecommercee.controller.exception.UserNotFoundException;
 import com.kodilla.ecommercee.domain.Cart;
 import com.kodilla.ecommercee.domain.Order;
 import com.kodilla.ecommercee.domain.Product;
@@ -29,7 +28,7 @@ public class CartService {
     }
 
     public Cart getCart(final long id) throws CartNotFoundException {
-        return cartRepository.findById(id).get();
+        return cartRepository.findById(id).orElseThrow(CartNotFoundException::new);
     }
 
     public Cart saveCart(final long userId) throws CartAlreadyExistsException {
@@ -39,7 +38,6 @@ public class CartService {
         } else {
             User user = userService.getOneUser(userId);
             user.setCart(cart);
-            userService.update(user, userId);
             return cartRepository.save(cart);
         }
     }
