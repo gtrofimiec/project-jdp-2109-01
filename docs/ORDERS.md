@@ -8,13 +8,13 @@
     - Doesn't require any parameters.
 
 
-- GET http://localhost:8080/v1/ecommerce/order/14
+- GET http://localhost:8080/v1/ecommerce/order/13
 
     - Request is returning chosen order in JSON. 
     - Requires a path variable(id of an order).
 
 
-- PUT http://localhost:8080/v1/ecommerce/order/14
+- PUT http://localhost:8080/v1/ecommerce/order/13
 
     - Request is updating chosen order. 
     - Requires a path variable (id of an order).
@@ -23,21 +23,24 @@
 {
   "totalPrice": 1000, 
   "cartDto": {
-     "id": 13, 
-     "products": {
-        "name" : "First Product",
-        "description" : "Super Product",
-        "price" : 1000,
-        "groupDto" : {
-          "id" : 2,
-          "name" : "Second Group"
+     "id": 12, 
+     "products": [
+        {
+          "name" : "First Product",
+          "description" : "Super Product",
+          "price" : 1000,
+          "groupDto" : {
+            "id" : 2,
+            "name" : "Second Group"
+          }
         }
+     ]
     }
   }
 }
 ```
 
-- DELETE http://localhost:8080/v1/ecommerce/orders/14
+- DELETE http://localhost:8080/v1/ecommerce/orders/13
 
     - Request is deleting chosen order. 
     - Requires a path variable (id of an order). 
