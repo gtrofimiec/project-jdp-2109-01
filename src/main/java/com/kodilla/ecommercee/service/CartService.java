@@ -36,10 +36,6 @@ public class CartService {
         Cart cart = new Cart();
         if (cart.getId() != null && cartRepository.existsById(cart.getId())) {
             throw new CartAlreadyExistsException();
-        } else {
-            User user = userService.getOneUser(userId);
-            user.setCart(cart);
-            return cartRepository.save(cart);
         }
         User user = userService.getUser(userId);
         user.setId(userId);
