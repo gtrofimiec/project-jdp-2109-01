@@ -21,12 +21,8 @@ public class GroupService {
         return groupRepository.findAll();
     }
 
-    public Group saveGroup(final Group group) throws GroupAlreadyExistsException {
-        if(!groupRepository.existsById(group.getId())) {
+    public Group saveGroup(final Group group) {
             return groupRepository.save(group);
-        } else {
-            throw new GroupAlreadyExistsException();
-        }
     }
 
     public Group getOne(final Long groupId) throws GroupNotFoundException {
