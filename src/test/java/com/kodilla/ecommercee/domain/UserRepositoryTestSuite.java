@@ -26,11 +26,13 @@ public class UserRepositoryTestSuite {
     @After
     public void after() {
         userRepository.deleteAll();
+        cartRepository.deleteAll();
     }
 
     @Before
     public void before() {
         userRepository.deleteAll();
+        cartRepository.deleteAll();
     }
 
     @Test

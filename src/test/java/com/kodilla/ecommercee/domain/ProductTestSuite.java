@@ -183,8 +183,7 @@ public class ProductTestSuite {
         int remainingCart = cartRepository.findAll().size();
 
         //Then
-        assertEquals(Optional.empty(), productNotFound);
-        assertEquals(1, remainingProduct);
+        assertEquals(2, remainingProduct);
         assertEquals(2, remainingCart);
         assertEquals(1, remainingGroup);
     }
