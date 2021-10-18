@@ -29,12 +29,6 @@ public class UserRepositoryTestSuite {
         cartRepository.deleteAll();
     }
 
-    @Before
-    public void before() {
-        userRepository.deleteAll();
-        cartRepository.deleteAll();
-    }
-
     @Test
     public void testSaveUser() {
 
