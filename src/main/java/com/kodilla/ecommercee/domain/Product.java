@@ -2,6 +2,10 @@ package com.kodilla.ecommercee.domain;
 
 import com.kodilla.ecommercee.service.GroupService;
 import lombok.*;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -12,6 +16,8 @@ import java.util.*;
 @Getter
 @Setter
 @Entity
+
+@Where(clause = "deleted = false")
 @Table(name = "Products")
 public class Product {
 
@@ -38,6 +44,9 @@ public class Product {
 
     @Column(name = "description")
     private String description;
+
+    @Column (name = "deleted")
+    private boolean deleted = false;
 
     @ManyToOne
     @JoinColumn(name = "group_id")

@@ -5,20 +5,28 @@ import com.kodilla.ecommercee.controller.exception.ProductNotFoundException;
 import com.kodilla.ecommercee.domain.Product;
 import com.kodilla.ecommercee.repository.ProductRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 
+@Transactional
 @Service
 public class ProductService {
 
+    private EntityManager entityManager;
     private ProductRepository productRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, EntityManager entityManager) {
         this.productRepository = productRepository;
+        this.entityManager = entityManager;
     }
 
-    public List<Product> getAll() {
-        return productRepository.findAll();
+
+    public List<Product> getProducts() {
+
+        List<Product> products = productRepository.findAll();
+        return products;
     }
 
     public Product getProduct(final Long id) throws ProductNotFoundException {
@@ -28,7 +36,7 @@ public class ProductService {
 
     public Product save(final Product product) throws ProductAlreadyExistsException {
         Long id = product.getId();
-        if (id != null && productRepository.existsById(id) ) {
+        if (id != null && productRepository.existsById(id)) {
             throw new ProductAlreadyExistsException();
         }
         return productRepository.save(product);
@@ -44,6 +52,9 @@ public class ProductService {
 
     public void delete(final Long id) throws ProductNotFoundException {
         productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
-        productRepository.deleteById(id);
+
+        Product product = productRepository.findById(id).get();
+        product.setDeleted(true);
+        productRepository.save(product);
     }
 }

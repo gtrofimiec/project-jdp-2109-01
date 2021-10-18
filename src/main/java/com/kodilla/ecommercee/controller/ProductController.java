@@ -36,7 +36,7 @@ public class ProductController {
     @GetMapping
     public List<ProductDto> getProducts() {
         return productMapper.mapToProductDtoList(
-                productService.getAll());
+                productService.getProducts());
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

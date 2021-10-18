@@ -1,8 +1,6 @@
 package com.kodilla.ecommercee.domain;
 
-import com.kodilla.ecommercee.repository.CartRepository;
-import com.kodilla.ecommercee.repository.GroupRepository;
-import com.kodilla.ecommercee.repository.ProductRepository;
+import com.kodilla.ecommercee.repository.*;
 import com.kodilla.ecommercee.service.ProductService;
 import org.junit.After;
 import org.junit.Test;
@@ -11,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -29,12 +28,19 @@ public class ProductTestSuite {
     private GroupRepository groupRepository;
     @Autowired
     private CartRepository cartRepository;
+    @Autowired
+    EntityManager entityManager;
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    OrderRepository orderRepository;
+
 
     @After
     public void cleanUpDataBaseAfter() {
-        cartRepository.deleteAll();
+        userRepository.deleteAll();
         productRepository.deleteAll();
-        groupRepository.deleteAll();
+        orderRepository.deleteAll();
     }
 
     @Test
@@ -106,10 +112,11 @@ public class ProductTestSuite {
         productService.save(product2);
 
         //When
-        List<Product> productList = productService.getAll();
+        List<Product> productList = productService.getProducts();
 
         //Then
         assertEquals(2, productList.size());
+
     }
 
     @Test
@@ -142,6 +149,11 @@ public class ProductTestSuite {
     @Test
     public void testProductDelete() {
 
+        userRepository.deleteAll();
+        cartRepository.deleteAll();
+        productRepository.deleteAll();
+        orderRepository.deleteAll();
+
         //Given
         Cart cart1 = new Cart();
         Cart cart2 = new Cart();
@@ -171,7 +183,6 @@ public class ProductTestSuite {
         int remainingCart = cartRepository.findAll().size();
 
         //Then
-        assertEquals(Optional.empty(), productNotFound);
         assertEquals(1, remainingProduct);
         assertEquals(2, remainingCart);
         assertEquals(1, remainingGroup);

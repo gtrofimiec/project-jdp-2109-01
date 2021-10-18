@@ -1,10 +1,7 @@
 package com.kodilla.ecommercee.domain;
 
-import com.kodilla.ecommercee.domain.Cart;
-import com.kodilla.ecommercee.domain.User;
 import com.kodilla.ecommercee.repository.CartRepository;
 import com.kodilla.ecommercee.repository.UserRepository;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,21 +16,39 @@ import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class UserRepositoryTestSuite {
-
     @Autowired
     UserRepository userRepository;
 
     @Autowired
     CartRepository cartRepository;
-    
-    @After
-    public void deleteData() {
+
+
+    @Before
+    public void before() {
         userRepository.deleteAll();
-        cartRepository.deleteAll();
+    }
+
+    @Test
+    public void testDeleteUserWithCart() {
+        //Given
+        User user = new User();
+        Cart cart = new Cart();
+        user.setCart(cart);
+        userRepository.save(user);
+
+        Long cartId = user.getCart().getId();
+        //When
+        Long id = user.getId();
+        userRepository.deleteById(id);
+        //Then
+
+        assertEquals(0, userRepository.findAll().size());
+        assertEquals(Optional.empty(), cartRepository.findById(cartId));
     }
 
     @Test
     public void testSaveUser() {
+
         //Given
         User user1 = new User();
         User user2 = new User();
@@ -65,7 +80,7 @@ public class UserRepositoryTestSuite {
         userRepository.save(user2);
         int result = userRepository.findAll().size();
         //Then
-        assertEquals(2,result);
+        assertEquals(2, result);
     }
 
     @Test
@@ -79,7 +94,7 @@ public class UserRepositoryTestSuite {
         Long id = user1.getId();
         User resultUser = userRepository.findById(id).get();
         //Then
-        assertEquals(user1,resultUser);
+        assertEquals(user1, resultUser);
         assertNotEquals(user2, resultUser);
     }
 
@@ -92,34 +107,20 @@ public class UserRepositoryTestSuite {
         Long id = user.getId();
         userRepository.deleteById(id);
         //Then
-        assertEquals(0,userRepository.findAll().size());
+        assertEquals(0, userRepository.findAll().size());
     }
 
     @Test
     public void testSaveUserWithCart() {
         //Given
-        User user = new User();
+        User user1 = new User();
         Cart cart = new Cart();
-        user.setCart(cart);
+        user1.setCart(cart);
         //When
-        userRepository.save(user);
+        userRepository.deleteAll();
+        userRepository.save(user1);
         //Then
         assertEquals(1, userRepository.findAll().size());
-        assertEquals(1, cartRepository.findAll().size());
-    }
-
-    @Test
-    public void testDeleteUserWithCart() {
-        //Given
-        User user = new User();
-        Cart cart = new Cart();
-        user.setCart(cart);
-        //When
-        userRepository.save(user);
-        Long id = user.getId();
-        userRepository.deleteById(id);
-        //Then
-        assertEquals(0, cartRepository.findAll().size());
-        assertEquals(0, userRepository.findAll().size());
+        assertNotNull(cartRepository.findById(user1.getCart().getId()));
     }
 }
