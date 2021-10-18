@@ -54,10 +54,7 @@
     "name" : "Second Product",
     "description" : "The Best Product",
     "price" : 100,
-    "groupDto" : {
-        "id" : 1,
-        "name" : "New name of a group"
-    }
+    "groupId" : 1
 }
 ```
 - DELETE http://localhost:8080/v1/ecommerce/products/5
